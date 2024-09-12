@@ -86,39 +86,65 @@ router.post('/reset-password', async (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-    let { name, email, DateOfBirth, Phone, password } = req.body;
+    let { firstName, middleName, lastName, email, dateOfBirth, phone, password } = req.body;
 
-    // Trim input fields
-    name = name.trim();
-    email = email.trim();
-    DateOfBirth = DateOfBirth.trim();
-    Phone = Phone.trim();
-    password = password.trim();
+    console.log(req.body);
 
-    // Validate fields
-    if (!name || !email || !DateOfBirth || !Phone || !password) {
+    // Check if any fields are undefined or empty
+    if (!firstName || !middleName || !lastName || !email || !dateOfBirth || !phone || !password) {
+        let missingFields = [];
+        if (!firstName) missingFields.push("firstName");
+        if (!middleName) missingFields.push("middleName");
+        if (!lastName) missingFields.push("lastName");
+        if (!email) missingFields.push("email");
+        if (!dateOfBirth) missingFields.push("dateOfBirth");
+        if (!phone) missingFields.push("phone");
+        if (!password) missingFields.push("password");
+
         return res.status(400).json({
             status: "Failed",
-            message: "Empty input fields!"
+            message: `Missing input fields: ${missingFields.join(', ')}`
         });
     }
 
+    // Trim input fields only if they exist
+    firstName = firstName.trim();
+    middleName = middleName.trim();
+    lastName = lastName.trim();
+    email = email.trim();
+    dateOfBirth = dateOfBirth.trim();
+    phone = phone.trim();
+    password = password.trim();
+
     // Name validation
-    if (!/^[a-zA-Z\s]+$/.test(name)) {
+    if (!/^[a-zA-Z\s]+$/.test(firstName)) {
         return res.status(400).json({
             status: "Failed",
-            message: "Invalid name entered!"
+            message: "Invalid firstName entered!"
+        });
+    }
+    if (!/^[a-zA-Z\s]+$/.test(middleName)) {
+        return res.status(400).json({
+            status: "Failed",
+            message: "Invalid middleName entered!"
+        });
+    }
+    if (!/^[a-zA-Z\s]+$/.test(lastName)) {
+        return res.status(400).json({
+            status: "Failed",
+            message: "Invalid lastName entered!"
         });
     }
 
     // Date of Birth validation
-    const parsedDate = new Date(DateOfBirth);
+    const parsedDate = new Date(dateOfBirth); // Correctly parse as Date
     if (isNaN(parsedDate.getTime())) {
         return res.status(400).json({
             status: "Failed",
             message: "Invalid date of birth entered!"
         });
     }
+
 
     // Email validation
     if (!/^[\w-.]+@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
@@ -129,7 +155,7 @@ router.post('/signup', async (req, res) => {
     }
 
     // Phone validation (adjust regex as needed)
-    if (!/^\d{10}$/.test(Phone)) {
+    if (!/^\d{10}$/.test(phone)) {
         return res.status(400).json({
             status: "Failed",
             message: "Invalid phone number format! Must be 10 digits."
@@ -160,13 +186,16 @@ router.post('/signup', async (req, res) => {
 
         // Create new user
         const newUser = new User({
-            name,
+            firstName,
+            middleName,
+            lastName,
             email,
-            DateOfBirth: parsedDate, // Store as Date
-            Phone,
+            dateOfBirth: parsedDate, // Store as Date
+            phone,
             password: hashedPassword,
+            verified: false,
         });
-
+        
         // Save user
         const result = await newUser.save();
         return res.status(201).json({
@@ -185,28 +214,29 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/signin', async (req, res) => {
-    let { emailOrPhone, password } = req.body;
+    let { email, password } = req.body;
 
     // Trim input fields
-    emailOrPhone = emailOrPhone.trim();
+    email = email.trim();
     password = password.trim();
 
     // Validate fields
-    if (!emailOrPhone || !password) {
+    if (!email || !password) {
         return res.status(400).json({
             status: "Failed",
             message: "Empty input fields!"
         });
     }
 
-    // Check if user exists (by email or phone)
+    // Check if user exists by email
     let user;
-    if (/\S+@\S+\.\S+/.test(emailOrPhone)) {
-        // It's an email
-        user = await User.findOne({ email: emailOrPhone });
-    } else if (/^\d{10}$/.test(emailOrPhone)) {
-        // It's a phone number
-        user = await User.findOne({ Phone: emailOrPhone });
+    try {
+        user = await User.findOne({ email: email });
+    } catch (error) {
+        return res.status(500).json({
+            status: "Failed",
+            message: "Internal server error while fetching user."
+        });
     }
 
     if (!user) {
@@ -230,6 +260,6 @@ router.post('/signin', async (req, res) => {
         message: "Signin successful",
         data: user,
     });
-});
+});  
 
 export default router;

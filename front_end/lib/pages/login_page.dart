@@ -1,7 +1,58 @@
 import 'package:flutter/material.dart';
+import '/services/user_service.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  LoginPageState createState() => LoginPageState();
+}
+
+class LoginPageState extends State<LoginPage> {
+  final UserService _userService = UserService();
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailOrPhoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _isLoading = false;
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _login() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final emailOrPhone = _emailOrPhoneController.text;
+      final password = _passwordController.text;
+
+      try {
+        await _userService.signin(emailOrPhone, password);
+        Navigator.pushReplacementNamed(context, '/home');
+      } catch (e) {
+        _showErrorDialog(e.toString());
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,83 +60,91 @@ class LoginPage extends StatelessWidget {
       backgroundColor: const Color(0xFFF2F2F2),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            RichText(
-              text: const TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Hey,\n",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Hey,\n",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: "Welcome Back",
-                    style: TextStyle(
-                      color: Color(0xFFD95D37),
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                    TextSpan(
+                      text: "Welcome Back",
+                      style: TextStyle(
+                        color: Color(0xFFD95D37),
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            _buildTextField('Email', fontSize: 10.0),
-            _buildTextField('Password', obscureText: true, fontSize: 10.0),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  _showForgotPasswordModal(context);
-                },
-                child: const Text(
-                  'Forgot Password?',
-                  style: TextStyle(fontSize: 10, color: Colors.black54),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to home screen when login is pressed
-                Navigator.pushReplacementNamed(context, '/home');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF75ECE1), // Background color
-                minimumSize: const Size.fromHeight(50), // Button height
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 20),
+              _buildTextField('Email', controller: _emailOrPhoneController),
+              _buildTextField('Password', controller: _passwordController, obscureText: true),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    _showForgotPasswordModal(context);
+                  },
+                  child: const Text(
+                    'Forgot Password?',
+                    style: TextStyle(fontSize: 10, color: Colors.black54),
+                  ),
                 ),
               ),
-              child: const Text(
-                'Login',
-                style: TextStyle(fontSize: 12, color: Colors.white),
-              ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF75ECE1),
+                        minimumSize: const Size.fromHeight(50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                    ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTextField(String labelText, {bool obscureText = false, double fontSize = 10.0}) {
+  Widget _buildTextField(String labelText,
+      {bool obscureText = false,
+      TextEditingController? controller,
+      double fontSize = 14.0}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: TextField(
+      child: TextFormField(
+        controller: controller,
         obscureText: obscureText,
-        style: TextStyle(fontSize: fontSize), // Apply the font size here
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter $labelText';
+          }
+          return null;
+        },
         decoration: InputDecoration(
           labelText: labelText,
-          labelStyle: TextStyle(fontSize: fontSize), // Apply font size to label
-          hintStyle: TextStyle(fontSize: fontSize),  // Apply font size to hint
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
           ),
           filled: true,
           fillColor: const Color(0xFFFFFFFF),
@@ -94,7 +153,9 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void _showForgotPasswordModal(BuildContext context) {
+   void _showForgotPasswordModal(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -113,23 +174,34 @@ class LoginPage extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 centerTitle: true,
-                title: Text(
+                title: const Text(
                   'Forgot Password',
                   style: TextStyle(color: Colors.black),
                 ),
-                toolbarHeight: 56, // Adjust height if needed
+                toolbarHeight: 56,
               ),
               const SizedBox(height: 24),
-              _buildTextField('Email', fontSize: 10.0),
+              _buildTextField('Email', controller: emailController, fontSize: 14.0),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the forgot password modal
-                  _showVerifyEmailModal(context); // Show the verify email modal
+                onPressed: () async {
+                  final email = emailController.text;
+
+                  if (email.isEmpty) {
+                    _showErrorDialog('Email cannot be empty.');
+                    return;
+                  }
+
+                  try {
+                    await _userService.forgotPassword(email);
+                    _showVerifyEmailModal(context, email);
+                  } catch (e) {
+                    _showErrorDialog(e.toString());
+                  }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF75ECE1), // Uniform button color
-                  minimumSize: const Size.fromHeight(50), // Button height
+                  backgroundColor: const Color(0xFF75ECE1),
+                  minimumSize: const Size.fromHeight(50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -146,7 +218,9 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void _showVerifyEmailModal(BuildContext context) {
+  void _showVerifyEmailModal(BuildContext context, String email) {
+    final TextEditingController codeController = TextEditingController();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -165,23 +239,29 @@ class LoginPage extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 centerTitle: true,
-                title: Text(
+                title: const Text(
                   'Verify Your Email',
                   style: TextStyle(color: Colors.black),
                 ),
-                toolbarHeight: 56, // Adjust height if needed
+                toolbarHeight: 56,
               ),
               const SizedBox(height: 24),
-              _buildTextField('Enter 4-digit code', fontSize: 10.0),
+              _buildTextField('Enter 4-digit code', controller: codeController, fontSize: 14.0),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the verify email modal
-                  _showResetPasswordModal(context); // Show the reset password modal
+                onPressed: () async {
+                  final code = codeController.text;
+
+                  if (code.isEmpty) {
+                    _showErrorDialog('Code cannot be empty.');
+                    return;
+                  }
+
+                  _showResetPasswordModal(context, email, code);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF75ECE1), // Uniform button color
-                  minimumSize: const Size.fromHeight(50), // Button height
+                  backgroundColor: const Color(0xFF75ECE1),
+                  minimumSize: const Size.fromHeight(50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -198,7 +278,10 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void _showResetPasswordModal(BuildContext context) {
+  void _showResetPasswordModal(BuildContext context, String email, String code) {
+    final TextEditingController newPasswordController = TextEditingController();
+    final TextEditingController confirmPasswordController = TextEditingController();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -217,24 +300,42 @@ class LoginPage extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 centerTitle: true,
-                title: Text(
+                title: const Text(
                   'Reset Password',
                   style: TextStyle(color: Colors.black),
                 ),
-                toolbarHeight: 56, // Adjust height if needed
+                toolbarHeight: 56,
               ),
               const SizedBox(height: 24),
-              _buildTextField('Enter New Password', obscureText: true, fontSize: 10.0),
+              _buildTextField('Enter New Password', controller: newPasswordController, obscureText: true, fontSize: 14.0),
               const SizedBox(height: 16),
-              _buildTextField('Re-enter New Password', obscureText: true, fontSize: 10.0),
+              _buildTextField('Re-enter New Password', controller: confirmPasswordController, obscureText: true, fontSize: 14.0),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/login'); // Navigate to login page
+                onPressed: () async {
+                  final newPassword = newPasswordController.text;
+                  final confirmPassword = confirmPasswordController.text;
+
+                  if (newPassword.isEmpty || confirmPassword.isEmpty) {
+                    _showErrorDialog('Please fill out both password fields.');
+                    return;
+                  }
+
+                  if (newPassword != confirmPassword) {
+                    _showErrorDialog('Passwords do not match.');
+                    return;
+                  }
+
+                  try {
+                    await _userService.resetPassword(email, code, newPassword);
+                    Navigator.pushReplacementNamed(context, '/login');
+                  } catch (e) {
+                    _showErrorDialog(e.toString());
+                  }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF75ECE1), // Uniform button color
-                  minimumSize: const Size.fromHeight(50), // Button height
+                  backgroundColor: const Color(0xFF75ECE1),
+                  minimumSize: const Size.fromHeight(50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
