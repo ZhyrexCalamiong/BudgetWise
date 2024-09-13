@@ -1,3 +1,4 @@
+import 'package:budgetwise_one/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import '/services/user_service.dart';
 
@@ -58,6 +59,16 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context); // Navigate back to the signup page
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Form(
@@ -89,7 +100,8 @@ class LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               _buildTextField('Email', controller: _emailOrPhoneController),
-              _buildTextField('Password', controller: _passwordController, obscureText: true),
+              _buildTextField('Password',
+                  controller: _passwordController, obscureText: true),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -119,6 +131,30 @@ class LoginPageState extends State<LoginPage> {
                         style: TextStyle(fontSize: 12, color: Colors.white),
                       ),
                     ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20), // Padding on top
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage()), // Navigate to the SecondPage
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4CAF50),
+                    minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Go to Second Page',
+                    style: TextStyle(fontSize: 12, color: Colors.white),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -153,7 +189,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-   void _showForgotPasswordModal(BuildContext context) {
+  void _showForgotPasswordModal(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
 
     showModalBottomSheet(
@@ -181,7 +217,8 @@ class LoginPageState extends State<LoginPage> {
                 toolbarHeight: 56,
               ),
               const SizedBox(height: 24),
-              _buildTextField('Email', controller: emailController, fontSize: 14.0),
+              _buildTextField('Email',
+                  controller: emailController, fontSize: 14.0),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
@@ -246,7 +283,8 @@ class LoginPageState extends State<LoginPage> {
                 toolbarHeight: 56,
               ),
               const SizedBox(height: 24),
-              _buildTextField('Enter 4-digit code', controller: codeController, fontSize: 14.0),
+              _buildTextField('Enter 4-digit code',
+                  controller: codeController, fontSize: 14.0),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
@@ -278,9 +316,11 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _showResetPasswordModal(BuildContext context, String email, String code) {
+  void _showResetPasswordModal(
+      BuildContext context, String email, String code) {
     final TextEditingController newPasswordController = TextEditingController();
-    final TextEditingController confirmPasswordController = TextEditingController();
+    final TextEditingController confirmPasswordController =
+        TextEditingController();
 
     showModalBottomSheet(
       context: context,
@@ -307,9 +347,15 @@ class LoginPageState extends State<LoginPage> {
                 toolbarHeight: 56,
               ),
               const SizedBox(height: 24),
-              _buildTextField('Enter New Password', controller: newPasswordController, obscureText: true, fontSize: 14.0),
+              _buildTextField('Enter New Password',
+                  controller: newPasswordController,
+                  obscureText: true,
+                  fontSize: 14.0),
               const SizedBox(height: 16),
-              _buildTextField('Re-enter New Password', controller: confirmPasswordController, obscureText: true, fontSize: 14.0),
+              _buildTextField('Re-enter New Password',
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                  fontSize: 14.0),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {

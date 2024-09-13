@@ -1,0 +1,22 @@
+# CMake generation dependency list for this directory.
+C:/Users/63939/Desktop/project/BudgetWise/front_end/build/windows/x64/CMakeFiles/3.28.3-msvc11/CMakeCXXCompiler.cmake
+C:/Users/63939/Desktop/project/BudgetWise/front_end/build/windows/x64/CMakeFiles/3.28.3-msvc11/CMakeRCCompiler.cmake
+C:/Users/63939/Desktop/project/BudgetWise/front_end/build/windows/x64/CMakeFiles/3.28.3-msvc11/CMakeSystem.cmake
+C:/Users/63939/Desktop/project/BudgetWise/front_end/windows/CMakeLists.txt
+C:/Users/63939/Desktop/project/BudgetWise/front_end/windows/flutter/generated_plugins.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeCXXInformation.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeGenericSystem.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeRCInformation.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/Compiler/MSVC-CXX.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/Compiler/MSVC.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/Platform/Windows-Initialize.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/Platform/Windows-MSVC-CXX.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/Platform/Windows-MSVC.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/Platform/Windows.cmake
+D:/Visual Studio/Visual Studio IDE/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/Platform/WindowsPaths.cmake

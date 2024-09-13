@@ -1,0 +1,10 @@
+^C:\USERS\63939\DESKTOP\PROJECT\BUDGETWISE\FRONT_END\WINDOWS\FLUTTER\CMAKELISTS.TXT
+setlocal
+"D:\Visual Studio\Visual Studio IDE\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/63939/Desktop/project/BudgetWise/front_end/windows -BC:/Users/63939/Desktop/project/BudgetWise/front_end/build/windows/x64 --check-stamp-file C:/Users/63939/Desktop/project/BudgetWise/front_end/build/windows/x64/flutter/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
