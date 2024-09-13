@@ -131,30 +131,6 @@ class LoginPageState extends State<LoginPage> {
                         style: TextStyle(fontSize: 12, color: Colors.white),
                       ),
                     ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20), // Padding on top
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePage()), // Navigate to the SecondPage
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4CAF50),
-                    minimumSize: const Size.fromHeight(50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    'Go to Second Page',
-                    style: TextStyle(fontSize: 12, color: Colors.white),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
