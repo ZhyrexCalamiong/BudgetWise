@@ -31,6 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.2.2
+  bloc:
+  flutter_bloc:
+  equatable:
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -60,8 +63,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/bar_chart.png
-    - assets/pie_chart.png
+    - assets/images/bar_chart.png
+    - assets/images/pie_chart.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

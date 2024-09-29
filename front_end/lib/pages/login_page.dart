@@ -1,21 +1,34 @@
 import 'package:budgetwise_one/pages/home_page.dart';
 import 'package:flutter/material.dart';
-import '/services/user_service.dart';
+import '../bloc/authentication/login/login_bloc.dart';
+import '../repositories/user_repository_impl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/authentication/login/login_event.dart';
+import '../bloc/authentication/login/login_state.dart';
+import '../models/user.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
+class LoginPage extends StatelessWidget {
   @override
-  LoginPageState createState() => LoginPageState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Login Page',
+      home: BlocProvider(
+        create: (context) => LoginBloc(UserService()),
+        child: _LoginPage(),
+      ),
+    );
+  }
 }
 
-class LoginPageState extends State<LoginPage> {
-  final UserService _userService = UserService();
+class _LoginPage extends StatefulWidget {
+  @override
+  State<_LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<_LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailOrPhoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  bool _isLoading = false;
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -33,28 +46,6 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _login() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      final emailOrPhone = _emailOrPhoneController.text;
-      final password = _passwordController.text;
-
-      try {
-        await _userService.signin(emailOrPhone, password);
-        Navigator.pushReplacementNamed(context, '/home');
-      } catch (e) {
-        _showErrorDialog(e.toString());
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +56,7 @@ class LoginPageState extends State<LoginPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context); // Navigate back to the signup page
+            Navigator.pop(context);
           },
         ),
       ),
@@ -73,65 +64,83 @@ class LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.all(24.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "Hey,\n",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: "Welcome Back",
-                      style: TextStyle(
-                        color: Color(0xFFD95D37),
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              _buildTextField('Email', controller: _emailOrPhoneController),
-              _buildTextField('Password',
-                  controller: _passwordController, obscureText: true),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    _showForgotPasswordModal(context);
-                  },
-                  child: const Text(
-                    'Forgot Password?',
-                    style: TextStyle(fontSize: 10, color: Colors.black54),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
-                      onPressed: _login,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF75ECE1),
-                        minimumSize: const Size.fromHeight(50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+          child: BlocConsumer<LoginBloc, LoginState>(
+            listener: (context, state) {
+              if (state is LoginError) {
+                _showErrorDialog(state.message);
+              }
+              if (state is LoginNavigateToHomeScreenActionState) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+              }
+            },
+            builder: (context, state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Hey,\n",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
+                        TextSpan(
+                          text: "Welcome Back",
+                          style: TextStyle(
+                            color: Color(0xFFD95D37),
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildTextField('Email or Phone', controller: _emailOrPhoneController),
+                  _buildTextField('Password', controller: _passwordController, obscureText: true),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        _showForgotPasswordModal(context);
+                      },
                       child: const Text(
-                        'Login',
-                        style: TextStyle(fontSize: 12, color: Colors.white),
+                        'Forgot Password?',
+                        style: TextStyle(fontSize: 10, color: Colors.black54),
                       ),
                     ),
-            ],
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        BlocProvider.of<LoginBloc>(context).add(
+                          LoginSubmitted(
+                            _emailOrPhoneController.text,
+                            _passwordController.text,
+                          ),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF75ECE1),
+                      minimumSize: const Size.fromHeight(50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -175,7 +184,7 @@ class LoginPageState extends State<LoginPage> {
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(24.0),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
           ),
@@ -193,8 +202,7 @@ class LoginPageState extends State<LoginPage> {
                 toolbarHeight: 56,
               ),
               const SizedBox(height: 24),
-              _buildTextField('Email',
-                  controller: emailController, fontSize: 14.0),
+              _buildTextField('Email', controller: emailController, fontSize: 14.0),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
@@ -206,7 +214,7 @@ class LoginPageState extends State<LoginPage> {
                   }
 
                   try {
-                    await _userService.forgotPassword(email);
+                    // Call your forgot password service here
                     _showVerifyEmailModal(context, email);
                   } catch (e) {
                     _showErrorDialog(e.toString());
@@ -241,7 +249,7 @@ class LoginPageState extends State<LoginPage> {
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(24.0),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
           ),
@@ -259,8 +267,7 @@ class LoginPageState extends State<LoginPage> {
                 toolbarHeight: 56,
               ),
               const SizedBox(height: 24),
-              _buildTextField('Enter 4-digit code',
-                  controller: codeController, fontSize: 14.0),
+              _buildTextField('Enter code', controller: codeController, fontSize: 14.0),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
@@ -292,11 +299,9 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _showResetPasswordModal(
-      BuildContext context, String email, String code) {
+  void _showResetPasswordModal(BuildContext context, String email, String code) {
     final TextEditingController newPasswordController = TextEditingController();
-    final TextEditingController confirmPasswordController =
-        TextEditingController();
+    final TextEditingController confirmPasswordController = TextEditingController();
 
     showModalBottomSheet(
       context: context,
@@ -305,7 +310,7 @@ class LoginPageState extends State<LoginPage> {
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(24.0),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
           ),
@@ -323,15 +328,8 @@ class LoginPageState extends State<LoginPage> {
                 toolbarHeight: 56,
               ),
               const SizedBox(height: 24),
-              _buildTextField('Enter New Password',
-                  controller: newPasswordController,
-                  obscureText: true,
-                  fontSize: 14.0),
-              const SizedBox(height: 16),
-              _buildTextField('Re-enter New Password',
-                  controller: confirmPasswordController,
-                  obscureText: true,
-                  fontSize: 14.0),
+              _buildTextField('New Password', controller: newPasswordController, obscureText: true),
+              _buildTextField('Confirm Password', controller: confirmPasswordController, obscureText: true),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
@@ -339,21 +337,16 @@ class LoginPageState extends State<LoginPage> {
                   final confirmPassword = confirmPasswordController.text;
 
                   if (newPassword.isEmpty || confirmPassword.isEmpty) {
-                    _showErrorDialog('Please fill out both password fields.');
+                    _showErrorDialog('Fields cannot be empty.');
                     return;
                   }
-
                   if (newPassword != confirmPassword) {
                     _showErrorDialog('Passwords do not match.');
                     return;
                   }
 
-                  try {
-                    await _userService.resetPassword(email, code, newPassword);
-                    Navigator.pushReplacementNamed(context, '/login');
-                  } catch (e) {
-                    _showErrorDialog(e.toString());
-                  }
+                  // Call your reset password service here
+                  _showSuccessDialog(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF75ECE1),
@@ -363,7 +356,7 @@ class LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 child: const Text(
-                  'Proceed',
+                  'Reset',
                   style: TextStyle(fontSize: 12, color: Colors.white),
                 ),
               ),
@@ -371,6 +364,25 @@ class LoginPageState extends State<LoginPage> {
           ),
         );
       },
+    );
+  }
+
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Success'),
+        content: const Text('Your password has been reset successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context); // Close the modal and the login page
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'BudgetWise',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -22,8 +23,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
-        '/signup': (context) => const SignupPage(title: 'Sign Up'),
-        '/login': (context) => const LoginPage(),
+        '/signup': (context) => SignupPage(),
+        '/login': (context) =>  LoginPage(),
         '/home': (context) => const HomePage(),
       },
     );

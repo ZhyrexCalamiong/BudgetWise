@@ -98,7 +98,7 @@ class WalletScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 15, horizontal: 30),
                       decoration: BoxDecoration(
-                        color: Colors.cyanAccent.shade100,
+                        color: Colors.cyanAccent.shade100.withOpacity(0.4),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -134,7 +134,7 @@ class WalletScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 15, horizontal: 30),
                       decoration: BoxDecoration(
-                        color: Colors.redAccent.shade100,
+                        color: Colors.redAccent.shade100.withOpacity(0.4),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -180,7 +180,9 @@ class WalletScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const ViewAllTransactions()),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ViewAllTransactions()),
                           );
                         },
                         child: Text('view all'),

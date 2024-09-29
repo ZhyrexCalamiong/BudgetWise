@@ -1,47 +1,45 @@
 class User {
-  final String id;
   final String firstName;
   final String middleName;
-  final String lastName ;
+  final String lastName;
   final String email;
-  final String dateofBirth;
   final String phone;
   final String password;
+  final String dateOfBirth;
 
   User({
-    required this.id,
     required this.firstName,
     required this.middleName,
     required this.lastName,
     required this.email,
-    required this.dateofBirth,
     required this.phone,
     required this.password,
+    required this.dateOfBirth,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'],
-      firstName: json['firstName'],
-      middleName: json['middleName'],
-      lastName: json['lastName'],
-      email: json['email'],
-      dateofBirth: json['dateofBirth'],
-      phone: json['phone'],
-      password: json['password']
-    );
-  }
-
-  Map<String, dynamic> toJson() {
+  // Add a method to convert User object to a Map
+  Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'firstName': firstName,
       'middleName': middleName,
       'lastName': lastName,
       'email': email,
-      'dateofBirth': dateofBirth,
       'phone': phone,
-      'password': password
+      'password': password,
+      'dateOfBirth': dateOfBirth,
     };
+  }
+
+  // Add a factory constructor to create a User from a Map if needed
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      firstName: map['firstName'],
+      middleName: map['middleName'],
+      lastName: map['lastName'],
+      email: map['email'],
+      phone: map['phone'],
+      password: map['password'],
+      dateOfBirth: map['dateOfBirth'],
+    );
   }
 }

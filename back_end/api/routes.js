@@ -20,7 +20,6 @@ router.post('/forgot-password', async (req, res) => {
         });
     }
 
-    // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
         return res.status(404).json({
@@ -29,11 +28,9 @@ router.post('/forgot-password', async (req, res) => {
         });
     }
 
-    // Generate a verification code
     const code = crypto.randomInt(100000, 999999).toString();
-    verificationCodes[email] = code; // Store code temporarily
+    verificationCodes[email] = code; 
 
-    // Send the code via email
     await sendVerificationCode(email, code);
 
     return res.status(200).json({
@@ -137,7 +134,7 @@ router.post('/signup', async (req, res) => {
     }
 
     // Date of Birth validation
-    const parsedDate = new Date(dateOfBirth); // Correctly parse as Date
+    const parsedDate = new Date(dateOfBirth); 
     if (isNaN(parsedDate.getTime())) {
         return res.status(400).json({
             status: "Failed",
@@ -190,7 +187,7 @@ router.post('/signup', async (req, res) => {
             middleName,
             lastName,
             email,
-            dateOfBirth: parsedDate, // Store as Date
+            dateOfBirth: parsedDate,
             phone,
             password: hashedPassword,
             verified: false,
@@ -216,7 +213,6 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
     let { email, password } = req.body;
 
-    // Trim input fields
     email = email.trim();
     password = password.trim();
 

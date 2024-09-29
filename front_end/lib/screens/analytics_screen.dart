@@ -41,7 +41,7 @@ class AnalyticsScreen extends StatelessWidget {
                     // Bar Chart Image Placeholder
                     Container(
                       height: 200, // Height of the image
-                      child: Image.asset('assets/bar_chart.png'),
+                      child: Image.asset('assets/images/bar_chart.png'),
                     ),
                     SizedBox(height: 16),
                     // Weekday labels
@@ -83,11 +83,16 @@ class AnalyticsScreen extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         // Placeholder for dropdown menu
-                        Row(
-                          children: [
-                            Text('Weekly'),
-                            Icon(Icons.arrow_drop_down),
-                          ],
+                        GestureDetector(
+                          onTap: () {
+                            //logic of dropdown here
+                          },
+                          child: Row(
+                            children: [
+                              Text('Weekly'),
+                              Icon(Icons.arrow_drop_down),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -95,7 +100,8 @@ class AnalyticsScreen extends StatelessWidget {
                     // Placeholder for the Donut Chart
                     Container(
                       height: 200, // Height of the image
-                      child: Image.asset('assets/pie_chart.png'), // Placeholder for actual chart
+                      child: Image.asset(
+                          'assets/images/pie_chart.png'), // Placeholder for actual chart
                     ),
                     SizedBox(height: 16),
                     // Legend section

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../screens/analytics_screen.dart';
 import '../screens/wallet_screen.dart';
 import '../screens/profile_screen.dart';
-import '../screens/home_screen.dart';
+//import '../screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,10 +51,10 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   _onItemTapped(3);
                 },
-                child: CircleAvatar(
-                  backgroundColor: const Color(0xFFEAEAEA),
+                child: const CircleAvatar(
+                  backgroundColor: Color(0xFFEAEAEA),
                   radius: 20,
-                  child: const Icon(
+                  child: Icon(
                     Icons.person,
                     size: 20,
                     color: Colors.white,
