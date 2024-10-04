@@ -1,6 +1,6 @@
-^C:\USERS\63939\DESKTOP\PROJECT\BUDGETWISE\FRONT_END\WINDOWS\RUNNER\CMAKELISTS.TXT
+^C:\USERS\DDAL6\ONEDRIVE\DESKTOP\BWISE\BUDGETWISE\FRONT_END\WINDOWS\RUNNER\CMAKELISTS.TXT
 setlocal
-"D:\Visual Studio\Visual Studio IDE\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/63939/Desktop/project/BudgetWise/front_end/windows -BC:/Users/63939/Desktop/project/BudgetWise/front_end/build/windows/x64 --check-stamp-file C:/Users/63939/Desktop/project/BudgetWise/front_end/build/windows/x64/runner/CMakeFiles/generate.stamp
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/ddal6/OneDrive/Desktop/BWise/BudgetWise/front_end/windows -BC:/Users/ddal6/OneDrive/Desktop/BWise/BudgetWise/front_end/build/windows/x64 --check-stamp-file C:/Users/ddal6/OneDrive/Desktop/BWise/BudgetWise/front_end/build/windows/x64/runner/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
