@@ -1,8 +1,11 @@
+import 'package:budgetwise_one/features/analytics/services/coingecko_service.dart';
 import 'package:budgetwise_one/features/navigations/bottom_navigation.dart';
+import 'package:budgetwise_one/features/notifications/notification_page.dart';
 import 'package:flutter/material.dart';
-import '../../analytics/screens/analytics_screen.dart';
-import '../../wallet/screens/wallet_screen.dart';
+import '../../analytics/pages/analytics_page.dart';
+import '../../wallet/pages/wallet_page.dart';
 import '../../profile/pages/profile_page.dart';
+// import '../../features/notifications/notification_page.dart'; // Updated import statement
 
 void main() {
   runApp(const MyApp());
@@ -124,135 +127,237 @@ class _HomePageState extends State<HomePage> {
 }
 
 // Home screen with current balance Card
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final CoinGeckoService _coinGeckoService =
+      CoinGeckoService(); // Create an instance of CoinGeckoService
+  List<dynamic> _topCoins = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTopCoins();
+  }
+
+  Future<void> _fetchTopCoins() async {
+    try {
+      final coins = await _coinGeckoService.fetchTopCoins();
+      setState(() {
+        _topCoins = coins;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false; // Handle error, maybe show an error message
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFF0D0D0D),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min, // Adjust size to content
-          children: [
-            Card(
-              color: const Color(0xFF1E1E1E), // Card color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0), // Rounded corners
-              ),
-              elevation: 4, // Shadow effect
-              child: const Padding(
-                padding: EdgeInsets.all(16.0), // Padding inside the card
-                child: Column(
-                  mainAxisSize: MainAxisSize.min, // Adjust size to content
-                  children: [
-                    Text(
-                      'Current Balance',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment:
+                MainAxisAlignment.start, // Align contents to the top
+            children: [
+              const SizedBox(height: 20), // Add space at the top
+              Card(
+                color: const Color(0xFF1E1E1E), // Card color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                ),
+                elevation: 4, // Shadow effect
+                child: const Padding(
+                  padding: EdgeInsets.all(35.0), // Padding inside the card
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min, // Adjust size to content
+                    children: [
+                      Text(
+                        'Current Balance',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8), // Space between text
-                    Text(
-                      'Php 120,000.00',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                      SizedBox(height: 8), // Space between text
+                      Text(
+                        'Php 120,000.00',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20), // Space between card and buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
-              children: [
-                _buildIconButton(Icons.add, 'Add'),
-                const SizedBox(width: 20), // Space between buttons
-                _buildIconButton(Icons.shopping_cart, 'Buy'),
-                const SizedBox(width: 20), // Space between buttons
-                _buildIconButton(Icons.transform, 'Convert'),
-              ],
-            ),
-          ],
+              const SizedBox(height: 20), // Space between card and buttons
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.center, // Center the buttons
+                children: [
+                  _buildIconButton(Icons.add, 'Add'),
+                  const SizedBox(width: 20), // Space between buttons
+                  _buildIconButton(Icons.shopping_cart, 'Buy'),
+                  const SizedBox(width: 20), // Space between buttons
+                  _buildIconButton(Icons.transform, 'Convert'),
+                ],
+              ),
+              const SizedBox(height: 20), // Space between buttons and My Assets
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.start, // Align My Assets to the left
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      'My Assets',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14, // Smaller text size
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                  height: 20), // Space between My Assets and Coin List
+
+              // Box for Crypto Currency Market Value
+              Card(
+                color: const Color(0xFF1E1E1E), // Card color for coin list
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                ),
+                elevation: 4, // Shadow effect
+                child: Padding(
+                  padding: const EdgeInsets.all(
+                      15.0), // Reduced padding inside the card
+                  child: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Align content to the start
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Crypto Currency Market',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Handle view all action
+                            },
+                            child: const Text(
+                              'View All',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                          height: 10), // Space between title and coin list
+
+                      // Loading indicator or coin list
+                      _isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : _topCoins.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    'No coins found',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: _topCoins.length > 5
+                                      ? 5
+                                      : _topCoins
+                                          .length, // Limit to top 5 coins
+                                  itemBuilder: (context, index) {
+                                    final coin = _topCoins[index];
+                                    return ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor:
+                                            const Color(0xFF1E1E1E),
+                                        child: Image.network(
+                                          coin['image'],
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                      ),
+                                      title: Text(
+                                        coin['name'],
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                      subtitle: Text(
+                                        '\$${coin['current_price'].toStringAsFixed(2)}',
+                                        style:
+                                            const TextStyle(color: Colors.grey),
+                                      ),
+                                      trailing: Text(
+                                        '${coin['price_change_percentage_24h'].toStringAsFixed(2)}%',
+                                        style: TextStyle(
+                                          color:
+                                              coin['price_change_percentage_24h'] >=
+                                                      0
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // Method to build individual icon buttons with circular backgrounds
   Widget _buildIconButton(IconData icon, String label) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E), // Background color for the circle
-            shape: BoxShape.circle, // Circular shape
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(16.0), // Padding inside the circle
-          child: Icon(
-            icon,
-            size: 30,
-            color: const Color(0xFF8BBE6D), // Change to desired icon color
-          ),
+        CircleAvatar(
+          radius: 30,
+          backgroundColor: const Color(0xFF1E1E1E),
+          child: Icon(icon, color: Colors.white), // White icons for consistency
         ),
-        const SizedBox(height: 8), // Space between icon and text
+        const SizedBox(height: 5), // Space between icon and label
         Text(
           label,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+            fontSize: 12,
           ),
         ),
       ],
-    );
-  }
-}
-
-// Notification Page
-class NotificationPage extends StatelessWidget {
-  const NotificationPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Notifications',
-          style: TextStyle(
-              color: Colors.white), // Change title text color to white
-        ),
-        backgroundColor: const Color(0xFF121212), // Updated AppBar color
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        // Optionally, you can add the following line to set all icon colors to white
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: const Center(
-        child: Text(
-          'You don\'t have notifications yet',
-          style: TextStyle(
-              color: Colors.black), // Optional: Change text color to white
-        ),
-      ),
     );
   }
 }

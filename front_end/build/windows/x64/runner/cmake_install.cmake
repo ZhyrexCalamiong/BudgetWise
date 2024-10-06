@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/ddal6/OneDrive/Desktop/budgetWiseIntro/BudgetWise/front_end/windows/runner
+# Install script for directory: C:/Users/ddal6/OneDrive/Desktop/bw october 6/BudgetWise/front_end/windows/runner
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

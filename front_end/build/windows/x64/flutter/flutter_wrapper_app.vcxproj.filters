@@ -1,28 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\windows\flutter\ephemeral\cpp_client_wrapper\core_implementations.cc">
+    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\bw october 6\BudgetWise\front_end\windows\flutter\ephemeral\cpp_client_wrapper\core_implementations.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\windows\flutter\ephemeral\cpp_client_wrapper\standard_codec.cc">
+    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\bw october 6\BudgetWise\front_end\windows\flutter\ephemeral\cpp_client_wrapper\standard_codec.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\windows\flutter\ephemeral\cpp_client_wrapper\flutter_engine.cc">
+    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\bw october 6\BudgetWise\front_end\windows\flutter\ephemeral\cpp_client_wrapper\flutter_engine.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\windows\flutter\ephemeral\cpp_client_wrapper\flutter_view_controller.cc">
+    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\bw october 6\BudgetWise\front_end\windows\flutter\ephemeral\cpp_client_wrapper\flutter_view_controller.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\windows\flutter\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\bw october 6\BudgetWise\front_end\windows\flutter\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{8D26D69F-2E65-3516-8E1F-5B4A078A578D}</UniqueIdentifier>
+      <UniqueIdentifier>{B9E2F5F0-5D54-3403-B433-81D44BD8DE27}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{EC22B743-AAA6-3C5C-B40D-B1DF286319EC}</UniqueIdentifier>
+      <UniqueIdentifier>{E5EACD4D-0E9C-39AF-8314-BD28F4F8A282}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\CMakeFiles\e44223a1779b01b3ac74e298dec4e560\generate.stamp.rule">
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\bw october 6\BudgetWise\front_end\build\windows\x64\CMakeFiles\ef9ad6287b118bbffde3c1e6a73eadd6\generate.stamp.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{8D26D69F-2E65-3516-8E1F-5B4A078A578D}</UniqueIdentifier>
+      <UniqueIdentifier>{B9E2F5F0-5D54-3403-B433-81D44BD8DE27}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
