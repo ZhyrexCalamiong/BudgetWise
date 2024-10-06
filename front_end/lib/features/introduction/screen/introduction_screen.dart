@@ -13,7 +13,7 @@ class IntroductionPage extends StatefulWidget {
 }
 
 class _IntroductionPageState extends State<IntroductionPage> {
-  PageController _controller = PageController();
+  final PageController _controller = PageController();
 
   bool lastpage = false;
 
@@ -81,7 +81,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                     child: TextButton(
                       onPressed: () {
                         _controller.nextPage(
-                          duration: Duration(microseconds: 500),
+                          duration: const Duration(microseconds: 500),
                           curve: Curves.easeIn,
                         );
                       },

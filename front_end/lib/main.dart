@@ -1,8 +1,13 @@
+// lib/main.dart
+
+import 'package:budgetwise_one/features/intro/onboarding_screen.dart';
+import 'package:budgetwise_one/features/intro/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'authentication/pages/signup_page.dart';
 import 'authentication/pages/login_page.dart';
 import 'features/home/pages/home_page.dart';
+// import 'screens/splash_screen.dart'; // Import the splash screen
+// import 'screens/onboarding_screen.dart'; // Import the onboarding screen
 
 void main() {
   runApp(const MyApp());
@@ -22,63 +27,14 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const SplashScreen(),
-        '/signup': (context) => SignupPage(),
-        '/login': (context) => LoginPage(),
+        '/': (context) =>
+            const SplashScreen(), // Set splash screen as initial route
+        '/signup': (context) => const SignupPage(),
+        '/login': (context) => const LoginPage(),
         '/home': (context) => const HomePage(),
+        '/onboarding': (context) =>
+            const OnboardingScreen(), // Add onboarding route
       },
-    );
-  }
-}
-
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Timer(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacementNamed('/signup');
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: RichText(
-          text: const TextSpan(
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-            children: [
-              TextSpan(
-                text: 'B',
-                style: TextStyle(color: Colors.cyan),
-              ),
-              TextSpan(
-                text: 'udget',
-                style: TextStyle(color: Colors.black),
-              ),
-              TextSpan(
-                text: 'W',
-                style: TextStyle(color: Colors.cyan),
-              ),
-              TextSpan(
-                text: 'ise',
-                style: TextStyle(color: Colors.black),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

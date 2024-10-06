@@ -1,8 +1,8 @@
+import 'package:budgetwise_one/features/navigations/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import '../../analytics/screens/analytics_screen.dart';
 import '../../wallet/screens/wallet_screen.dart';
-import '../../profile/screens/profile_screen.dart';
-//import '../screens/home_screen.dart';
+import '../../profile/pages/profile_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                     TextSpan(
                       text: "Hey, User!\n",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                     TextSpan(
                       text: "Good morning",
                       style: TextStyle(
-                        color: Color(0xFFD95D37),
+                        color: Color(0xFF8BBE6D),
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ],
-          backgroundColor: Colors.white,
+          backgroundColor: const Color(0xFF121212), // Updated AppBar color
           elevation: 0,
         ),
         body: const HomeScreen(),
@@ -115,189 +115,109 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildPages()[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: 'Analytics',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet),
-            label: 'Wallet',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFFD95D37),
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
+      bottomNavigationBar: BottomNavigation(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }
 }
 
-// Home screen with the updated balance card
+// Home screen with current balance Card
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Updated Balance Card
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF6EE2A3),
-                  Color(0xFFFF5D47)
-                ], // Adjusted colors to match the image
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+    return Container(
+      color: const Color(0xFF0D0D0D),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min, // Adjust size to content
+          children: [
+            Card(
+              color: const Color(0xFF1E1E1E), // Card color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0), // Rounded corners
               ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Current Balance',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  '₱120,000.00',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              elevation: 4, // Shadow effect
+              child: const Padding(
+                padding: EdgeInsets.all(16.0), // Padding inside the card
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, // Adjust size to content
                   children: [
-                    const Text(
-                      'Wallet Address',
-                      style: TextStyle(color: Colors.white),
+                    Text(
+                      'Current Balance',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.copy, color: Colors.white),
-                      onPressed: () {
-                        // Copy wallet address
-                      },
+                    SizedBox(height: 8), // Space between text
+                    Text(
+                      'Php 120,000.00',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
-                const Text(
-                  '0x1539215231623D72376428...',
-                  style: TextStyle(color: Colors.white),
-                ),
+              ),
+            ),
+            const SizedBox(height: 20), // Space between card and buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center, // Center the buttons
+              children: [
+                _buildIconButton(Icons.add, 'Add'),
+                const SizedBox(width: 20), // Space between buttons
+                _buildIconButton(Icons.shopping_cart, 'Buy'),
+                const SizedBox(width: 20), // Space between buttons
+                _buildIconButton(Icons.transform, 'Convert'),
               ],
             ),
-          ),
-          const SizedBox(height: 24),
-          // Action buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildActionButton(Icons.send, 'Send'),
-              _buildActionButton(Icons.qr_code, 'Receive'),
-              _buildActionButton(Icons.shopping_cart, 'Buy'),
-              _buildActionButton(Icons.swap_horiz, 'Convert'),
-            ],
-          ),
-          const SizedBox(height: 24),
-          // My Assets Section
-          const Text(
-            'My Assets',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          _buildAssetCard('Bitcoin', '12.8217132', '₱12,843,213.00'),
-          const SizedBox(height: 16),
-          _buildAssetCard('Ethereum', '5.1234567', '₱234,231.00'),
-          const SizedBox(height: 16),
-          _buildAssetCard('Litecoin', '50.234', '₱312,231.00'),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildActionButton(IconData icon, String label) {
+  // Method to build individual icon buttons with circular backgrounds
+  Widget _buildIconButton(IconData icon, String label) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        CircleAvatar(
-          backgroundColor: const Color(0xFFF6F6F6),
-          radius: 30,
-          child: Icon(icon, size: 30, color: Colors.orange),
+        Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E1E1E), // Background color for the circle
+            shape: BoxShape.circle, // Circular shape
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(16.0), // Padding inside the circle
+          child: Icon(
+            icon,
+            size: 30,
+            color: const Color(0xFF8BBE6D), // Change to desired icon color
+          ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 8), // Space between icon and text
         Text(
           label,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _buildAssetCard(String assetName, String amount, String value) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF6F6F6),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.orange,
-                child: Text(assetName[0],
-                    style: const TextStyle(color: Colors.white)),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                assetName,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                amount,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                value,
-                style: const TextStyle(color: Colors.grey),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }
@@ -310,18 +230,28 @@ class NotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
-        backgroundColor: Colors.white,
+        title: const Text(
+          'Notifications',
+          style: TextStyle(
+              color: Colors.white), // Change title text color to white
+        ),
+        backgroundColor: const Color(0xFF121212), // Updated AppBar color
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
+        // Optionally, you can add the following line to set all icon colors to white
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: const Center(
-        child: Text('You don\'t have notifications yet'),
+        child: Text(
+          'You don\'t have notifications yet',
+          style: TextStyle(
+              color: Colors.black), // Optional: Change text color to white
+        ),
       ),
     );
   }

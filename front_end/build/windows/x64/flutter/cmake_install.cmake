@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/ddal6/OneDrive/Desktop/BUDGETWISEFOLDERSTRUCTURE/BudgetWise/front_end/windows/flutter
+# Install script for directory: C:/Users/ddal6/OneDrive/Desktop/budgetWiseIntro/BudgetWise/front_end/windows/flutter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

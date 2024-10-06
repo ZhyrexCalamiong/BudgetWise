@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\CMakeFiles\6f8ee1314968d008abe07a80e98b6112\flutter_windows.dll.rule">
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\CMakeFiles\f15eba97121768f97d45efbeeef6eb9f\flutter_windows.dll.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\CMakeFiles\951ce2aa7988f80e474fa9e4af320d4f\flutter_assemble.rule">
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\CMakeFiles\bbb4b43b74287397f636c3361939f9ce\flutter_assemble.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\windows\flutter\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\windows\flutter\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\flutter_assemble" />
+    <None Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\flutter_assemble" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{F5DC226B-240C-317B-97CC-491F64A00FAF}</UniqueIdentifier>
+      <UniqueIdentifier>{8D26D69F-2E65-3516-8E1F-5B4A078A578D}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

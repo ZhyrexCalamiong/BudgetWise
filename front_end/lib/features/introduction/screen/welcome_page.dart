@@ -64,7 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   color: Colors.grey,
                 ),
               ),
-              SizedBox(height: 100),
+              const SizedBox(height: 100),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
@@ -75,7 +75,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           // Add login navigation here
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xff75ECE1),
+                          backgroundColor: const Color(0xff75ECE1),
                           padding: const EdgeInsets.symmetric(
                               vertical: 20.0, horizontal: 80.0),
                           shape: RoundedRectangleBorder(
@@ -86,14 +86,14 @@ class _WelcomePageState extends State<WelcomePage> {
                             style: TextStyle(color: Colors.white)),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Container(
                       child: ElevatedButton(
                         onPressed: () {
                           // Add signup navigation here
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xffD95D37),
+                          backgroundColor: const Color(0xffD95D37),
                           padding: const EdgeInsets.symmetric(
                               vertical: 20.0, horizontal: 76.0),
                           shape: RoundedRectangleBorder(

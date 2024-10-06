@@ -18,7 +18,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6327E2E9-3E23-3BE2-816B-14AFBC2551B5}</ProjectGuid>
+    <ProjectGuid>{8580EA8A-34FA-3A1E-A79F-6C71FB2A0499}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
@@ -100,7 +100,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\CMakeFiles\951ce2aa7988f80e474fa9e4af320d4f\INSTALL_force.rule">
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\CMakeFiles\bbb4b43b74287397f636c3361939f9ce\INSTALL_force.rule">
       <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</BuildInParallel>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
@@ -113,7 +113,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\INSTALL_force</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
       <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</VerifyInputsAndOutputsExist>
       <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">true</BuildInParallel>
@@ -128,7 +128,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\INSTALL_force</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">false</LinkObjects>
       <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">false</VerifyInputsAndOutputsExist>
       <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</BuildInParallel>
@@ -143,20 +143,20 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\INSTALL_force</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
       <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</VerifyInputsAndOutputsExist>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\ZERO_CHECK.vcxproj">
-      <Project>{9F5A85ED-7403-3308-B631-D5D438771414}</Project>
+    <ProjectReference Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\ZERO_CHECK.vcxproj">
+      <Project>{271B64FF-870B-3BC6-A0A7-969A6AF0ADF2}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\runner\ALL_BUILD.vcxproj">
-      <Project>{DD45694E-83AA-348D-949A-875EC6D6752F}</Project>
+    <ProjectReference Include="C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\runner\ALL_BUILD.vcxproj">
+      <Project>{082F8586-9CC2-33E3-8211-C264405E17FD}</Project>
       <Name>ALL_BUILD</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

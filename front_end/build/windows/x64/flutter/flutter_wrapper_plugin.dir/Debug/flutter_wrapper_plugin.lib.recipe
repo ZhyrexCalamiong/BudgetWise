@@ -2,10 +2,10 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\x64\Debug\ZERO_CHECK</FullPath>
+      <FullPath>C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\x64\Debug\ZERO_CHECK</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\ddal6\OneDrive\Desktop\BUDGETWISEFOLDERSTRUCTURE\BudgetWise\front_end\build\windows\x64\flutter\x64\Debug\flutter_assemble</FullPath>
+      <FullPath>C:\Users\ddal6\OneDrive\Desktop\budgetWiseIntro\BudgetWise\front_end\build\windows\x64\flutter\x64\Debug\flutter_assemble</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
