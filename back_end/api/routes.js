@@ -43,6 +43,7 @@ router.post('/forgot-password', async (req, res) => {
 router.post('/reset-password', async (req, res) => {
     const { email, code, newPassword } = req.body;
 
+    // Input validation
     if (!email || !code || !newPassword) {
         return res.status(400).json({
             status: "Failed",
@@ -50,36 +51,44 @@ router.post('/reset-password', async (req, res) => {
         });
     }
 
-    // Check if the code is correct
-    if (verificationCodes[email] !== code) {
-        return res.status(400).json({
+    try {
+        // Check if the code is correct
+        if (verificationCodes[email] !== code) {
+            return res.status(400).json({
+                status: "Failed",
+                message: "Invalid or expired code."
+            });
+        }
+
+        // Find user and update password
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                status: "Failed",
+                message: "User not found."
+            });
+        }
+
+        // Hash new password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+        user.password = hashedPassword;
+        await user.save();
+
+        // Remove code after successful reset
+        delete verificationCodes[email];
+
+        return res.status(200).json({
+            status: "Success",
+            message: "Password reset successful."
+        });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        return res.status(500).json({
             status: "Failed",
-            message: "Invalid or expired code."
+            message: "An error occurred while resetting the password."
         });
     }
-
-    // Find user and update password
-    const user = await User.findOne({ email });
-    if (!user) {
-        return res.status(404).json({
-            status: "Failed",
-            message: "User not found."
-        });
-    }
-
-    // Hash new password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-    user.password = hashedPassword;
-    await user.save();
-
-    // Remove code after successful reset
-    delete verificationCodes[email];
-
-    return res.status(200).json({
-        status: "Success",
-        message: "Password reset successful."
-    });
 });
 
 router.post('/signup', async (req, res) => {

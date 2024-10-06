@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'login_page.dart';
-import '../bloc/registration/registration_bloc.dart';
-import '../../features/profile/repositories/user_repository_impl.dart';
+import '../bloc/authentication/registration/registration_bloc.dart';
+import '../features/profile/repositories/user_repository_impl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/registration/registration_event.dart';
-import '../bloc/registration/registration_state.dart';
+import '../bloc/authentication/registration/registration_event.dart';
+import '../bloc/authentication/registration/registration_state.dart';
 import '../models/user.dart'; // Assuming a User model exists.
 
 class SignupPage extends StatelessWidget {
@@ -13,6 +13,7 @@ class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Signup Page',
       theme: ThemeData.dark(), // Use dark theme for the app
       home: BlocProvider(
@@ -49,7 +50,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
           if (state is RegistrationNavigateToLoginScreenActionState) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const LoginPage()),
+              MaterialPageRoute(builder: (context) => LoginPage()),
             );
           } else if (state is RegistrationError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -139,7 +140,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 },
                 child: const Row(

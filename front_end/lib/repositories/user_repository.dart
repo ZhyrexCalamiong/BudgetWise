@@ -1,5 +1,4 @@
-import '../../../models/user.dart';
-
+import '/models/user.dart';
 abstract class UserRepository {
   Future<void> signin(String email, String password);
   Future<void> signup(User user);

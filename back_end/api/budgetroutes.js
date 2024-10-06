@@ -164,14 +164,11 @@ budget.get('/budget/:userId', async (req, res) => {
             });
         }
 
-        const remainingBudget = budget.maximumAmount - budget.amountSpent;
-
         return res.status(200).json({
             status: "Success",
             data: {
                 maximumAmount: budget.maximumAmount,
                 amountSpent: budget.amountSpent,
-                remainingBudget: remainingBudget
             },
         });
 
