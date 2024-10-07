@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:budgetwise_one/repositories/user_repository_impl.dart';
-import '../../../features/profile/repositories/user_repository.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 

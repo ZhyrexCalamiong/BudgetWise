@@ -1,3 +1,7 @@
+import 'package:budgetwise_one/features/wallet/screens/add_funds_crypto_screen.dart';
+import 'package:budgetwise_one/features/wallet/screens/add_funds_fiat_screen.dart';
+import 'package:budgetwise_one/features/wallet/screens/convert_crypto_screen.dart';
+import 'package:budgetwise_one/features/wallet/screens/convert_fiat_currency.dart';
 import 'package:flutter/material.dart';
 import '../../transactions/view_all_transactions/view_all_transaction.dart'; // Import the new page
 
@@ -130,16 +134,39 @@ class WalletScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildActionButton(Icons.add, 'Add', const Color(0xFF8BBE6D), () {
-              _showAmountInputModal(context, isFiat, true, (amount) {
-                balance += amount; // Update balance for Fiat
-              });
+            _buildActionButton(Icons.add, 'Add', () {
+              if (isFiat) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddFundsFiatScreen(),
+                  ),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddFundsCryptoScreen(),
+                  ),
+                );
+              }
             }),
-            _buildActionButton(
-                Icons.swap_horiz, 'Convert', const Color(0xFF8BBE6D), () {
-              _showAmountInputModal(context, isFiat, false, (amount) {
-                totalSpent += amount; // Update total spent for Fiat
-              });
+            _buildActionButton(Icons.swap_horiz, 'Convert', () {
+              if (isFiat) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ConvertCurrencyFiatScreen(),
+                  ),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ConvertCurrencyCryptoScreen(),
+                  ),
+                );
+              }
             }),
           ],
         ),
@@ -155,9 +182,10 @@ class WalletScreen extends StatelessWidget {
                   const Text(
                     'Recent Transactions',
                     style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -182,28 +210,23 @@ class WalletScreen extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Container(
-                        height: 60,
+                        padding: const EdgeInsets.all(16.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey
-                              .shade700, // Transaction item background color
+                          color: const Color(0xFF1E1E1E),
                         ),
-                        child: ListTile(
-                          leading: Container(
-                            width: 5,
-                            height: double.infinity,
-                            color: const Color(0xFF8BBE6D),
-                          ),
-                          title: Text('Transaction $index',
-                              style: const TextStyle(
-                                  color:
-                                      Colors.white)), // Transaction text color
-                          subtitle: const Text('Details of the transaction',
-                              style: TextStyle(
-                                  color: Colors.grey)), // Subtitle color
-                          trailing: const Text('₱ 1,000.00',
-                              style: TextStyle(
-                                  color: Colors.white)), // Trailing text color
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Transaction #$index',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            Text(
+                              '₱${(index + 1) * 100}',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
                         ),
                       ),
                     );
@@ -218,173 +241,29 @@ class WalletScreen extends StatelessWidget {
   }
 
   Widget _buildActionButton(
-      IconData icon, String label, Color color, VoidCallback onTap) {
+      IconData icon, String label, VoidCallback onPressed) {
     return Column(
       children: [
-        GestureDetector(
-          onTap: onTap,
-          child: CircleAvatar(
-            backgroundColor:
-                const Color(0xFF121212), // Background color for buttons
-            radius: 30,
-            child: Icon(icon, size: 30, color: color),
+        ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            backgroundColor: const Color(0xFF1E1E1E), // Black background color
+            padding: const EdgeInsets.all(20), // Increased padding
+            shadowColor: Colors.black,
           ),
+          child:
+              Icon(icon, color: Colors.white, size: 36), // Increased icon size
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 5),
         Text(
           label,
           style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.white), // Button label color
+            color: Colors.white, // White text color
+            fontSize: 16, // Slightly bigger font size
+          ),
         ),
       ],
-    );
-  }
-
-  void _showAmountInputModal(BuildContext context, bool isFiat, bool isAdd,
-      Function(double) updateAmount) {
-    final TextEditingController amountController = TextEditingController();
-    String selectedCurrency = 'PHP'; // Default currency
-
-    // List of currency options
-    final List<String> currencyOptions = ['PHP', 'USD', 'JPY'];
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return _AmountInputModal(
-          amountController: amountController,
-          selectedCurrency: selectedCurrency,
-          currencyOptions: currencyOptions,
-          onChangedCurrency: (String newCurrency) {
-            selectedCurrency = newCurrency; // Update selected currency
-          },
-          isFiat: isFiat,
-          isAdd: isAdd,
-          updateAmount: updateAmount,
-        );
-      },
-    );
-  }
-}
-
-class _AmountInputModal extends StatefulWidget {
-  final TextEditingController amountController;
-  final String selectedCurrency;
-  final List<String> currencyOptions;
-  final Function(String) onChangedCurrency;
-  final bool isFiat;
-  final bool isAdd;
-  final Function(double) updateAmount;
-
-  const _AmountInputModal({
-    required this.amountController,
-    required this.selectedCurrency,
-    required this.currencyOptions,
-    required this.onChangedCurrency,
-    required this.isFiat,
-    required this.isAdd,
-    required this.updateAmount,
-  });
-
-  @override
-  __AmountInputModalState createState() => __AmountInputModalState();
-}
-
-class __AmountInputModalState extends State<_AmountInputModal> {
-  late String selectedCurrency;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedCurrency = widget.selectedCurrency; // Initialize selected currency
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 400, // Set a fixed height for the modal
-      padding: const EdgeInsets.all(16.0),
-      color: const Color(0xFF0D0D0D), // Background color of modal
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            '${widget.isAdd ? 'Add' : 'Convert'} Amount',
-            style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white), // Modal title color
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          TextField(
-            controller: widget.amountController,
-            keyboardType: TextInputType.number,
-            style: const TextStyle(color: Colors.white), // Text color
-            decoration: const InputDecoration(
-              labelText: 'Amount',
-              labelStyle: TextStyle(color: Colors.grey), // Label text color
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: Color(0xFF8BBE6D)), // Focused border color
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Colors.grey), // Unfocused border color
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          DropdownButtonFormField<String>(
-            value: selectedCurrency,
-            dropdownColor: const Color(0xFF1E1E1E), // Dropdown background color
-            items: widget.currencyOptions.map((String currency) {
-              return DropdownMenuItem<String>(
-                value: currency,
-                child: Text(currency,
-                    style: const TextStyle(
-                        color: Colors.white)), // Dropdown item text color
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedCurrency = newValue!;
-                widget.onChangedCurrency(
-                    selectedCurrency); // Update selected currency
-              });
-            },
-            decoration: const InputDecoration(
-              labelText: 'Select Currency',
-              labelStyle: TextStyle(color: Colors.grey), // Label text color
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Colors.grey), // Unfocused border color
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              if (widget.amountController.text.isNotEmpty) {
-                final amount = double.parse(widget.amountController.text);
-                widget.updateAmount(amount); // Update amount in parent
-                Navigator.pop(context); // Close modal
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  const Color(0xFF8BBE6D), // Button background color
-            ),
-            child: Text(widget.isAdd ? 'Add' : 'Convert',
-                style:
-                    const TextStyle(color: Colors.black)), // Button text color
-          ),
-        ],
-      ),
     );
   }
 }

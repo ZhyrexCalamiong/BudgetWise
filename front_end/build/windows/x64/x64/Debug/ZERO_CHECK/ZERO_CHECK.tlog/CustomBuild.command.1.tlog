@@ -1,6 +1,6 @@
-^C:\USERS\DDAL6\ONEDRIVE\DESKTOP\BW OCTOBER 6\BUDGETWISE\FRONT_END\BUILD\WINDOWS\X64\CMAKEFILES\EF9AD6287B118BBFFDE3C1E6A73EADD6\GENERATE.STAMP.RULE
+^C:\USERS\DDAL6\ONEDRIVE\DESKTOP\OCTOBER 7 BW\BUDGETWISE\FRONT_END\BUILD\WINDOWS\X64\CMAKEFILES\EC769BDCC6AAC760F2CE900FBA1DE7F0\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SC:/Users/ddal6/OneDrive/Desktop/bw october 6/BudgetWise/front_end/windows" "-BC:/Users/ddal6/OneDrive/Desktop/bw october 6/BudgetWise/front_end/build/windows/x64" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/ddal6/OneDrive/Desktop/bw october 6/BudgetWise/front_end/build/windows/x64/budgetwise_one.sln"
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SC:/Users/ddal6/OneDrive/Desktop/OCTOBER 7 BW/BudgetWise/front_end/windows" "-BC:/Users/ddal6/OneDrive/Desktop/OCTOBER 7 BW/BudgetWise/front_end/build/windows/x64" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/ddal6/OneDrive/Desktop/OCTOBER 7 BW/BudgetWise/front_end/build/windows/x64/budgetwise_one.sln"
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
