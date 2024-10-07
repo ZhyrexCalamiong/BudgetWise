@@ -16,7 +16,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change Password'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -39,7 +38,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xffD95D37), // Color for "Change"
+                        color: Color(0xFF8BBE6D), // Color for "Change"
                       ),
                     ),
                     TextSpan(
@@ -47,7 +46,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black, // Color for "Password"
+                        color: Colors.white, // Color for "Password"
                       ),
                     ),
                   ],
@@ -90,8 +89,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         // Add send code logic here
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(
-                            0xff75ECE1), // Cyan color for the button
+                        backgroundColor: const Color(0xFF8BBE6D),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -165,7 +163,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        const Color(0xff75ECE1), // Cyan color for the button
+                        const Color(0xFF8BBE6D), // Cyan color for the button
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

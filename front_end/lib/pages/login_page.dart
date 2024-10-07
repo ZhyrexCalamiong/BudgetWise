@@ -82,6 +82,15 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: const Text('Forgot Password?'),
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
+                    },
+                    child: const Text('Backdoor'),
+                  ),
                 ],
               ),
             ),
@@ -119,6 +128,15 @@ class _LoginPageState extends State<LoginPage> {
                       _showForgotPasswordModal(context);
                     },
                     child: const Text('Forgot Password?'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
+                    },
+                    child: const Text('Backdoor'),
                   ),
                 ],
               ),

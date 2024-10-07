@@ -29,7 +29,7 @@ class EditProfilePage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange, // Orange color for "Edit"
+                        color: Color(0xFF8BBE6D), // Orange color for "Edit"
                       ),
                     ),
                     TextSpan(
@@ -37,7 +37,7 @@ class EditProfilePage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black, // Black color for "Profile"
+                        color: Colors.white, // Black color for "Profile"
                       ),
                     ),
                   ],
@@ -109,7 +109,7 @@ class EditProfilePage extends StatelessWidget {
                     // Add confirm logic here
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF75ECE1), // Cyan color
+                    backgroundColor: Colors.orange, // Cyan color
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -135,7 +135,7 @@ class EditProfilePage extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        const Color(0xFFD95D37), // Orange-red color
+                        const Color(0xFF8BBE6D), // Orange-red color
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
