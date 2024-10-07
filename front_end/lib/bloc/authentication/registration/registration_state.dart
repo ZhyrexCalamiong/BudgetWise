@@ -7,6 +7,10 @@ abstract class RegistrationState extends Equatable {
   List<Object?> get props => [];
 }
 
+class RegistrationLoaded extends RegistrationState {}
+
+class RegistrationInitial extends RegistrationState {}
+
 class RegistrationLoading extends RegistrationState {}
 
 class RegistrationNavigateToLoginScreenActionState extends RegistrationState {}
