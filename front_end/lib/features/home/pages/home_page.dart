@@ -220,10 +220,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const SizedBox(height: 20), // Space between buttons and My Assets
-              Row(
+              const Row(
                 mainAxisAlignment:
                     MainAxisAlignment.start, // Align My Assets to the left
-                children: const [
+                children: [
                   Padding(
                     padding: EdgeInsets.only(left: 20.0),
                     child: Text(
@@ -465,7 +465,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisSize: MainAxisSize.min, // Adjust size to content
               children: [
                 TextField(
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor:
@@ -507,7 +507,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showMoneyConverterDialog(BuildContext context) {
     String selectedFromCurrency = 'PHP'; // Default selected currency
     String selectedToCurrency = 'JPY'; // Default selected currency
-    TextEditingController _amountController = TextEditingController();
+    TextEditingController amountController = TextEditingController();
 
     showDialog(
       context: context,
@@ -573,9 +573,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 10), // Spacing between dropdown and text field
                     Expanded(
                       child: TextField(
-                        controller: _amountController,
+                        controller: amountController,
                         keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
+                            const TextInputType.numberWithOptions(decimal: true),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor:
