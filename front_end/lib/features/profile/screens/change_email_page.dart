@@ -10,7 +10,6 @@ class ChangeEmailPage extends StatefulWidget {
 class _ChangeEmailPageState extends State<ChangeEmailPage> {
   // Variables to manage password visibility
   bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,6 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Change Password Title
               RichText(
@@ -36,7 +34,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                     TextSpan(
                       text: 'Change',
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF8BBE6D), // Color for "Change"
                       ),
@@ -44,7 +42,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                     TextSpan(
                       text: ' Email',
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.white, // Color for "Password"
                       ),
@@ -52,18 +50,10 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
-
-              // Email TextField
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
               const SizedBox(height: 20),
+
+              const _TextField(labelText: 'Email', borderRadius: 10),
+              const SizedBox(height: 16),
 
               // OTP TextField and Send Code Button
               Row(
@@ -74,7 +64,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                       decoration: InputDecoration(
                         labelText: 'Input OTP Code',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
@@ -82,7 +72,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                   const SizedBox(width: 10),
                   // Send Code Button
                   SizedBox(
-                    height: 60,
+                    height: 45,
                     width: 80,
                     child: ElevatedButton(
                       onPressed: () {
@@ -91,21 +81,24 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF8BBE6D),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: const Text(
                         'Send Code',
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(fontSize: 12, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
-              // Password TextField with visibility toggle
+              const _TextField(labelText: 'New Email', borderRadius: 10),
+              const SizedBox(height: 16),
+
+              // Confirm Password TextField with visibility toggle
               TextField(
                 obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
@@ -127,58 +120,52 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-
-              // Confirm Password TextField with visibility toggle
-              TextField(
-                obscureText: !_isConfirmPasswordVisible,
-                decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isConfirmPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-                      });
-                    },
-                  ),
-                ),
-              ),
               const SizedBox(height: 30),
 
-              // Confirm Button
-              SizedBox(
-                width: double.infinity, // Make button full-width
-                height: 60, // Button height
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Add confirm logic here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        const Color(0xFF8BBE6D), // Cyan color for the button
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+              ElevatedButton(
+                onPressed: () {
+                  // Add confirm logic here
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8BBE6D),
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Text(
-                    'Confirm',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TextField extends StatelessWidget {
+  final String labelText;
+  final double borderRadius;
+
+  const _TextField({
+    Key? key,
+    required this.labelText,
+    this.borderRadius = 5.0, // default value for borderRadius
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
     );

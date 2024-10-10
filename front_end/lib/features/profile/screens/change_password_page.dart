@@ -27,7 +27,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Change Password Title
               RichText(
@@ -36,7 +35,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     TextSpan(
                       text: 'Change',
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF8BBE6D), // Color for "Change"
                       ),
@@ -44,7 +43,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     TextSpan(
                       text: ' Password',
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.white, // Color for "Password"
                       ),
@@ -52,18 +51,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
-
-              // Email TextField
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
               const SizedBox(height: 20),
+
+              const _TextField(labelText: 'Email', borderRadius: 10),
+              const SizedBox(height: 16),
 
               // OTP TextField and Send Code Button
               Row(
@@ -82,7 +73,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   const SizedBox(width: 10),
                   // Send Code Button
                   SizedBox(
-                    height: 60,
+                    height: 45,
                     width: 80,
                     child: ElevatedButton(
                       onPressed: () {
@@ -96,14 +87,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       ),
                       child: const Text(
                         'Send Code',
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(fontSize: 12, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
               // Password TextField with visibility toggle
               TextField(
@@ -127,7 +118,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
               // Confirm Password TextField with visibility toggle
               TextField(
@@ -151,34 +142,52 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 16),
 
-              // Confirm Button
-              SizedBox(
-                width: double.infinity, // Make button full-width
-                height: 60, // Button height
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Add confirm logic here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        const Color(0xFF8BBE6D), // Cyan color for the button
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+              ElevatedButton(
+                onPressed: () {
+                  // Add confirm logic here
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8BBE6D),
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Text(
-                    'Confirm',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TextField extends StatelessWidget {
+  final String labelText;
+  final double borderRadius;
+
+  const _TextField({
+    Key? key,
+    required this.labelText,
+    this.borderRadius = 5.0, // default value for borderRadius
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
     );

@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class EditProfilePage extends StatelessWidget {
+class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
+
+  @override
+  _EditProfilePage createState() => _EditProfilePage();
+}
+
+class _EditProfilePage extends State<EditProfilePage> {
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -18,139 +26,142 @@ class EditProfilePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Edit Profile Title
               RichText(
                 text: const TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Edit',
+                      text: "Edit ",
                       style: TextStyle(
-                        fontSize: 32,
+                        color: Color(0xFF8BBE6D),
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF8BBE6D), // Orange color for "Edit"
                       ),
                     ),
                     TextSpan(
-                      text: ' Profile',
+                      text: "Profile",
                       style: TextStyle(
-                        fontSize: 32,
+                        color: Colors.white,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white, // Black color for "Profile"
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
-
-              // First Name TextField
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'First Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
               const SizedBox(height: 20),
-
-              // Middle Name TextField
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Middle Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Last Name TextField
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Last Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Email TextField
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+              const _TextField(labelText: 'First Name', borderRadius: 10),
+              const SizedBox(height: 16),
+              const _TextField(labelText: 'Middle Name', borderRadius: 10),
+              const SizedBox(height: 16),
+              const _TextField(labelText: 'Last Name', borderRadius: 10),
+              const SizedBox(height: 16),
 
               // Contact No TextField
               TextField(
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(10),
+                ],
                 decoration: InputDecoration(
                   labelText: 'Contact No.',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
-
-              // Confirm Button
-              SizedBox(
-                width: double.infinity, // Make button full-width
-                height: 60, // Button height
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Add confirm logic here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange, // Cyan color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+              const SizedBox(height: 16),
+              TextField(
+                obscureText: !_isPasswordVisible,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
-                    'Confirm',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Confirm Button// Button height
+              ElevatedButton(
+                onPressed: () {
+                  // Add confirm logic here
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8BBE6D),
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
               ),
               const SizedBox(height: 10),
 
-              // Cancel Button
-              SizedBox(
-                width: double.infinity, // Make button full-width
-                height: 60, // Button height
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Add cancel logic here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        const Color(0xFF8BBE6D), // Orange-red color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     // Add cancel logic here
+              //   },
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: Colors.red,
+              //     minimumSize: const Size.fromHeight(50),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(12),
+              //     ),
+              //   ),
+              //   child: const Text(
+              //     'Cancel',
+              //     style: TextStyle(
+              //       fontSize: 18,
+              //       color: Colors.black,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TextField extends StatelessWidget {
+  final String labelText;
+  final double borderRadius;
+
+  const _TextField({
+    Key? key,
+    required this.labelText,
+    this.borderRadius = 5.0, // default value for borderRadius
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
     );
