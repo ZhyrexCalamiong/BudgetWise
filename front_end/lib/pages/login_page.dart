@@ -184,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
         labelText: labelText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
-        fillColor: const Color(0xFFFFFFFF),
+        fillColor: const Color.fromARGB(255, 0, 0, 0),
       ),
     );
   }

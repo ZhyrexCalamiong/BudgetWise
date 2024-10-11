@@ -242,4 +242,108 @@ router.post('/signin', async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+
+  router.get('/user/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId, 'firstName middleName lastName'); // Fetch only first and last name
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+});
+
+// router.put('/user/:id', async (req, res) => {
+//     const id = req.params.id;
+//     const params = req.body;
+  
+//     try {
+//         const user = await User.findOneAndUpdate(
+//         { _id: id },
+//         {
+//         firstName: params.firstName,
+//         middleName: params.middleName,
+//         lastName: params.lastName,
+//         phone: params.phone,
+//         password: params.password,
+//         },
+//         { new: true }
+//       );
+  
+//       if (!user) {
+//         return res
+//           .status(404)
+//           .json({ message: 'No record found' });
+//       }
+//       res.status(200).json({
+//         message: 'Record of __ has been updated.',
+//       });
+//     } catch (error) {
+//       console.error("Error updating user:", error);
+//       res.status(500).json({ message: "Database query error" });
+//     }
+//   })
+
+router.put('/user/:id', async (req, res) => {
+    const userId = req.params.id;
+    const content = req.body;
+
+    console.log("Received request to update user:", userId, content);
+
+    // Build the update object dynamically
+    const updateData = {};
+
+    // Only set the fields if they are explicitly provided (even if empty string)
+    if (content.hasOwnProperty('firstName')) {
+        updateData.firstName = content.firstName.trim() === '' ? null : content.firstName;
+    }
+    if (content.hasOwnProperty('middleName')) {
+        updateData.middleName = content.middleName.trim() === '' ? null : content.middleName;
+    }
+    if (content.hasOwnProperty('lastName')) {
+        updateData.lastName = content.lastName.trim() === '' ? null : content.lastName;
+    }
+    if (content.hasOwnProperty('phone')) {
+        updateData.phone = content.phone.trim() === '' ? null : content.phone;
+    }
+
+    // Handle password update with hashing
+    if (content.password) {
+        const salt = await bcrypt.genSalt(10);
+        updateData.password = await bcrypt.hash(content.password, salt);
+    }
+
+    try {
+        // Find user by ID and update with only the fields provided
+        const user = await User.findOneAndUpdate(
+            { _id: userId },
+            { $set: updateData },  // $set allows partial updates
+            { new: true, runValidators: true }  // Return the updated document and run validators
+        );
+
+        if (!user) {
+            console.log("User not found.");
+            return res.status(404).json({ message: `No record found with user ID ${userId}.` });
+        }
+
+        console.log("User updated successfully:", user);
+        res.status(200).json({
+            message: `Record of ${user.lastName}, ${user.firstName} has been updated.`,
+            user
+        });
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ message: "Database query error" });
+    }
+});
+
+
+
+
+  
 export default router;

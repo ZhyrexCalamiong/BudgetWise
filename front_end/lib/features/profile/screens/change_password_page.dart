@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:budgetwise_one/repositories/user_repository_impl.dart';
+import 'package:budgetwise_one/bloc/authentication/forgot_password/forgot_password_bloc.dart';
+import 'package:budgetwise_one/bloc/authentication/forgot_password/forgot_password_event.dart';
+import 'package:budgetwise_one/bloc/authentication/forgot_password/forgot_password_state.dart';
+import 'package:budgetwise_one/bloc/authentication/forgot_password/reset_password_bloc.dart';
+import 'package:budgetwise_one/bloc/authentication/forgot_password/reset_password_event.dart';
+import 'package:budgetwise_one/bloc/authentication/forgot_password/reset_password_state.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
@@ -8,182 +16,272 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
-  // Variables to manage password visibility
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ForgotPasswordBloc>(
+          create: (context) => ForgotPasswordBloc(UserService()),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            children: [
-              // Change Password Title
-              RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Change',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF8BBE6D), // Color for "Change"
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' Password',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white, // Color for "Password"
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              const _TextField(labelText: 'Email', borderRadius: 10),
-              const SizedBox(height: 16),
-
-              // OTP TextField and Send Code Button
-              Row(
-                children: [
-                  // OTP TextField
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Input OTP Code',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+        BlocProvider<ResetPasswordBloc>(
+          create: (context) => ResetPasswordBloc(UserService()),
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
+              listener: (context, state) {
+                if (state is ForgotPasswordSuccessState) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('OTP sent to ${emailController.text}')),
+                  );
+                } else if (state is ForgotPasswordErrorState) {
+                  _showErrorDialog(context, state.message);
+                }
+              },
+              builder: (context, forgotPasswordState) {
+                return BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
+                  listener: (context, state) {
+                    if (state is ResetPasswordSuccess) {
+                      _showSuccessDialog(context, "Password reset successful. Please log in.");
+                    } else if (state is ResetPasswordFailure) {
+                      _showErrorDialog(context, state.error);
+                    }
+                  },
+                  builder: (context, resetPasswordState) {
+                    return Column(
+                      children: [
+                        // Change Password Title
+                        RichText(
+                          text: const TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Change',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF8BBE6D),
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' Password',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  // Send Code Button
-                  SizedBox(
-                    height: 45,
-                    width: 80,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Add send code logic here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF8BBE6D),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                        const SizedBox(height: 20),
+
+                        _buildTextField(
+                          'Email',
+                          controller: emailController,
+                          borderRadius: 10,
                         ),
-                      ),
-                      child: const Text(
-                        'Send Code',
-                        style: TextStyle(fontSize: 12, color: Colors.black),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
+                        const SizedBox(height: 16),
 
-              // Password TextField with visibility toggle
-              TextField(
-                obscureText: !_isPasswordVisible,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
+                        // OTP TextField and Send Code Button
+                        Row(
+                          children: [
+                            // OTP TextField
+                            Expanded(
+                              child: TextField(
+                                controller: otpController,
+                                decoration: InputDecoration(
+                                  labelText: 'Input OTP Code',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            // Send Code Button
+                            SizedBox(
+                              height: 45,
+                              width: 80,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  BlocProvider.of<ForgotPasswordBloc>(context).add(
+                                    ForgotPasswordSubmitEvent(emailController.text),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF8BBE6D),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Send Code',
+                                  style: TextStyle(fontSize: 12, color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
 
-              // Confirm Password TextField with visibility toggle
-              TextField(
-                obscureText: !_isConfirmPasswordVisible,
-                decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isConfirmPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-                      });
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
+                        // Password TextField with visibility toggle
+                        _buildPasswordTextField(
+                          'Password',
+                          controller: newPasswordController,
+                          obscureText: !_isPasswordVisible,
+                          onVisibilityToggle: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
 
-              ElevatedButton(
-                onPressed: () {
-                  // Add confirm logic here
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF8BBE6D),
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  'Confirm',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ],
+                        // Confirm Password TextField with visibility toggle
+                        _buildPasswordTextField(
+                          'Confirm Password',
+                          controller: confirmPasswordController,
+                          obscureText: !_isConfirmPasswordVisible,
+                          onVisibilityToggle: () {
+                            setState(() {
+                              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Confirm Button
+                        ElevatedButton(
+                          onPressed: () {
+                            if (newPasswordController.text == confirmPasswordController.text) {
+                              BlocProvider.of<ResetPasswordBloc>(context).add(
+                                ChangePasswordRequested(
+                                  emailController.text,
+                                  otpController.text,
+                                  newPasswordController.text,
+                                ),
+                              );
+                            } else {
+                              _showErrorDialog(context, "Passwords do not match!");
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF8BBE6D),
+                            minimumSize: const Size.fromHeight(50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Confirm',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),
     );
   }
-}
 
-class _TextField extends StatelessWidget {
-  final String labelText;
-  final double borderRadius;
+  // Function to show a success dialog
+  void _showSuccessDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-  const _TextField({
-    Key? key,
-    required this.labelText,
-    this.borderRadius = 5.0, // default value for borderRadius
-  }) : super(key: key);
+  // Function to show an error dialog
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  // Helper method to build password text fields with visibility toggle
+  Widget _buildPasswordTextField(String labelText,
+      {required TextEditingController controller,
+      required bool obscureText,
+      required VoidCallback onVisibilityToggle}) {
     return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(
+            obscureText ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: onVisibilityToggle,
+        ),
+      ),
+    );
+  }
+
+  // Helper method to build standard text fields
+  Widget _buildTextField(String labelText,
+      {required TextEditingController controller, double borderRadius = 5.0}) {
+    return TextField(
+      controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
         border: OutlineInputBorder(

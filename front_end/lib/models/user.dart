@@ -1,11 +1,11 @@
 class User {
-  final String firstName;
-  final String middleName;
-  final String lastName;
-  final String email;
-  final String phone;
-  final String password;
-  final String dateOfBirth;
+  final String? firstName;
+  final String? middleName;
+  final String? lastName;
+  final String? email;
+  final String? phone;
+  final String? password;
+  final String? dateOfBirth;
 
   User({
     required this.firstName,
@@ -32,6 +32,18 @@ class User {
 
   // Add a factory constructor to create a User from a Map if needed
   factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      firstName: map['firstName'],
+      middleName: map['middleName'],
+      lastName: map['lastName'],
+      email: map['email'],
+      phone: map['phone'],
+      password: map['password'],
+      dateOfBirth: map['dateOfBirth'],
+    );
+  }
+
+  factory User.fromJson(Map<String, dynamic> map) {
     return User(
       firstName: map['firstName'],
       middleName: map['middleName'],

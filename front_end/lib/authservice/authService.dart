@@ -11,4 +11,3 @@ class AuthService {
     return prefs.getString('userId'); // retrieve the _id
   }
 }
-
