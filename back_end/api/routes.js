@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import User from './../model/auth.js';
 import { sendVerificationCode } from '../services/mailService.js';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -220,51 +221,25 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/signin', async (req, res) => {
-    let { email, password } = req.body;
-
-    email = email.trim();
-    password = password.trim();
-
-    // Validate fields
-    if (!email || !password) {
-        return res.status(400).json({
-            status: "Failed",
-            message: "Empty input fields!"
-        });
-    }
-
-    // Check if user exists by email
-    let user;
+    const { email, password } = req.body;
+  
     try {
-        user = await User.findOne({ email: email });
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+  
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+  
+      // Instead of a token, simply send back the user ID
+      res.json({ userId: user._id, message: 'Login successful' });
     } catch (error) {
-        return res.status(500).json({
-            status: "Failed",
-            message: "Internal server error while fetching user."
-        });
+      res.status(500).json({ message: 'Internal server error' });
     }
-
-    if (!user) {
-        return res.status(401).json({
-            status: "Failed",
-            message: "User not found."
-        });
-    }
-
-    // Compare passwords
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-        return res.status(401).json({
-            status: "Failed",
-            message: "Invalid credentials."
-        });
-    }
-
-    return res.status(200).json({
-        status: "Success",
-        message: "Signin successful",
-        data: user,
-    });
-});  
-
+  });
 export default router;

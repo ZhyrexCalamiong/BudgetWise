@@ -1,21 +1,50 @@
+import 'package:budgetwise_one/repositories/user_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import '../bloc/authentication/registration/registration_bloc.dart';
-import '../features/profile/repositories/user_repository_impl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/authentication/registration/registration_event.dart';
 import '../bloc/authentication/registration/registration_state.dart';
 import '../models/user.dart'; // Assuming a User model exists.
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
+
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _middleNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _contactNoController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _dateOfBirthController = TextEditingController();
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _middleNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _contactNoController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _dateOfBirthController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Signup Page',
-      theme: ThemeData.dark(), // Use dark theme for the app
+      theme: ThemeData.dark(),
       home: BlocProvider(
         create: (context) => RegistrationBloc(UserService()),
         child: _SignupPageContent(),
@@ -44,7 +73,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0D0D0D), // Dark background color
+      backgroundColor: const Color(0xFF0D0D0D),
       body: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
           if (state is RegistrationNavigateToLoginScreenActionState) {
@@ -55,7 +84,8 @@ class _SignupPageContentState extends State<_SignupPageContent> {
           } else if (state is RegistrationError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content: Text('Failed to create account: ${state.message}')),
+                content: Text('Failed to create account: ${state.message}'),
+              ),
             );
           }
         },
@@ -69,7 +99,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                   TextSpan(
                     text: "Let’s\n",
                     style: TextStyle(
-                      color: Color(0xFF8BBE6D), // Green highlight
+                      color: Color(0xFF8BBE6D),
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
@@ -77,7 +107,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                   TextSpan(
                     text: "get started",
                     style: TextStyle(
-                      color: Colors.white, // White text
+                      color: Colors.white,
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
@@ -86,74 +116,80 @@ class _SignupPageContentState extends State<_SignupPageContent> {
               ),
             ),
             const SizedBox(height: 20),
-            _buildTextField('First Name', _firstNameController),
-            _buildTextField('Middle Name', _middleNameController),
-            _buildTextField('Last Name', _lastNameController),
-            _buildTextField('Email', _emailController),
-            _buildTextField('Contact No.', _contactNoController),
-            _buildDatePicker(),
-            _buildTextField('Password', _passwordController, obscureText: true),
-            _buildTextField('Confirm Password', _confirmPasswordController,
-                obscureText: true),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  if (_passwordController.text !=
-                      _confirmPasswordController.text) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Passwords do not match')),
-                    );
-                    return;
-                  }
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  _buildTextField('First Name', _firstNameController),
+                  _buildTextField('Middle Name', _middleNameController),
+                  _buildTextField('Last Name', _lastNameController),
+                  _buildTextField('Email', _emailController),
+                  _buildTextField('Contact No.', _contactNoController),
+                  _buildDatePicker(),
+                  _buildTextField('Password', _passwordController,
+                      obscureText: true),
+                  _buildTextField('Confirm Password', _confirmPasswordController,
+                      obscureText: true),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        if (_passwordController.text !=
+                            _confirmPasswordController.text) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Passwords do not match')),
+                          );
+                          return;
+                        }
 
-                  final user = User(
-                    firstName: _firstNameController.text,
-                    middleName: _middleNameController.text,
-                    lastName: _lastNameController.text,
-                    email: _emailController.text,
-                    phone: _contactNoController.text,
-                    dateOfBirth: _dateOfBirthController.text,
-                    password: _passwordController.text,
-                  );
-
-                  // Trigger user registration
-                  BlocProvider.of<RegistrationBloc>(context)
-                      .add(UserRegistrationRequested(user));
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8BBE6D), // Green button
-                minimumSize: const Size.fromHeight(50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'Sign Up',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'I already have an account',
-                      style: TextStyle(fontSize: 12, color: Colors.white70),
+                        final user = User(
+                          firstName: _firstNameController.text,
+                          middleName: _middleNameController.text,
+                          lastName: _lastNameController.text,
+                          email: _emailController.text,
+                          phone: _contactNoController.text,
+                          dateOfBirth: _dateOfBirthController.text,
+                          password: _passwordController.text,
+                        );
+                        BlocProvider.of<RegistrationBloc>(context)
+                            .add(UserRegistrationRequested(user));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF8BBE6D),
+                      minimumSize: const Size.fromHeight(50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    SizedBox(width: 4),
-                    Icon(Icons.arrow_right_alt, color: Colors.white70),
-                  ],
-                ),
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                      },
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'I already have an account',
+                            style: TextStyle(fontSize: 12, color: Colors.white70),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.arrow_right_alt, color: Colors.white70),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -171,13 +207,13 @@ class _SignupPageContentState extends State<_SignupPageContent> {
         obscureText: obscureText,
         style: const TextStyle(
           fontSize: 14,
-          color: Colors.white, // White text
+          color: Colors.white,
         ),
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: const TextStyle(
             fontSize: 14,
-            color: Colors.white70, // Light grey label
+            color: Colors.white70,
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.white24),
@@ -188,7 +224,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
             borderRadius: BorderRadius.circular(12),
           ),
           filled: true,
-          fillColor: const Color(0xFF1A1A1A), // Dark field background
+          fillColor: const Color(0xFF1A1A1A),
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -208,13 +244,13 @@ class _SignupPageContentState extends State<_SignupPageContent> {
         readOnly: true,
         style: const TextStyle(
           fontSize: 14,
-          color: Colors.white, // White text
+          color: Colors.white,
         ),
         decoration: InputDecoration(
           labelText: 'Date of Birth',
           labelStyle: const TextStyle(
             fontSize: 14,
-            color: Colors.white70, // Light grey label
+            color: Colors.white70,
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.white24),
@@ -225,7 +261,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
             borderRadius: BorderRadius.circular(12),
           ),
           filled: true,
-          fillColor: const Color(0xFF1A1A1A), // Dark field background
+          fillColor: const Color(0xFF1A1A1A),
         ),
         onTap: () async {
           final DateTime? picked = await showDatePicker(

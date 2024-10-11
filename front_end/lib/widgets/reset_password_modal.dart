@@ -131,8 +131,7 @@ class ResetPasswordModal extends StatelessWidget {
 
   Widget _buildTextField(String labelText,
       {TextEditingController? controller,
-      bool obscureText = false,
-      double fontSize = 14.0}) {
+      bool obscureText = false}) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,

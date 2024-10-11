@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
         ),
         body: const HomeScreen(),
       ),
-      const AnalyticsScreen(),
+       AnalyticsScreen(),
       const WalletScreen(),
       const ProfileScreen(),
     ];
@@ -216,10 +216,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const SizedBox(height: 20), // Space between buttons and My Assets
-              Row(
+              const Row(
                 mainAxisAlignment:
                     MainAxisAlignment.start, // Align My Assets to the left
-                children: const [
+                children: [
                   Padding(
                     padding: EdgeInsets.only(left: 20.0),
                     child: Text(

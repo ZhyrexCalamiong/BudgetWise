@@ -8,6 +8,9 @@ abstract class RegistrationEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class RegistrationInitialEvent extends RegistrationEvent {}
+
+
 class UserRegistrationRequested extends RegistrationEvent {
   final User user;
 

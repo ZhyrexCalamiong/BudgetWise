@@ -9,6 +9,8 @@ import 'package:budgetwise_one/widgets/forgot_password_modal.dart';
 import 'package:budgetwise_one/widgets/reset_password_modal.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -48,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
       }, builder: (context, state) {
-        if (state is LoginLoaded) {
+        if (state is LoginInitial) {
           return Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
