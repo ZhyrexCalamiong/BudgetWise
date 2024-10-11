@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../analytics/pages/analytics_page.dart';
 import '../../wallet/pages/wallet_page.dart';
 import '../../profile/pages/profile_page.dart';
-// import '../../features/notifications/notification_page.dart'; // Updated import statement
 
 void main() {
   runApp(const MyApp());
@@ -267,71 +266,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return Container(
-                                    padding: const EdgeInsets.all(20),
-                                    height: 400, // Adjust the height as needed
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'All Coins',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        // Here you can list all coins instead of the top 5
-                                        Expanded(
-                                          child: ListView.builder(
-                                            itemCount: _topCoins
-                                                .length, // Use all coins
-                                            itemBuilder: (context, index) {
-                                              final coin = _topCoins[index];
-                                              return ListTile(
-                                                leading: CircleAvatar(
-                                                  backgroundColor:
-                                                      const Color(0xFF1E1E1E),
-                                                  child: Image.network(
-                                                    coin['image'],
-                                                    width: 30,
-                                                    height: 30,
-                                                  ),
-                                                ),
-                                                title: Text(
-                                                  coin['name'],
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                subtitle: Text(
-                                                  '\$${coin['current_price'].toStringAsFixed(2)}',
-                                                  style: const TextStyle(
-                                                      color: Colors.grey),
-                                                ),
-                                                trailing: Text(
-                                                  '${coin['price_change_percentage_24h'].toStringAsFixed(2)}%',
-                                                  style: TextStyle(
-                                                    color:
-                                                        coin['price_change_percentage_24h'] >=
-                                                                0
-                                                            ? Colors.green
-                                                            : Colors.red,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
                             },
                             child: const Text(
                               'View All',
