@@ -6,8 +6,6 @@ import '../../analytics/pages/analytics_page.dart';
 import '../../wallet/pages/wallet_page.dart';
 import '../../profile/pages/profile_page.dart';
 import '../../home/widgets/actionButton.dart';
-import '../../home/widgets/addMoneyDialog.dart' as addMoneyDialog;
-import '../../home/widgets/showMoneyConverterDialog.dart' as converterDialog;
 
 void main() {
   runApp(const MyApp());
@@ -212,10 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   BuildActionButton(
                     icon: Icons.add,
                     label: 'Add',
-                    onPressed: () {
-                      addMoneyDialog.showAddMoneyDialog(
-                          context); // Call the function to show the dialog
-                    },
+                    onPressed: () {},
                   ),
                   const SizedBox(width: 20),
                   BuildActionButton(
@@ -227,9 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   BuildActionButton(
                     icon: Icons.transform,
                     label: 'Convert',
-                    onPressed: () {
-                      converterDialog.showMoneyConverterDialog(context);
-                    },
+                    onPressed: () {},
                   ),
                   const SizedBox(width: 20),
                 ],
