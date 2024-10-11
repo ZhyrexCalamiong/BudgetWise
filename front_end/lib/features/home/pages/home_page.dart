@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
         ),
         body: const HomeScreen(),
       ),
-      const AnalyticsScreen(),
+       AnalyticsScreen(),
       const WalletScreen(),
       const ProfileScreen(),
     ];

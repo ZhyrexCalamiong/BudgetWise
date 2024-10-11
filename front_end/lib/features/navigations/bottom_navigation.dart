@@ -20,8 +20,8 @@ class BottomNavigation extends StatelessWidget {
           const Color(0xFF121212), // Updated BottomNavigationBar color
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.account_balance_wallet),
+          label: 'Wallet',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.analytics),
@@ -29,7 +29,7 @@ class BottomNavigation extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_balance_wallet),
-          label: 'Wallet',
+          label: 'Converter',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),

@@ -10,7 +10,7 @@ class ForgotPasswordModal extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final Function(String email) onSuccess; // To trigger the next modal
 
-  ForgotPasswordModal({required this.onSuccess});
+  ForgotPasswordModal({super.key, required this.onSuccess});
 
   @override
   Widget build(BuildContext context) {

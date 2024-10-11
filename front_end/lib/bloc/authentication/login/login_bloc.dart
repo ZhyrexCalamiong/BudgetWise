@@ -6,10 +6,14 @@ import 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserService _loginRepository;
 
-  LoginBloc(this._loginRepository) : super(LoginLoading()) {
+  LoginBloc(this._loginRepository) : super(LoginInitial()) {
     on<LoginSubmitted>((event, emit) async {
+      if (event.email.isEmpty || event.password.isEmpty) {
+        emit(const LoginError("Email and password cannot be empty."));
+        return;
+      }
       try {
-        emit(LoginLoaded());
+        emit(LoginLoading());
         await _loginRepository.signin(event.email, event.password);
         emit(LoginNavigateToHomeScreenActionState());
       } catch (e) {
@@ -18,3 +22,4 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
   }
 }
+

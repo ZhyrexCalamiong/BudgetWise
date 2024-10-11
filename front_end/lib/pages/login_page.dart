@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
       }, builder: (context, state) {
-        if (state is LoginLoaded) {
+        if (state is LoginInitial) {
           return Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
