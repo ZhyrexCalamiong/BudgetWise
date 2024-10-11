@@ -66,8 +66,10 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/images/
     - assets/images/bar_chart.png
     - assets/images/pie_chart.png
+    - assets/images/home_image.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
