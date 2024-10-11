@@ -1,8 +1,8 @@
+import 'package:budgetwise_one/features/guide/screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/edit_profile_page.dart';
 import '../screens/change_password_page.dart';
 import '../screens/change_email_page.dart';
-import '../screens/settings_page.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -76,12 +76,12 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 ProfileOption(
                   icon: Icons.settings,
-                  text: 'Settings',
+                  text: 'Help',
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SettingsPage()),
+                          builder: (context) => const IntroductionPage()),
                     );
                   },
                 ),
@@ -90,7 +90,7 @@ class ProfileScreen extends StatelessWidget {
                   text: 'Logout',
                   isLast: true,
                   onTap: () {
-                    // Handle logout
+                    //Navigator.pop(context);
                   },
                 ),
               ],

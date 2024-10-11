@@ -1,7 +1,6 @@
-import 'package:budgetwise_one/features/introduction/pages/first_page.dart';
-import 'package:budgetwise_one/features/introduction/pages/second_page.dart';
-import 'package:budgetwise_one/features/introduction/pages/third_page.dart';
-import 'package:budgetwise_one/features/introduction/screen/welcome_page.dart';
+import 'package:budgetwise_one/features/guide/pages/first_page.dart';
+import 'package:budgetwise_one/features/guide/pages/second_page.dart';
+import 'package:budgetwise_one/features/guide/pages/third_page.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -49,7 +48,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                   child: const Text(
                     "Skip",
                     style: TextStyle(
-                      color: Colors.redAccent,
+                      color: Colors.black,
                       fontSize: 15,
                     ),
                   ),
@@ -61,15 +60,12 @@ class _IntroductionPageState extends State<IntroductionPage> {
                     right: 20, // Padding from the right
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return const WelcomePage();
-                        }));
+                        Navigator.pop(context); // Navigate to HomePage
                       },
                       child: const Text(
-                        "Get Started",
+                        "Return",
                         style: TextStyle(
-                          color: Colors.redAccent,
+                          color: Colors.black,
                           fontSize: 15,
                         ),
                       ),
@@ -88,7 +84,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                       child: const Text(
                         "Next",
                         style: TextStyle(
-                          color: Colors.redAccent,
+                          color: Colors.black,
                           fontSize: 15,
                         ),
                       ),
