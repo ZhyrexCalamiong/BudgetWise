@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
             const Center(child: CircularProgressIndicator());
           } else if (state is LoginNavigateToHomeScreenActionState) {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage()));
+                MaterialPageRoute(builder: (context) => const HomeScreen()));
           } else if (state is LoginError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
