@@ -1,4 +1,3 @@
-import 'package:budgetwise_one/models/Transaction.dart';
 import 'package:budgetwise_one/models/budget_history.dart';
 import 'package:budgetwise_one/models/expense.dart';
 import 'package:equatable/equatable.dart';

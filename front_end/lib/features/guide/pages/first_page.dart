@@ -6,19 +6,20 @@ class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0D0D0D),
       body: Container(
         // Use a Container to apply the gradient
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter, // Start the gradient at the top
-            end: Alignment.bottomCenter, // End the gradient at the bottom
-            colors: [
-              Color(0xFF0D1F14), // Dark green (top)
-              Color(0xFF2F4F36), // Mid-tone green
-              Color(0xFF8BBE6D), // Light green (bottom)
-            ],
-          ),
-        ),
+        // decoration: const BoxDecoration(
+        //   gradient: LinearGradient(
+        //     begin: Alignment.topCenter, // Start the gradient at the top
+        //     end: Alignment.bottomCenter, // End the gradient at the bottom
+        //     colors: [
+        //       Color(0xFF0D1F14), // Dark green (top)
+        //       Color(0xFF2F4F36), // Mid-tone green
+        //       Color(0xFF8BBE6D), // Light green (bottom)
+        //     ],
+        //   ),
+        // ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

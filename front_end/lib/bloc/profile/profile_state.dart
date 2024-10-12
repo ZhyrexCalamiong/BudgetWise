@@ -1,5 +1,4 @@
 import 'package:budgetwise_one/models/user.dart';
-import 'package:equatable/equatable.dart';
 
 // Define login states
 abstract class ProfileState {}
@@ -7,6 +6,10 @@ abstract class ProfileState {}
 class ProfileInitial extends ProfileState {}
 
 class ProfileLoading extends ProfileState {}
+
+
+class ProfileSuccess extends ProfileState {}
+
 
 class ProfileLoaded extends ProfileState {
   final List<User> user;

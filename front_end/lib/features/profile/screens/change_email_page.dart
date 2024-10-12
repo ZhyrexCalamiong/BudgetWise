@@ -154,10 +154,10 @@ class _TextField extends StatelessWidget {
   final double borderRadius;
 
   const _TextField({
-    Key? key,
+    super.key,
     required this.labelText,
     this.borderRadius = 5.0, // default value for borderRadius
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

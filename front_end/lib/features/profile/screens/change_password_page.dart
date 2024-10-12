@@ -22,7 +22,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               listener: (context, state) {
                 if (state is ForgotPasswordSuccessState) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('OTP sent to ${emailController.text}')),
+                    SnackBar(
+                        content: Text('OTP sent to ${emailController.text}')),
                   );
                 } else if (state is ForgotPasswordErrorState) {
                   _showErrorDialog(context, state.message);
@@ -61,7 +63,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 return BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
                   listener: (context, state) {
                     if (state is ResetPasswordSuccess) {
-                      _showSuccessDialog(context, "Password reset successful. Please log in.");
+                      _showSuccessDialog(
+                          context, "Password reset successful. Please log in.");
+                      Navigator.pop(context);
                     } else if (state is ResetPasswordFailure) {
                       _showErrorDialog(context, state.error);
                     }
@@ -123,8 +127,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                               width: 80,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  BlocProvider.of<ForgotPasswordBloc>(context).add(
-                                    ForgotPasswordSubmitEvent(emailController.text),
+                                  BlocProvider.of<ForgotPasswordBloc>(context)
+                                      .add(
+                                    ForgotPasswordSubmitEvent(
+                                        emailController.text),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -135,7 +141,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 ),
                                 child: const Text(
                                   'Send Code',
-                                  style: TextStyle(fontSize: 12, color: Colors.black),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.black),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -164,7 +171,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           obscureText: !_isConfirmPasswordVisible,
                           onVisibilityToggle: () {
                             setState(() {
-                              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                              _isConfirmPasswordVisible =
+                                  !_isConfirmPasswordVisible;
                             });
                           },
                         ),
@@ -173,7 +181,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         // Confirm Button
                         ElevatedButton(
                           onPressed: () {
-                            if (newPasswordController.text == confirmPasswordController.text) {
+                            if (newPasswordController.text ==
+                                confirmPasswordController.text) {
                               BlocProvider.of<ResetPasswordBloc>(context).add(
                                 ChangePasswordRequested(
                                   emailController.text,
@@ -182,7 +191,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 ),
                               );
                             } else {
-                              _showErrorDialog(context, "Passwords do not match!");
+                              _showErrorDialog(
+                                  context, "Passwords do not match!");
                             }
                           },
                           style: ElevatedButton.styleFrom(
