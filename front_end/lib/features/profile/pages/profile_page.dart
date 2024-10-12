@@ -1,6 +1,6 @@
-import 'package:budgetwise_one/bloc/profile/profile_bloc.dart';
-import 'package:budgetwise_one/bloc/profile/profile_event.dart';
-import 'package:budgetwise_one/bloc/profile/profile_state.dart';
+import 'package:budgetwise_one/bloc/profile/bloc/profile_bloc.dart';
+import 'package:budgetwise_one/bloc/profile/bloc/profile_event.dart';
+import 'package:budgetwise_one/bloc/profile/bloc/profile_state.dart';
 import 'package:budgetwise_one/pages/login_page.dart';
 import 'package:budgetwise_one/repositories/user_repository_impl.dart';
 import 'package:flutter/material.dart';

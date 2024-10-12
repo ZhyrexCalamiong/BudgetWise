@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:budgetwise_one/bloc/financial_wallet/financial_wallet_event.dart';
 import 'package:budgetwise_one/bloc/financial_wallet/financial_wallet_state.dart';
+import 'package:budgetwise_one/models/Transaction.dart';
 import 'package:budgetwise_one/models/budget_history.dart';
 import 'package:budgetwise_one/models/expense.dart';
 import 'package:budgetwise_one/repositories/budget_repository_impl.dart';

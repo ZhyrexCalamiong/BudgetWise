@@ -116,7 +116,7 @@ class UserService implements UserRepository {
     try {
       final userId = await _getId();
       final response = await http.get(
-        Uri.parse('$baseUrl/getuseruser/$userId'),
+        Uri.parse('$baseUrl/user/$userId'),
         headers: {"Content-Type": "application/json"},
       );
       print(response.statusCode);
@@ -133,27 +133,6 @@ class UserService implements UserRepository {
     } catch (e) {
       print('Signin error: $e');
       throw Exception('Failed to login: $e');
-    }
-  }
-
-  @override
-  Future<User> updateProfile(String id) async {
-    try {
-      final userId = await _getId();
-      final response = await http.get(Uri.parse("$baseUrl/user/$userId"),
-          headers: {"Content-Type": "application/json"});
-    if (response.statusCode == 200) {
-        print('successful get');
-        final Map<String, dynamic> body = jsonDecode(response.body);
-        print(body);
-        return User.fromJson(body);
-      } else {
-        final responseData = jsonDecode(response.body);
-        throw Exception('Failed to get: ${responseData['message']}');
-      }
-    } catch (e) {
-      print('Failed: $e');
-      throw Exception('Failed: $e');
     }
   }
 }

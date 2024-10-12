@@ -227,7 +227,7 @@ router.post('/signin', async (req, res) => {
     }
   });
 
-  router.get('/getuser/:id', async (req, res) => {
+  router.get('/user/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         const user = await User.findById(userId, 'firstName middleName lastName'); // Fetch only first and last name
@@ -242,6 +242,36 @@ router.post('/signin', async (req, res) => {
     }
 });
 
+// router.put('/user/:id', async (req, res) => {
+//     const id = req.params.id;
+//     const params = req.body;
+  
+//     try {
+//         const user = await User.findOneAndUpdate(
+//         { _id: id },
+//         {
+//         firstName: params.firstName,
+//         middleName: params.middleName,
+//         lastName: params.lastName,
+//         phone: params.phone,
+//         password: params.password,
+//         },
+//         { new: true }
+//       );
+  
+//       if (!user) {
+//         return res
+//           .status(404)
+//           .json({ message: 'No record found' });
+//       }
+//       res.status(200).json({
+//         message: 'Record of __ has been updated.',
+//       });
+//     } catch (error) {
+//       console.error("Error updating user:", error);
+//       res.status(500).json({ message: "Database query error" });
+//     }
+//   })
 
 router.put('/user/:id', async (req, res) => {
     const userId = req.params.id;
@@ -266,6 +296,11 @@ router.put('/user/:id', async (req, res) => {
         updateData.phone = content.phone.trim() === '' ? null : content.phone;
     }
 
+    // Handle password update with hashing
+    if (content.password) {
+        const salt = await bcrypt.genSalt(10);
+        updateData.password = await bcrypt.hash(content.password, salt);
+    }
 
     try {
         // Find user by ID and update with only the fields provided

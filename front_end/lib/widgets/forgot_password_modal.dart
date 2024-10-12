@@ -36,7 +36,7 @@ class ForgotPasswordModal extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: const BoxDecoration(
-        color: Color(0xFF0D0D0D),
+        color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
       ),
       child: Column(
@@ -47,7 +47,7 @@ class ForgotPasswordModal extends StatelessWidget {
             elevation: 0,
             centerTitle: true,
             title: const Text('Forgot Password',
-                style: TextStyle(color: Colors.white)),
+                style: TextStyle(color: Colors.black)),
             toolbarHeight: 56,
           ),
           const SizedBox(height: 24),
@@ -62,8 +62,7 @@ class ForgotPasswordModal extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ResetPasswordModal(
-                            email: emailController.text.toString())));
+                        builder: (context) => ResetPasswordModal(email: emailController.text.toString())));
               } catch (e) {
                 print(e);
               }

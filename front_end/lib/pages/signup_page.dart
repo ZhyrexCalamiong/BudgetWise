@@ -77,7 +77,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
           if (state is RegistrationNavigateToLoginScreenActionState) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const LoginPage()),
+              MaterialPageRoute(builder: (context) => LoginPage()),
             );
           } else if (state is RegistrationError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -167,7 +167,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                          MaterialPageRoute(builder: (context) => LoginPage()),
                         );
                       },
                       child: const Row(
