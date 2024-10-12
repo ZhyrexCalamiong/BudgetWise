@@ -10,7 +10,7 @@ const ExpenseHistorySchema = new Schema({
     oldDescription: { type: String, required: true },
     newDescription: { type: String, required: true },
     changeDate: { type: Date, default: Date.now },
-    reason: { type: String, required: true }, // Optional field to explain the change
+    reason: { type: String, required: true },
 });
 
 const ExpenseHistory = mongoose.model('ExpenseHistory', ExpenseHistorySchema);

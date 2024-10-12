@@ -1,5 +1,3 @@
-// lib/screens/splash_screen.dart
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -33,19 +31,19 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               TextSpan(
                 text: 'B',
-                style: TextStyle(color: Color(0xFFA4C87C)), // Light green
+                style: TextStyle(color: Color(0xFFA4C87C)),
               ),
               TextSpan(
                 text: 'udget',
-                style: TextStyle(color: Colors.white), // White text for 'udget'
+                style: TextStyle(color: Colors.white),
               ),
               TextSpan(
                 text: 'W',
-                style: TextStyle(color: Color(0xFFA4C87C)), // Light green
+                style: TextStyle(color: Color(0xFFA4C87C)),
               ),
               TextSpan(
                 text: 'ise',
-                style: TextStyle(color: Colors.white), // White text for 'ise'
+                style: TextStyle(color: Colors.white),
               ),
             ],
           ),

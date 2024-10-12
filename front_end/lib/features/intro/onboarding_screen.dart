@@ -7,15 +7,14 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // Apply the gradient background
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF0D1F14), // Dark green (top)
-              Color(0xFF2F4F36), // Mid-tone green
-              Color(0xFF8BBE6D), // Light green (bottom)
+              Color(0xFF0D1F14),
+              Color(0xFF2F4F36),
+              Color(0xFF8BBE6D),
             ],
           ),
         ),
@@ -25,7 +24,7 @@ class OnboardingScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: 300, // Constraint the Stack height
+                height: 300,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -35,8 +34,7 @@ class OnboardingScreen extends StatelessWidget {
                         width: 200,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFF3A4E44), // Dark card background color (USD card)
+                          color: const Color(0xFF3A4E44),
                           borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: const Center(
@@ -58,8 +56,7 @@ class OnboardingScreen extends StatelessWidget {
                         width: 160,
                         height: 100,
                         decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFA4C87C), // Light green card (GBP card)
+                          color: const Color(0xFFA4C87C),
                           borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: const Center(
@@ -67,8 +64,7 @@ class OnboardingScreen extends StatelessWidget {
                             'BTC\n1.75',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors
-                                  .black, // Text color black on light green
+                              color: Colors.black,
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
@@ -84,7 +80,7 @@ class OnboardingScreen extends StatelessWidget {
                 'Keep Financial\nUnder Control',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white, // White for the text
+                  color: Colors.white,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
@@ -94,15 +90,14 @@ class OnboardingScreen extends StatelessWidget {
                 'We are here as your digital financial solution.\nLet\'s connect your funds to us!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white70, // Light white for subtitle text
+                  color: Colors.white70,
                   fontSize: 16,
                 ),
               ),
               const SizedBox(height: 40),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(
-                      0xFFA4C87C), // Light green background for the button
+                  backgroundColor: const Color(0xFFA4C87C),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,
                     vertical: 16,
@@ -117,7 +112,7 @@ class OnboardingScreen extends StatelessWidget {
                 child: const Text(
                   'Get Started',
                   style: TextStyle(
-                    color: Colors.black, // Black text for the button
+                    color: Colors.black,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

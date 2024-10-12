@@ -10,26 +10,16 @@ class BudgetService implements BudgetRepository {
   final String baseUrl = 'http://localhost:8000/api';
 
   @override
-  Future<void> setBudget(
-      String userId, double maximumAmount, DateTime date) async {
-    // Updated to include date
+  Future<void> setBudget(String userId, double maximumAmount, DateTime date) async {
     final response = await http.post(
       Uri.parse('$baseUrl/set-budget'),
       body: jsonEncode({
         'userId': userId,
         'maximumAmount': maximumAmount,
-        'date': date.toIso8601String(), // Sending the date to the API
+        'date': date.toIso8601String(),
       }),
       headers: {'Content-Type': 'application/json'},
     );
-
-    print('Request: ${jsonEncode({
-          'userId': userId,
-          'maximumAmount': maximumAmount,
-          'date': date.toIso8601String()
-        })}');
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
 
     if (response.statusCode != 201) {
       throw Exception('Failed to set budget');
@@ -37,8 +27,7 @@ class BudgetService implements BudgetRepository {
   }
 
   @override
-  Future<void> addExpense(
-      String userId, double cost, String description, DateTime date) async {
+  Future<void> addExpense(String userId, double cost, String description, DateTime date) async {
     final response = await http.post(
       Uri.parse('$baseUrl/add-expense'),
       body: jsonEncode({
@@ -65,7 +54,7 @@ class BudgetService implements BudgetRepository {
         userId: userId,
         maximumAmount: data['maximumAmount'].toDouble(),
         amountSpent: data['amountSpent'].toDouble(),
-        date: DateTime.now(), // You may not need this if not used
+        date: DateTime.now(),
       );
     } else {
       throw Exception('Failed to retrieve budget details');
@@ -74,8 +63,7 @@ class BudgetService implements BudgetRepository {
 
   @override
   Future<List<Expense>> getUserExpenses(String userId) async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/user-expenses/$userId'));
+    final response = await http.get(Uri.parse('$baseUrl/user-expenses/$userId'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> expensesJson = responseBody['data'];

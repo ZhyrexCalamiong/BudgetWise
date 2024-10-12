@@ -4,13 +4,13 @@ import User from './../model/auth.js';
 import { sendVerificationCode } from '../services/mailService.js';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import { generateNonce, SiweMessage } from 'siwe';
+import { generateToken, authenticateToken } from '../token/token.js';
 
 const router = express.Router();
-
-// Temporary storage for verification codes
 const verificationCodes = {};
+let currentNonce = null;
 
-// Forgot Password - Request Code
 router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
 
@@ -40,11 +40,9 @@ router.post('/forgot-password', async (req, res) => {
     });
 });
 
-// Verify Code and Reset Password
 router.post('/reset-password', async (req, res) => {
     const { email, code, newPassword } = req.body;
 
-    // Input validation
     if (!email || !code || !newPassword) {
         return res.status(400).json({
             status: "Failed",
@@ -53,7 +51,6 @@ router.post('/reset-password', async (req, res) => {
     }
 
     try {
-        // Check if the code is correct
         if (verificationCodes[email] !== code) {
             return res.status(400).json({
                 status: "Failed",
@@ -61,7 +58,6 @@ router.post('/reset-password', async (req, res) => {
             });
         }
 
-        // Find user and update password
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({
@@ -70,13 +66,11 @@ router.post('/reset-password', async (req, res) => {
             });
         }
 
-        // Hash new password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
         user.password = hashedPassword;
         await user.save();
 
-        // Remove code after successful reset
         delete verificationCodes[email];
 
         return res.status(200).json({
@@ -84,7 +78,7 @@ router.post('/reset-password', async (req, res) => {
             message: "Password reset successful."
         });
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error(error);
         return res.status(500).json({
             status: "Failed",
             message: "An error occurred while resetting the password."
@@ -97,7 +91,6 @@ router.post('/signup', async (req, res) => {
 
     console.log(req.body);
 
-    // Check if any fields are undefined or empty
     if (!firstName || !middleName || !lastName || !email || !dateOfBirth || !phone || !password) {
         let missingFields = [];
         if (!firstName) missingFields.push("firstName");
@@ -114,7 +107,6 @@ router.post('/signup', async (req, res) => {
         });
     }
 
-    // Trim input fields only if they exist
     firstName = firstName.trim();
     middleName = middleName.trim();
     lastName = lastName.trim();
@@ -123,7 +115,6 @@ router.post('/signup', async (req, res) => {
     phone = phone.trim();
     password = password.trim();
 
-    // Name validation
     if (!/^[a-zA-Z\s]+$/.test(firstName)) {
         return res.status(400).json({
             status: "Failed",
@@ -143,7 +134,6 @@ router.post('/signup', async (req, res) => {
         });
     }
 
-    // Date of Birth validation
     const parsedDate = new Date(dateOfBirth); 
     if (isNaN(parsedDate.getTime())) {
         return res.status(400).json({
@@ -152,8 +142,6 @@ router.post('/signup', async (req, res) => {
         });
     }
 
-
-    // Email validation
     if (!/^[\w-.]+@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
         return res.status(400).json({
             status: "Failed",
@@ -161,7 +149,6 @@ router.post('/signup', async (req, res) => {
         });
     }
 
-    // Phone validation (adjust regex as needed)
     if (!/^\d{10}$/.test(phone)) {
         return res.status(400).json({
             status: "Failed",
@@ -169,7 +156,6 @@ router.post('/signup', async (req, res) => {
         });
     }
 
-    // Password validation
     if (password.length < 8) {
         return res.status(400).json({
             status: "Failed",
@@ -178,7 +164,6 @@ router.post('/signup', async (req, res) => {
     }
 
     try {
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({
@@ -187,11 +172,9 @@ router.post('/signup', async (req, res) => {
             });
         }
 
-        // Hash password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Create new user
         const newUser = new User({
             firstName,
             middleName,
@@ -203,7 +186,6 @@ router.post('/signup', async (req, res) => {
             verified: false,
         });
         
-        // Save user
         const result = await newUser.save();
         return res.status(201).json({
             status: "Success",
@@ -222,24 +204,26 @@ router.post('/signup', async (req, res) => {
 
 router.post('/signin', async (req, res) => {
     const { email, password } = req.body;
-  
+
     try {
-      const user = await User.findOne({ email });
-  
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-  
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-  
-      // Instead of a token, simply send back the user ID
-      res.json({ userId: user._id, message: 'Login successful' });
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const token = generateToken(user);
+
+        res.json({ userId: user._id, token, message: 'Login successful' });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
   });
 

@@ -6,13 +6,13 @@ import convert from './api/moneyconvert.js';
 import cors from 'cors';
 
 const app = express();
-const port = process.env.PORT || 3000; // Use port from .env or default to 3000
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // For form data
+app.use(express.urlencoded({ extended: true })); 
 
-// Use the routes with a prefix
+
 app.use('/api', router);
 app.use('/api', budget);
 app.use('/api', convert);

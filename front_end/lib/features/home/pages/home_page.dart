@@ -103,13 +103,13 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ],
-          backgroundColor: const Color(0xFF121212), // Updated AppBar color
+          backgroundColor: const Color(0xFF121212),
           elevation: 0,
         ),
         body: const HomeScreen(),
       ),
-       AnalyticsScreen(),
-      const WalletScreen(),
+      AnalyticsScreen(),
+      WalletScreen(),
       const ProfileScreen(),
     ];
   }
@@ -126,7 +126,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Home screen with current balance Card
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -135,8 +134,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final CoinGeckoService _coinGeckoService =
-      CoinGeckoService(); // Create an instance of CoinGeckoService
+  final CoinGeckoService _coinGeckoService = CoinGeckoService();
   List<dynamic> _topCoins = [];
   bool _isLoading = true;
 
@@ -155,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } catch (e) {
       setState(() {
-        _isLoading = false; // Handle error, maybe show an error message
+        _isLoading = false;
       });
     }
   }
@@ -167,20 +165,19 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SingleChildScrollView(
         child: Center(
           child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.start, // Align contents to the top
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 20), // Add space at the top
+              const SizedBox(height: 20),
               Card(
-                color: const Color(0xFF1E1E1E), // Card color
+                color: const Color(0xFF1E1E1E),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-                elevation: 4, // Shadow effect
+                elevation: 4,
                 child: const Padding(
-                  padding: EdgeInsets.all(35.0), // Padding inside the card
+                  padding: EdgeInsets.all(35.0),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min, // Adjust size to content
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         'Current Balance',
@@ -190,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8), // Space between text
+                      SizedBox(height: 8),
                       Text(
                         'Php 120,000.00',
                         style: TextStyle(
@@ -203,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20), // Space between card and buttons
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -227,10 +224,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(width: 20),
                 ],
               ),
-              const SizedBox(height: 20), // Space between buttons and My Assets
+              const SizedBox(height: 20),
               const Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.start, // Align My Assets to the left
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 20.0),
@@ -238,29 +234,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       'My Assets',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14, // Smaller text size
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(
-                  height: 20), // Space between My Assets and Coin List
-
-              // Box for Crypto Currency Market Value
+              const SizedBox(height: 20),
               Card(
-                color: const Color(0xFF1E1E1E), // Card color for coin list
+                color: const Color(0xFF1E1E1E),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-                elevation: 4, // Shadow effect
+                elevation: 4,
                 child: Padding(
-                  padding: const EdgeInsets.all(
-                      15.0), // Reduced padding inside the card
+                  padding: const EdgeInsets.all(15.0),
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start, // Align content to the start
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -285,10 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                          height: 10), // Space between title and coin list
-
-                      // Loading indicator or coin list
+                      const SizedBox(height: 10),
                       _isLoading
                           ? const Center(child: CircularProgressIndicator())
                           : _topCoins.isEmpty
@@ -303,8 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: _topCoins.length > 5
                                       ? 5
-                                      : _topCoins
-                                          .length, // Limit to top 5 coins
+                                      : _topCoins.length,
                                   itemBuilder: (context, index) {
                                     final coin = _topCoins[index];
                                     return ListTile(

@@ -1,4 +1,3 @@
-// Define login events
 abstract class LoginEvent {}
 
 class LoginInitialEvent extends LoginEvent {}
@@ -11,3 +10,4 @@ class LoginSubmitted extends LoginEvent {
 
   List<Object> get props => [email, password];
 }
+

@@ -13,7 +13,6 @@ class IntroductionPage extends StatefulWidget {
 
 class _IntroductionPageState extends State<IntroductionPage> {
   final PageController _controller = PageController();
-
   bool lastpage = false;
 
   @override
@@ -108,10 +107,11 @@ class _IntroductionPageState extends State<IntroductionPage> {
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
-    ));
+            )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

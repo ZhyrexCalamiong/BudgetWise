@@ -15,13 +15,20 @@ class AddFundsFiatScreen extends StatefulWidget {
 }
 
 class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
-  late FinancialWalleBloc financialWalletBloc;
-  final TextEditingController _maximumAmountController = TextEditingController();
+  late FinancialWalletBloc financialWalletBloc;
+  final TextEditingController _maximumAmountController =
+      TextEditingController();
+  String? userId;
 
   @override
   void initState() {
     super.initState();
-    financialWalletBloc = FinancialWalleBloc(BudgetService());
+    financialWalletBloc = FinancialWalletBloc(BudgetService());
+    _loadUserId(); // Load the user ID
+  }
+
+  Future<void> _loadUserId() async {
+    userId = await AuthService.getCurrentUserId(); // Fetch user ID
   }
 
   @override
@@ -34,15 +41,15 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => financialWalletBloc,
-      child: BlocConsumer<FinancialWalleBloc, FinancialWalletState>(
+      child: BlocConsumer<FinancialWalletBloc, FinancialWalletState>(
         listener: (context, state) {
           if (state is FinancialWalletLoading) {
-            // Show loading indicator or message if needed
           } else if (state is FinancialWalletSuccess) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const WalletScreen()),
-            );
+            // Refresh wallet data
+            context
+                .read<FinancialWalletBloc>()
+                .add(GetBalanceFinancialWalletEvent(userId!));
+            Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Success: Budget added')),
             );
@@ -61,11 +68,15 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
               centerTitle: true,
               title: const Text(
                 'Add Fiat Funds',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WalletScreen()),
+                ),
               ),
             ),
             body: Padding(
@@ -73,7 +84,6 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Maximum Amount Input Field
                   _buildTextField(
                     labelText: 'Set Budget',
                     controller: _maximumAmountController,
@@ -81,25 +91,27 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
                     obscureText: false,
                   ),
                   const SizedBox(height: 20),
-
-                  // Set Budget Button
                   ElevatedButton(
                     onPressed: () async {
-                      double? maximumAmount = double.tryParse(_maximumAmountController.text);
+                      double? maximumAmount =
+                          double.tryParse(_maximumAmountController.text);
                       if (maximumAmount != null) {
                         String? userId = await AuthService.getCurrentUserId();
                         if (userId != null) {
-                          // Get the current date
                           DateTime date = DateTime.now();
-                          context.read<FinancialWalleBloc>().add(SetFinancialWallettEvent(userId, maximumAmount, date));
+                          context.read<FinancialWalletBloc>().add(
+                              SetFinancialWallettEvent(
+                                  userId, maximumAmount, date));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Error: User ID not found')),
+                            const SnackBar(
+                                content: Text('Error: User ID not found')),
                           );
                         }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Error: Invalid budget amount')),
+                          const SnackBar(
+                              content: Text('Error: Invalid budget amount')),
                         );
                       }
                     },

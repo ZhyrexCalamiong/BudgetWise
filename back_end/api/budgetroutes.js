@@ -5,10 +5,8 @@ import Expense from './../model/expenses.js';
 import BudgetHistory from './../model/busget_history.js';
 import ExpenseHistory from './../model/expnses_history.js';
 
-
 const budget = express.Router();
 
-// Set or Update Budget for a user
 budget.post('/set-budget', async (req, res) => {
     const { userId, maximumAmount } = req.body;
 
@@ -31,27 +29,23 @@ budget.post('/set-budget', async (req, res) => {
         let budget = await Budget.findOne({ user: userId });
 
         if (budget) {
-            // Record the old maximumAmount for history
             const oldMaximumAmount = budget.maximumAmount;
-
-            // Update the maximumAmount
             budget.maximumAmount += maximumAmount;
 
-            // Create a new history record
             const budgetHistory = new BudgetHistory({
                 user: userId,
                 oldMaximumAmount: oldMaximumAmount,
                 newMaximumAmount: budget.maximumAmount,
-                reason: "Updated budget amount", // Customize this message as needed
-                date: new Date() // Set the current date
+                reason: "Updated budget amount",
+                date: new Date()
             });
 
-            await budgetHistory.save(); // Save the budget history
+            await budgetHistory.save();
         } else {
             budget = new Budget({
                 user: userId,
                 maximumAmount,
-                amountSpent: 0 // This will still be 0 for a new budget
+                amountSpent: 0
             });
         }
 
@@ -72,11 +66,9 @@ budget.post('/set-budget', async (req, res) => {
     }
 });
 
-
 budget.post('/add-expense', async (req, res) => {
     const { userId, cost, description, date } = req.body;
 
-    // Validate input
     if (!userId || !cost || !description || !date) {
         return res.status(400).json({
             status: "Failed",
@@ -101,10 +93,8 @@ budget.post('/add-expense', async (req, res) => {
             });
         }
 
-        // Calculate remaining budget
         const remainingBudget = budget.maximumAmount - budget.cost;
 
-        // Prevent adding expense if it would make the maximum amount negative
         if (remainingBudget < cost) {
             return res.status(400).json({
                 status: "Failed",
@@ -112,11 +102,9 @@ budget.post('/add-expense', async (req, res) => {
             });
         }
 
-        // Update the amountSpent and maximumAmount
         budget.amountSpent += cost;
         budget.maximumAmount -= cost;
 
-        // Ensure maximumAmount does not go below zero
         if (budget.maximumAmount < 0) {
             return res.status(400).json({
                 status: "Failed",
@@ -126,28 +114,26 @@ budget.post('/add-expense', async (req, res) => {
 
         await budget.save();
 
-        // Create a new expense entry
         const expense = new Expense({
             user: userId,
             cost,
             description,
-            date: new Date(date), // Ensure the date is correctly parsed
+            date: new Date(date),
         });
 
         const result = await expense.save();
 
-        // Create a new history record for the added expense
         const expenseHistory = new ExpenseHistory({
             user: userId,
             expenseId: result._id,
             oldCost: 0,
             newCost: cost,
-            oldDescription: '', // No previous description
+            oldDescription: '',
             newDescription: description,
             reason: 'Added new expense',
         });
 
-        await expenseHistory.save(); // Save the expense history
+        await expenseHistory.save();
 
         return res.status(201).json({
             status: "Success",
@@ -169,13 +155,10 @@ budget.post('/add-expense', async (req, res) => {
     }
 });
 
-
-
 budget.put('/edit-expense/:expenseId', async (req, res) => {
     const { expenseId } = req.params;
     const { userId, cost, description, date } = req.body;
 
-    // Validate input
     if (!userId || !cost || !description || !date) {
         return res.status(400).json({
             status: "Failed",
@@ -200,18 +183,15 @@ budget.put('/edit-expense/:expenseId', async (req, res) => {
             });
         }
 
-        // Save old values for history
         const oldCost = expense.cost;
         const oldDescription = expense.description;
 
-        // Update expense details
         expense.cost = cost;
         expense.description = description;
         expense.date = new Date(date);
 
         await expense.save();
 
-        // Create a new history record for the edited expense
         const expenseHistory = new ExpenseHistory({
             user: userId,
             expenseId: expenseId,
@@ -222,7 +202,7 @@ budget.put('/edit-expense/:expenseId', async (req, res) => {
             reason: 'Edited expense details',
         });
 
-        await expenseHistory.save(); // Save the expense history
+        await expenseHistory.save();
 
         return res.status(200).json({
             status: "Success",
@@ -238,9 +218,6 @@ budget.put('/edit-expense/:expenseId', async (req, res) => {
     }
 });
 
-
-
-// Get all expenses for a user
 budget.get('/user-expenses/:userId', async (req, res) => {
     const { userId } = req.params;
 
@@ -267,7 +244,6 @@ budget.get('/user-expenses/:userId', async (req, res) => {
     }
 });
 
-// Get the budget details including total spent and remaining budget
 budget.get('/budget/:userId', async (req, res) => {
     const { userId } = req.params;
 
@@ -331,7 +307,6 @@ budget.get('/user-budget-history/:userId', async (req, res) => {
     const { userId } = req.params;
 
     try {
-        // Fetch the budget history for the user
         const budgetHistory = await BudgetHistory.find({ user: userId });
 
         if (!budgetHistory || budgetHistory.length === 0) {
@@ -359,10 +334,5 @@ budget.get('/user-budget-history/:userId', async (req, res) => {
         });
     }
 });
-
-
-
-
-
 
 export default budget;

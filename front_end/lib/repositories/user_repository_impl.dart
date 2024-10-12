@@ -2,7 +2,7 @@ import 'package:budgetwise_one/authservice/authService.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../models/user.dart'; // Import the User model
+import '../models/user.dart';
 import 'user_repository.dart';
 
 class UserService implements UserRepository {
@@ -48,8 +48,8 @@ class UserService implements UserRepository {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        String userId = data['userId']; // Assuming the response contains userId
-        await AuthService.saveUserId(userId); // _id from MongoDB is saved
+        String userId = data['userId'];
+        await AuthService.saveUserId(userId);
         print('Signin successful: ${data['message']}');
       } else {
         final responseData = jsonDecode(response.body);

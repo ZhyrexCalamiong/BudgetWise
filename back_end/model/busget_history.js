@@ -7,7 +7,7 @@ const BudgetHistorySchema = new Schema({
     oldMaximumAmount: { type: Number, required: true },
     newMaximumAmount: { type: Number, required: true },
     changeDate: { type: Date, default: Date.now },
-    reason: { type: String, required: true }, // Optional field to explain the change
+    reason: { type: String, required: true }, 
 });
 
 const BudgetHistory = mongoose.model('BudgetHistory', BudgetHistorySchema);

@@ -23,6 +23,15 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="reown.com" />
+                <data android:scheme="exampleapp" />
+                <data android:pathPattern="/exampleapp" />
+
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
@@ -37,9 +46,15 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
+        <package android:name="org.toshi"/>
+
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+        <package android:name="io.metamask"/>
+        <package android:name="com.wallet.crypto.trustapp"/>
+        <package android:name="io.gnosis.safe"/>
+        <package android:name="me.rainbow"/>
     </queries>
 </manifest>

@@ -13,24 +13,23 @@ class Budget {
 
   });
 
-  // Factory method to create a Budget instance from JSON
   factory Budget.fromJson(Map<String, dynamic> json) {
     return Budget(
       userId: json['userId'],
       maximumAmount: json['maximumAmount'],
       amountSpent: json['amountSpent'],
-      date: DateTime.parse(json['date']), // Ensure date is parsed correctly
+      date: DateTime.parse(json['date']), 
 
     );
   }
 
-  // Method to convert a Budget instance to JSON
+
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
       'maximumAmount': maximumAmount,
       'amountSpent': amountSpent,
-      'date': date.toIso8601String(), // Convert date to ISO 8601 string
+      'date': date.toIso8601String(), 
 
     };
   }

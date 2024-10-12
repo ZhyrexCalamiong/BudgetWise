@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'dart:async';
 
 class AnalyticsScreen extends StatefulWidget {
+  const AnalyticsScreen({super.key});
+
   @override
   _AnalyticsPageState createState() => _AnalyticsPageState();
 }
@@ -18,13 +20,12 @@ class _AnalyticsPageState extends State<AnalyticsScreen> {
   }
 
   Future<List<dynamic>> fetchTopCoins() async {
-    final String baseUrl = 'https://api.coingecko.com/api/v3';
+    const String baseUrl = 'https://api.coingecko.com/api/v3';
     final response = await http.get(Uri.parse(
         '$baseUrl/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false'));
 
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
-      print('Number of coins fetched: ${data.length}'); // Debugging line
       return data;
     } else {
       throw Exception('Failed to load top coins');
@@ -36,24 +37,22 @@ class _AnalyticsPageState extends State<AnalyticsScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
       appBar: AppBar(
-        title: Text('Analytics'),
-        centerTitle: true, // Center the title
-        automaticallyImplyLeading: false, // Remove the back button
+        title: const Text('Analytics'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
-        // Wrap the body in SingleChildScrollView
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Cryptocurrency Prices by Market Cap',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
-                // Removed border property
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -61,19 +60,15 @@ class _AnalyticsPageState extends State<AnalyticsScreen> {
                   future: _futureCoins,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Center(child: Text('No data available'));
+                      return const Center(child: Text('No data available'));
                     }
 
-                    // Printing the length of data to ensure it has 20 items
-                    print(
-                        'Number of coins displayed: ${snapshot.data!.length}');
-
-                    return Container(
-                      height: 400, // Increased height for the ListView
+                    return SizedBox(
+                      height: 400,
                       child: ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
@@ -82,31 +77,27 @@ class _AnalyticsPageState extends State<AnalyticsScreen> {
                             child: ListTile(
                               leading: Image.network(
                                 coin['image'],
-                                height: 30, // Further reduced height for icon
-                                width: 30, // Further reduced width for icon
+                                height: 30,
+                                width: 30,
                               ),
                               title: Text(
                                 coin['name'],
-                                style: TextStyle(
-                                    fontSize: 12), // Smaller text size
+                                style: const TextStyle(fontSize: 12),
                               ),
                               subtitle: Text(
                                 'Price: \$${coin['current_price']}',
-                                style: TextStyle(
-                                    fontSize: 10), // Smaller text size
+                                style: const TextStyle(fontSize: 10),
                               ),
                               trailing: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     'Market Cap: \$${coin['market_cap']}',
-                                    style: TextStyle(
-                                        fontSize: 10), // Smaller text size
+                                    style: const TextStyle(fontSize: 10),
                                   ),
                                   Text(
                                     '24h Change: ${coin['price_change_percentage_24h']}%',
-                                    style: TextStyle(
-                                        fontSize: 10), // Smaller text size
+                                    style: const TextStyle(fontSize: 10),
                                   ),
                                 ],
                               ),
@@ -118,19 +109,19 @@ class _AnalyticsPageState extends State<AnalyticsScreen> {
                   },
                 ),
               ),
-              SizedBox(height: 20), // Space between sections
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Philippine Peso Exchange Rates',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
-                height: 200, // Set a height for the container
+                height: 200,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Center(
-                  child: Text('Content will go here'), // Placeholder text
+                child: const Center(
+                  child: Text('Content will go here'),
                 ),
               ),
             ],

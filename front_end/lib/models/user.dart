@@ -17,7 +17,6 @@ class User {
     required this.dateOfBirth,
   });
 
-  // Add a method to convert User object to a Map
   Map<String, dynamic> toMap() {
     return {
       'firstName': firstName,
@@ -30,8 +29,7 @@ class User {
     };
   }
 
-  // Add a factory constructor to create a User from a Map if needed
-  factory User.fromMap(Map<String, dynamic> map) {
+  factory User.fromJsom(Map<String, dynamic> map) {
     return User(
       firstName: map['firstName'],
       middleName: map['middleName'],

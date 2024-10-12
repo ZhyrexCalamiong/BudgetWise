@@ -24,3 +24,4 @@ class LoginError extends LoginState {
 }
 
 class LoginNavigateToHomeScreenActionState extends LoginState {}
+

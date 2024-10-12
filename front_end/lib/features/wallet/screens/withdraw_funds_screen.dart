@@ -21,7 +21,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   @override
   void initState() {
     super.initState();
-    _loadUserId(); // Load the userId
+    _loadUserId();
   }
 
   Future<void> _loadUserId() async {
@@ -31,38 +31,31 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
     });
   }
 
-void _withdraw() {
-  if (userId != null) {
-    double amount = double.tryParse(_amountController.text) ?? 0.0;
-    String description = _descriptionController.text;
+  void _withdraw() {
+    if (userId != null) {
+      double amount = double.tryParse(_amountController.text) ?? 0.0;
+      String description = _descriptionController.text;
+      if (amount > 0) {
+        DateTime now = DateTime.now();
+        context.read<FinancialWalletBloc>().add(
+              AddFinancialWalletEvent(userId!, amount, description, now),
+            );
 
-    // Only proceed if the amount is greater than 0
-    if (amount > 0) {
-      // Automatically use the current date and time
-      DateTime now = DateTime.now();
+        context
+            .read<FinancialWalletBloc>()
+            .add(GetUserFinancialWalletEvent(userId!));
 
-      // Trigger the withdrawal event, regardless of the current balance
-      context.read<FinancialWalleBloc>().add(
-            AddFinancialWalletEvent(userId!, amount, description, now),
-          );
-
-      // Clear the input fields after withdrawal
-      _amountController.clear();
-      _descriptionController.clear();
-
-      // Navigate to the wallet screen after withdrawal
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const WalletScreen()),
-      );
-    } else {
-      // Show an error message if the amount is 0 or less
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid amount greater than 0.')),
-      );
+        _amountController.clear();
+        _descriptionController.clear();
+        Navigator.pop(context); // Go back to the previous screen
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Please enter a valid amount greater than 0.')),
+        );
+      }
     }
   }
-}
 
   @override
   Widget build(BuildContext context) {

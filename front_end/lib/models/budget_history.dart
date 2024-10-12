@@ -1,9 +1,9 @@
 class BudgetHistory {
-  final String user;  // This will store the userId from the backend
-  final double oldMaximumAmount;  // Previous max budget
-  final double newMaximumAmount;  // Updated max budget
-  final DateTime changeDate;  // Date when the budget changed
-  final String reason;  // Reason for the change
+  final String user;
+  final double oldMaximumAmount;
+  final double newMaximumAmount;
+  final DateTime changeDate;
+  final String reason;
 
   BudgetHistory({
     required this.user,
@@ -13,25 +13,13 @@ class BudgetHistory {
     required this.reason,
   });
 
-  // Factory method to parse JSON data from the backend
   factory BudgetHistory.fromJson(Map<String, dynamic> json) {
     return BudgetHistory(
-      user: json['user'],  // Parsing user ID
-      oldMaximumAmount: json['oldMaximumAmount'].toDouble(),  // Ensure number is parsed correctly
-      newMaximumAmount: json['newMaximumAmount'].toDouble(),
-      changeDate: DateTime.parse(json['changeDate']),  // Parse date from string
-      reason: json['reason'],  // Get the reason for budget change
+      user: json['user'] is Map ? json['user']['_id'] ?? '' : json['user'] ?? '',
+      oldMaximumAmount: json['oldMaximumAmount']?.toDouble() ?? 0.0,
+      newMaximumAmount: json['newMaximumAmount']?.toDouble() ?? 0.0,
+      changeDate: DateTime.tryParse(json['changeDate']) ?? DateTime.now(),
+      reason: json['reason'] ?? '',
     );
-  }
-
-  // Method to convert Dart object to JSON (if needed)
-  Map<String, dynamic> toJson() {
-    return {
-      'user': user,
-      'oldMaximumAmount': oldMaximumAmount,
-      'newMaximumAmount': newMaximumAmount,
-      'changeDate': changeDate.toIso8601String(),  // Format date as ISO string
-      'reason': reason,
-    };
   }
 }

@@ -6,10 +6,10 @@ class AddFundsCryptoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0D0D0D), // Background color
+      backgroundColor: const Color(0xFF0D0D0D), 
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xFF121212), // AppBar color
+        backgroundColor: const Color(0xFF121212), 
         centerTitle: true,
         title: const Text(
           'Add Crypto Funds',

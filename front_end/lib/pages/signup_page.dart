@@ -5,7 +5,7 @@ import '../bloc/authentication/registration/registration_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/authentication/registration/registration_event.dart';
 import '../bloc/authentication/registration/registration_state.dart';
-import '../models/user.dart'; // Assuming a User model exists.
+import '../models/user.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -22,8 +22,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _contactNoController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   final TextEditingController _dateOfBirthController = TextEditingController();
 
   @override
@@ -66,8 +65,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _contactNoController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   final TextEditingController _dateOfBirthController = TextEditingController();
 
   @override
@@ -126,16 +124,13 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                   _buildTextField('Email', _emailController),
                   _buildTextField('Contact No.', _contactNoController),
                   _buildDatePicker(),
-                  _buildTextField('Password', _passwordController,
-                      obscureText: true),
-                  _buildTextField('Confirm Password', _confirmPasswordController,
-                      obscureText: true),
+                  _buildTextField('Password', _passwordController, obscureText: true),
+                  _buildTextField('Confirm Password', _confirmPasswordController, obscureText: true),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        if (_passwordController.text !=
-                            _confirmPasswordController.text) {
+                        if (_passwordController.text != _confirmPasswordController.text) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Passwords do not match')),
                           );
@@ -151,8 +146,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                           dateOfBirth: _dateOfBirthController.text,
                           password: _passwordController.text,
                         );
-                        BlocProvider.of<RegistrationBloc>(context)
-                            .add(UserRegistrationRequested(user));
+                        BlocProvider.of<RegistrationBloc>(context).add(UserRegistrationRequested(user));
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -198,8 +192,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
     );
   }
 
-  Widget _buildTextField(String labelText, TextEditingController controller,
-      {bool obscureText = false}) {
+  Widget _buildTextField(String labelText, TextEditingController controller, {bool obscureText = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(

@@ -1,5 +1,3 @@
-// lib/widgets/bottom_navigation.dart
-
 import 'package:flutter/material.dart';
 
 class BottomNavigation extends StatelessWidget {
@@ -16,12 +14,11 @@ class BottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor:
-          const Color(0xFF121212), // Updated BottomNavigationBar color
+      backgroundColor: const Color(0xFF121212),
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.account_balance_wallet),
-          label: 'Wallet',
+          icon: Icon(Icons.swap_horiz),
+          label: 'Converter',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.analytics),
@@ -29,7 +26,7 @@ class BottomNavigation extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_balance_wallet),
-          label: 'Converter',
+          label: 'Wallet',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),

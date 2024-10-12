@@ -1,13 +1,13 @@
 class ExpenseHistory {
-  final String id; // The unique identifier for the ExpenseHistory document
-  final String user; // User ID
-  final String expenseId; // Expense ID
-  final double oldCost; // Old cost of the expense
-  final double newCost; // New cost of the expense
-  final String oldDescription; // Old description of the expense
-  final String newDescription; // New description of the expense
-  final DateTime changeDate; // Date of the change
-  final String reason; // Reason for the change
+  final String id;
+  final String user;
+  final String expenseId;
+  final double oldCost;
+  final double newCost;
+  final String oldDescription;
+  final String newDescription;
+  final DateTime changeDate;
+  final String reason;
 
   ExpenseHistory({
     required this.id,
@@ -21,7 +21,6 @@ class ExpenseHistory {
     required this.reason,
   });
 
-  // Factory method to create an instance from a JSON object
   factory ExpenseHistory.fromJson(Map<String, dynamic> json) {
     return ExpenseHistory(
       id: json['_id'] as String,
@@ -36,7 +35,6 @@ class ExpenseHistory {
     );
   }
 
-  // Method to convert the instance to a JSON object
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
