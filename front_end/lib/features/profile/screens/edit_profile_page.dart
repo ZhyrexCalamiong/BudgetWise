@@ -113,7 +113,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                               lastName: lastName,
                             ),
                           );
-                      Navigator.pop(context);
+                      Navigator.pop(context, true);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF8BBE6D),

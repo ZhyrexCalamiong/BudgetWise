@@ -1,11 +1,9 @@
 import 'package:budgetwise_one/bloc/conversion_money/money_converter_bloc.dart';
-import 'package:budgetwise_one/bloc/conversion_money/money_converter_state.dart';
-import 'package:budgetwise_one/bloc/conversion_money/money_converter_event.dart';
 import 'package:budgetwise_one/features/analytics/pages/analytics_page.dart';
+import 'package:budgetwise_one/features/home/screens/currency_converter_screen.dart';
 import 'package:budgetwise_one/features/navigations/bottom_navigation.dart';
 import 'package:budgetwise_one/features/profile/pages/profile_page.dart';
 import 'package:budgetwise_one/features/wallet/pages/wallet_page.dart';
-import 'package:budgetwise_one/repositories/money_converter_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Wallet App',
+      title: 'BudgetWise',
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
@@ -38,12 +36,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  final MoneyConverter _moneyConverter = MoneyConverter();
-
-  String _fromCurrency = 'USD';
-  String _toCurrency = 'EUR';
-  double _amountToConvert = 0.0;
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -52,146 +44,93 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> _buildPages() {
     return [
-      // Add your page widgets here
-      BlocProvider(
-        create: (context) => MoneyConverterBloc(_moneyConverter),
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Currency Converter'),
-            backgroundColor: const Color(0xFF0D0D0D),
-          ),
-          body: BlocBuilder<MoneyConverterBloc, MoneyConverterState>(
-            builder: (context, state) {
-              String convertedResult = '';
-              if (state is MoneyConverterSuccess) {
-                convertedResult = state.convertedAmount.toStringAsFixed(2);
-              } else if (state is MoneyConverterError) {
-                convertedResult = state.message;
-              }
-
-              return Container(
-                color: const Color(0xFF0D0D0D),
-                child: SingleChildScrollView(
-                  child: Center(
+      // Landing page layout
+      Scaffold(
+        body: Container(
+          color: const Color(0xFF0D0D0D),
+          child: Center(
+            // Use Center widget for centering content
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.center, // Center the Column
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 30), // Reduced space
+                  const Text(
+                    'Welcome to BudgetWise',
+                    style: TextStyle(
+                      color: Color(0xFF8BBE6D), // Updated highlight color
+                      fontSize: 24, // Reduced font size
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 12), // Reduced space
+                  const Text(
+                    'Your all-in-one solution for personal finance management',
+                    style: TextStyle(
+                        color: Colors.white, fontSize: 14), // Reduced font size
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20), // Reduced space
+                  Padding(
+                    padding: const EdgeInsets.all(8.0), // Reduced padding
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Card(
-                          color: const Color(0xFF1E1E1E),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              children: [
-                                const Text(
-                                  'Currency Converter',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextField(
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                        decoration: const InputDecoration(
-                                          hintText: 'Amount',
-                                          hintStyle:
-                                              TextStyle(color: Colors.grey),
-                                        ),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _amountToConvert =
-                                                double.tryParse(value) ?? 0.0;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    DropdownButton<String>(
-                                      dropdownColor: const Color(0xFF1E1E1E),
-                                      value: _fromCurrency,
-                                      items: ['USD', 'EUR', 'PHP']
-                                          .map((String currency) {
-                                        return DropdownMenuItem<String>(
-                                          value: currency,
-                                          child: Text(
-                                            currency,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _fromCurrency = value ?? 'USD';
-                                        });
-                                      },
-                                    ),
-                                    const Icon(Icons.swap_horiz,
-                                        color: Colors.white),
-                                    DropdownButton<String>(
-                                      dropdownColor: const Color(0xFF1E1E1E),
-                                      value: _toCurrency,
-                                      items: ['USD', 'EUR', 'PHP']
-                                          .map((String currency) {
-                                        return DropdownMenuItem<String>(
-                                          value: currency,
-                                          child: Text(
-                                            currency,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _toCurrency = value ?? 'EUR';
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    BlocProvider.of<MoneyConverterBloc>(context)
-                                        .add(
-                                      ConvertCurrencyEvent(
-                                        from: _fromCurrency,
-                                        to: _toCurrency,
-                                        amount: _amountToConvert,
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.orange),
-                                  child: const Text('Convert'),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  convertedResult.isNotEmpty
-                                      ? 'Converted Amount: $convertedResult $_toCurrency'
-                                      : '',
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
+                        _featureCard(
+                          title: 'Currency Converter',
+                          icon: Icons.currency_exchange,
+                          description:
+                              'Easily convert currencies with real-time exchange rates.',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const CurrencyConverterScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                        _featureCard(
+                          title: 'Analytics',
+                          icon: Icons.bar_chart,
+                          description:
+                              'Get insights into your spending and saving habits.',
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = 1;
+                            });
+                          },
+                        ),
+                        _featureCard(
+                          title: 'Wallet',
+                          icon: Icons.account_balance_wallet,
+                          description:
+                              'Manage your funds and track expenses easily.',
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = 2;
+                            });
+                          },
+                        ),
+                        _featureCard(
+                          title: 'Profile',
+                          icon: Icons.person,
+                          description:
+                              'Update your personal information and preferences.',
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = 3;
+                            });
+                          },
                         ),
                       ],
                     ),
                   ),
-                ),
-              );
-            },
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -201,14 +140,67 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
+  Widget _featureCard({
+    required String title,
+    required IconData icon,
+    required String description,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        color: const Color(0xFF1E1E1E),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0), // Further reduced padding
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: const Color(0xFF8BBE6D), // Updated highlight color
+                size: 30, // Reduced icon size
+              ),
+              const SizedBox(width: 8), // Reduced space
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Color(0xFF8BBE6D), // Updated highlight color
+                      fontSize: 14, // Reduced font size
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 2), // Reduced space
+                  Text(
+                    description,
+                    style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12), // Reduced font size
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildPages()[_selectedIndex],
-      bottomNavigationBar: BottomNavigation(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
-      ),
+      bottomNavigationBar: _selectedIndex != 0
+          ? BottomNavigation(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
+            )
+          : null,
     );
   }
 }

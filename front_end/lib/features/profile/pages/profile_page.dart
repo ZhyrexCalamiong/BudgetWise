@@ -95,8 +95,8 @@ class _ProfileState extends State<ProfileScreen> {
                   ProfileOption(
                     icon: Icons.edit,
                     text: 'Edit Profile Name',
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => BlocProvider(
@@ -105,6 +105,12 @@ class _ProfileState extends State<ProfileScreen> {
                           ),
                         ),
                       );
+
+                      // Check if the result indicates a profile update and refresh the screen
+                      if (result == true) {
+                        // Reload profile data
+                        profileBloc.add(FetchUserName());
+                      }
                     },
                   ),
                   ProfileOption(
