@@ -169,21 +169,35 @@ class _ProfileState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Logout'),
-          content: const Text('Are you sure you want to logout?'),
+          backgroundColor:
+              const Color(0xFF121212), // Match your screen's background color
+          title: const Text(
+            'Confirm Logout',
+            style: TextStyle(color: Colors.white), // Set title text color
+          ),
+          content: const Text(
+            'Are you sure you want to logout?',
+            style: TextStyle(color: Colors.white), // Set content text color
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.grey), // Set button text color
+              ),
             ),
             TextButton(
               onPressed: () {
                 // Trigger logout through the BLoC
                 logout(context);
               },
-              child: const Text('Logout'),
+              child: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.red), // Set button text color
+              ),
             ),
           ],
         );

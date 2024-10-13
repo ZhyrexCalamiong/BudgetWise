@@ -49,7 +49,7 @@ class _AnalyticsPageState extends State<AnalyticsScreen> {
             children: [
               const Text(
                 'Cryptocurrency Prices by Market Cap',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
               ),
               const SizedBox(height: 10),
               Container(

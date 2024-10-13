@@ -1,5 +1,3 @@
-// lib/main.dart
-
 import 'package:budgetwise_one/bloc/financial_wallet/financial_wallet_bloc.dart';
 import 'package:budgetwise_one/features/intro/onboarding_screen.dart';
 import 'package:budgetwise_one/features/intro/splash_screen.dart';
@@ -9,11 +7,7 @@ import 'package:budgetwise_one/pages/signup_page.dart';
 import 'package:budgetwise_one/repositories/budget_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reown_appkit/modal/appkit_modal_impl.dart';
-import 'package:reown_appkit/reown_appkit.dart';
 import 'features/home/pages/home_page.dart';
-// import 'screens/splash_screen.dart'; // Import the splash screen
-// import 'screens/onboarding_screen.dart'; // Import the onboarding screen
 
 void main() {
   runApp(
@@ -24,8 +18,6 @@ void main() {
   );
 }
 
-
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -34,33 +26,32 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
-
-   @override
+  @override
   void initState() {
     super.initState();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BudgetWise',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      theme: ThemeData.dark().copyWith( // Use a dark theme
+        primaryColor: Colors.orange,
+        scaffoldBackgroundColor: const Color(0xFF0D0D0D), // Background color
+        cardColor: const Color(0xFF1E1E1E), // Card color
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF1E1E1E), // AppBar color
+          titleTextStyle: TextStyle(color: Colors.white), // AppBar text color
+        ),
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
-        '/signup': (context) =>const SignupPage(),
+        '/signup': (context) => const SignupPage(),
         '/login': (context) => LoginPage(),
         '/home': (context) => WalletScreen(),
-        '/onboarding': (context) =>
-            const OnboardingScreen(), 
+        '/onboarding': (context) => const OnboardingScreen(),
       },
     );
   }
