@@ -7,18 +7,7 @@ class SecondPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // Use a Container to apply the gradient
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter, // Start the gradient at the top
-            end: Alignment.bottomCenter, // End the gradient at the bottom
-            colors: [
-              Color(0xFF0D1F14), // Dark green (top)
-              Color(0xFF2F4F36), // Mid-tone green
-              Color(0xFF8BBE6D), // Light green (bottom)
-            ],
-          ),
-        ),
+        color: const Color(0xFF1E1E1E),
         child: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -18,96 +18,151 @@ class _IntroductionPageState extends State<IntroductionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: [
-        PageView(
-          controller: _controller,
-          onPageChanged: (index) {
-            setState(() {
-              lastpage = (index == 2);
-            });
-          },
-          children: const [
-            FirstPage(),
-            SecondPage(),
-            ThirdPage(),
-          ],
-        ),
-        Stack(
-          children: [
-            // Skip button moved to bottom left
-            if (!lastpage)
+      body: Stack(
+        children: [
+          PageView(
+            controller: _controller,
+            onPageChanged: (index) {
+              setState(() {
+                lastpage = (index == 2);
+              });
+            },
+            children: const [
+              FirstPage(),
+              SecondPage(),
+              ThirdPage(),
+            ],
+          ),
+          Stack(
+            children: [
+              // Skip button moved to bottom left
+              if (!lastpage)
+                Positioned(
+                  bottom: 20, // Padding from the bottom
+                  left: 20, // Padding from the left
+                  child: TextButton(
+                    onPressed: () {
+                      _controller.jumpToPage(2); // Jump to last page
+                    },
+                    child: const Text(
+                      "Skip",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              lastpage
+                  ? Positioned(
+                      bottom: 20, // Padding from the bottom
+                      right: 20, // Padding from the right
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Navigate to HomePage
+                        },
+                        child: const Text(
+                          "Return",
+                          style: TextStyle(
+                            color: Color(0xFF8BBE6D),
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Positioned(
+                      bottom: 20, // Padding from the bottom
+                      right: 20, // Padding from the right
+                      child: TextButton(
+                        onPressed: () {
+                          _controller.nextPage(
+                            duration: const Duration(microseconds: 500),
+                            curve: Curves.easeIn,
+                          );
+                        },
+                        child: const Text(
+                          "Next",
+                          style: TextStyle(
+                            color: Color(0xFF8BBE6D),
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+              // Centering the SmoothPageIndicator
               Positioned(
-                bottom: 20, // Padding from the bottom
-                left: 20, // Padding from the left
-                child: TextButton(
-                  onPressed: () {
-                    _controller.jumpToPage(2); // Jump to last page
-                  },
-                  child: const Text(
-                    "Skip",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
+                bottom: 30, // Padding from the bottom
+                left: 0, // Make sure it's full width
+                right: 0, // Make sure it's full width
+                child: Center(
+                  child: SmoothPageIndicator(
+                    controller: _controller,
+                    count: 3,
+                    effect: const WormEffect(
+                      dotHeight: 7, // Change dot height
+                      dotWidth: 7, // Change dot width
+                      spacing: 8, // Spacing between dots
+                      activeDotColor: Color(0xFF8BBE6D), // Active dot color
+                      dotColor: Colors.grey,
                     ),
                   ),
                 ),
               ),
-            lastpage
-                ? Positioned(
-                    bottom: 20, // Padding from the bottom
-                    right: 20, // Padding from the right
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Navigate to HomePage
-                      },
-                      child: const Text(
-                        "Return",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
+              lastpage
+                  ? Positioned(
+                      bottom: 20, // Padding from the bottom
+                      right: 20, // Padding from the right
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Navigate to HomePage
+                        },
+                        child: const Text(
+                          "Return",
+                          style: TextStyle(
+                            color: Color(0xFF8BBE6D),
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Positioned(
+                      bottom: 20, // Padding from the bottom
+                      right: 20, // Padding from the right
+                      child: TextButton(
+                        onPressed: () {
+                          _controller.nextPage(
+                            duration: const Duration(microseconds: 500),
+                            curve: Curves.easeIn,
+                          );
+                        },
+                        child: const Text(
+                          "Next",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
-                  )
-                : Positioned(
-                    bottom: 20, // Padding from the bottom
-                    right: 20, // Padding from the right
-                    child: TextButton(
-                      onPressed: () {
-                        _controller.nextPage(
-                          duration: const Duration(microseconds: 500),
-                          curve: Curves.easeIn,
-                        );
-                      },
-                      child: const Text(
-                        "Next",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                        ),
-                      ),
+              // Centering the SmoothPageIndicator
+              Positioned(
+                bottom: 30, // Padding from the bottom
+                left: 0, // Make sure it's full width
+                right: 0, // Make sure it's full width
+                child: Center(
+                  child: SmoothPageIndicator(
+                    controller: _controller,
+                    count: 3,
+                    effect: const WormEffect(
+                      dotHeight: 7, // Change dot height
+                      dotWidth: 7, // Change dot width
+                      spacing: 8, // Spacing between dots
+                      activeDotColor: Color(0xFF8BBE6D), // Active dot color
+                      dotColor: Colors.grey,
                     ),
-                  ),
-            // Centering the SmoothPageIndicator
-            Positioned(
-              bottom: 30, // Padding from the bottom
-              left: 0, // Make sure it's full width
-              right: 0, // Make sure it's full width
-              child: Center(
-                child: SmoothPageIndicator(
-                  controller: _controller,
-                  count: 3,
-                  effect: const WormEffect(
-                    dotHeight: 7, // Change dot height
-                    dotWidth: 7, // Change dot width
-                    spacing: 8, // Spacing between dots
-                    activeDotColor: Color(0xff75ECE1), // Active dot color
-                    dotColor: Colors.grey,
                   ),
                 ),
-              ),
-            )
+              )
             ],
           ),
         ],

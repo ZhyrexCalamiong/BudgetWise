@@ -11,8 +11,8 @@ class CurrencyConverterScreen extends StatelessWidget {
         title: const Text('Currency Converter'),
         backgroundColor: Color(0xFF0D0D0D),
       ),
-      body: const Center(
-        child: Text(
+      body: Center(
+        child: const Text(
           'Currency Converter Coming Soon!',
           style: TextStyle(fontSize: 24),
         ),

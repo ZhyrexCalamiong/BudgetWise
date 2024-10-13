@@ -56,8 +56,12 @@ class _WalletScreenState extends State<WalletScreen> {
       userId = id;
     });
     if (userId != null) {
-      context.read<FinancialWalletBloc>().add(GetBalanceFinancialWalletEvent(userId!));
-      context.read<FinancialWalletBloc>().add(GetUserFinancialWalletEvent(userId!));
+      context
+          .read<FinancialWalletBloc>()
+          .add(GetBalanceFinancialWalletEvent(userId!));
+      context
+          .read<FinancialWalletBloc>()
+          .add(GetUserFinancialWalletEvent(userId!));
       context.read<FinancialWalletBloc>().add(GetBudgetHistoryEvent(userId!));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -110,9 +114,7 @@ class _WalletScreenState extends State<WalletScreen> {
                       setState(() {
                         balance = state.maximumAmount;
                         totalSpent = state.amountSpent;
-                        const CircularProgressIndicator();
                       });
-                      
                     } else if (state is FinancialGetBudgetHistorySuccess) {
                       setState(() {
                         budgetHistory = state.budgetHistory;
@@ -207,66 +209,133 @@ class _WalletScreenState extends State<WalletScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildActionButton(Icons.add, 'Add Funds', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddFundsFiatScreen(),
-            ),
-          );
-        }),
-        _buildActionButton(Icons.remove, 'Withdraw', () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const WithdrawScreen(),
-            ),
-          );
-          if (result == true) {
-            _loadUserId();
-          }
-        }),
+        _buildActionButton(
+          Icons.add,
+          'Add Funds',
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddFundsFiatScreen(),
+              ),
+            );
+          },
+          Icons.add,
+        ),
+        _buildActionButton(
+          Icons.remove,
+          'Withdraw',
+          () async {
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const WithdrawScreen(),
+              ),
+            );
+            if (result == true) {
+              _loadUserId();
+            }
+          },
+          Icons.arrow_downward,
+        ),
       ],
     );
   }
 
-  Widget _buildActionButton(IconData icon, String label, VoidCallback onPressed) {
-    return ElevatedButton.icon(
+  Widget _buildActionButton(IconData icon, String label, VoidCallback onPressed,
+      IconData buttonIcon) {
+    return ElevatedButton(
       onPressed: onPressed,
-      icon: Icon(icon),
-      label: Text(label),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF8BBE6D),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        shape: const CircleBorder(), // Makes the button round
+        padding: const EdgeInsets.all(20), // Adds padding for larger size
+        backgroundColor: const Color(0xFF1E1E1E), // Matches card background
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(buttonIcon,
+              size: 24, color: const Color(0xFF8BBE6D)), // Highlight color
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(
+                fontSize: 12, color: Color(0xFF8BBE6D)), // Highlight color
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildRecentTransactionsSection(BuildContext context) {
     return Expanded(
-      child: ListView.builder(
-        itemCount: combinedTransactions.length,
-        itemBuilder: (context, index) {
-          final transaction = combinedTransactions[index];
-          return _buildTransactionItem(transaction);
-        },
-      ),
+      child: combinedTransactions.isEmpty
+          ? const Center(
+              child: Text(
+                'No recent transactions.',
+                style: TextStyle(color: Colors.grey),
+              ),
+            )
+          : ListView.builder(
+              itemCount: combinedTransactions.length,
+              itemBuilder: (context, index) {
+                final transaction = combinedTransactions[index];
+                return _buildTransactionItem(transaction);
+              },
+            ),
     );
   }
 
   Widget _buildTransactionItem(BudgetExpenseHistory transaction) {
     return ListTile(
-      title: Text(transaction.description,
-          style: const TextStyle(color: Colors.white)),
+      title: Text(
+        transaction.description,
+        style: const TextStyle(color: Colors.white),
+      ),
       subtitle: Text(
-        '${transaction.type} - ${transaction.date}',
+        '${transaction.type.capitalize()} - ${_formatDate(transaction.date)}',
         style: const TextStyle(color: Colors.grey),
       ),
       trailing: Text(
         '${transaction.type == 'expense' ? '-' : '+'} ₱${transaction.amount}',
         style: TextStyle(
-            color: transaction.type == 'expense' ? Colors.red : Colors.green),
+          color: transaction.type == 'expense'
+              ? Colors.red
+              : const Color(0xFF8BBE6D),
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    // You can format the date as per your requirements
+    // For example: 'Oct 13, 2024'
+    return "${_getMonth(date.month)} ${date.day}, ${date.year}";
+  }
+
+  String _getMonth(int month) {
+    const List<String> months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return months[month - 1];
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    if (isEmpty) return this;
+    return '${this[0].toUpperCase()}${substring(1)}';
   }
 }
