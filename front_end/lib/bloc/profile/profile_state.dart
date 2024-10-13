@@ -21,3 +21,5 @@ class ProfileError extends ProfileState {
 }
 
 class ProfileNavigate extends ProfileState {}
+
+// class ProfileSuccess extends ProfileState {}

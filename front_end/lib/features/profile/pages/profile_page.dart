@@ -1,6 +1,7 @@
-import 'package:budgetwise_one/bloc/profile/bloc/profile_bloc.dart';
-import 'package:budgetwise_one/bloc/profile/bloc/profile_event.dart';
-import 'package:budgetwise_one/bloc/profile/bloc/profile_state.dart';
+import 'package:budgetwise_one/bloc/profile/edit_profile_bloc.dart';
+import 'package:budgetwise_one/bloc/profile/profile_bloc.dart';
+import 'package:budgetwise_one/bloc/profile/profile_event.dart';
+import 'package:budgetwise_one/bloc/profile/profile_state.dart';
 import 'package:budgetwise_one/pages/login_page.dart';
 import 'package:budgetwise_one/repositories/user_repository_impl.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:budgetwise_one/features/guide/screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/edit_profile_page.dart';
 import '../screens/change_password_page.dart';
-import '../screens/change_email_page.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -99,7 +99,11 @@ class _ProfileState extends State<ProfileScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditProfilePage()),
+                          builder: (context) => BlocProvider(
+                            create: (context) => EditProfileBloc(UserService()),
+                            child: const EditProfilePage(),
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -111,17 +115,6 @@ class _ProfileState extends State<ProfileScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const ChangePasswordPage()),
-                      );
-                    },
-                  ),
-                  ProfileOption(
-                    icon: Icons.email,
-                    text: 'Change Email Address',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ChangeEmailPage()),
                       );
                     },
                   ),

@@ -135,4 +135,34 @@ class UserService implements UserRepository {
       throw Exception('Failed to login: $e');
     }
   }
+  @override
+Future<User> updateProfile(String id, String firstName, String middleName, String lastName) async {
+  try {
+    final userId = await _getId(); // Assuming this method gets the user ID
+    final Uri url = Uri.parse("$baseUrl/user/$userId");
+
+    final response = await http.put(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "firstName": firstName,
+        "middleName": middleName,
+        "lastName": lastName,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Profile updated successfully');
+      final Map<String, dynamic> body = jsonDecode(response.body);
+      print(body);
+      return User.fromJson(body);
+    } else {
+      final responseData = jsonDecode(response.body);
+      throw Exception('Failed to update profile: ${responseData['message']}');
+    }
+  } catch (e) {
+    print('Error occurred: $e');
+    throw Exception('Failed to update profile: $e');
+  }
+}
 }
