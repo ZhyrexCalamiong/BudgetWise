@@ -17,8 +17,8 @@ class BottomNavigation extends StatelessWidget {
       backgroundColor: const Color(0xFF121212),
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.swap_horiz),
-          label: 'Converter',
+          icon: Icon(Icons.home),
+          label: 'Home',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.analytics),

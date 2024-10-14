@@ -39,7 +39,7 @@ class _ProfileState extends State<ProfileScreen> {
     return BlocProvider<ProfileBloc>(
       create: (context) => profileBloc, // Use the initialized bloc
       child: Scaffold(
-        backgroundColor: const Color(0xFF121212),
+        backgroundColor: const Color(0xFF0D0D0D),
         body: Column(
           children: [
             const SizedBox(height: 20),

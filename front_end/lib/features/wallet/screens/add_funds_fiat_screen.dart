@@ -80,9 +80,8 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
               ),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.push(
+                onPressed: () => Navigator.pop(
                   context,
-                  MaterialPageRoute(builder: (context) => WalletScreen()),
                 ),
               ),
             ),

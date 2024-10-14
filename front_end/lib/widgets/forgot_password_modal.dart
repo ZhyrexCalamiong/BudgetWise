@@ -36,7 +36,7 @@ class ForgotPasswordModal extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Color(0xFF0D0D0D),
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
       ),
       child: Column(
@@ -47,7 +47,7 @@ class ForgotPasswordModal extends StatelessWidget {
             elevation: 0,
             centerTitle: true,
             title: const Text('Forgot Password',
-                style: TextStyle(color: Colors.black)),
+                style: TextStyle(color: Color(0xFF8BBE6D))),
             toolbarHeight: 56,
           ),
           const SizedBox(height: 24),
@@ -62,19 +62,20 @@ class ForgotPasswordModal extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ResetPasswordModal(email: emailController.text.toString())));
+                        builder: (context) => ResetPasswordModal(
+                            email: emailController.text.toString())));
               } catch (e) {
                 print(e);
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF75ECE1),
+              backgroundColor: const Color(0xFF8BBE6D),
               minimumSize: const Size.fromHeight(50),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
             child: const Text('Send',
-                style: TextStyle(fontSize: 12, color: Colors.white)),
+                style: TextStyle(fontSize: 12, color: Colors.black)),
           ),
         ],
       ),
@@ -109,7 +110,7 @@ class ForgotPasswordModal extends StatelessWidget {
         labelText: labelText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
-        fillColor: const Color(0xFFFFFFFF),
+        fillColor: const Color(0xFF0D0D0D),
       ),
     );
   }

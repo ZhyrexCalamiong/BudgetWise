@@ -8,7 +8,7 @@ class FirstPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         // Use a Container to apply a solid background color
-        color: const Color(0xFF1E1E1E), // Set solid background color
+        color: const Color(0xFF0D0D0D), // Set solid background color
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

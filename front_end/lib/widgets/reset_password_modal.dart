@@ -9,7 +9,7 @@ import '../bloc/authentication/forgot_password/reset_password_state.dart';
 class ResetPasswordModal extends StatelessWidget {
   final String email;
   ResetPasswordModal({super.key, required this.email});
-  
+
   final TextEditingController codeController = TextEditingController();
   final TextEditingController newPassController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -47,7 +47,7 @@ class ResetPasswordModal extends StatelessWidget {
               elevation: 0,
               centerTitle: true,
               title: const Text('Reset Password',
-                  style: TextStyle(color: Colors.black)),
+                  style: TextStyle(color: Color(0xFF8BBE6D))),
               toolbarHeight: 56,
             ),
             const SizedBox(height: 24),
@@ -75,13 +75,13 @@ class ResetPasswordModal extends StatelessWidget {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF75ECE1),
+                backgroundColor: const Color(0xFF8BBE6D),
                 minimumSize: const Size.fromHeight(50),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
               child: const Text('Change Password',
-                  style: TextStyle(fontSize: 12, color: Colors.white)),
+                  style: TextStyle(fontSize: 12, color: Colors.black)),
             ),
           ],
         ),
@@ -99,7 +99,8 @@ class ResetPasswordModal extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
               },
               child: const Text('OK'),
             ),
@@ -119,7 +120,8 @@ class ResetPasswordModal extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
               },
               child: const Text('OK'),
             ),
@@ -130,8 +132,7 @@ class ResetPasswordModal extends StatelessWidget {
   }
 
   Widget _buildTextField(String labelText,
-      {TextEditingController? controller,
-      bool obscureText = false}) {
+      {TextEditingController? controller, bool obscureText = false}) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
@@ -139,7 +140,7 @@ class ResetPasswordModal extends StatelessWidget {
         labelText: labelText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
-        fillColor: const Color(0xFFFFFFFF),
+        fillColor: const Color(0xFF0D0D0D),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {

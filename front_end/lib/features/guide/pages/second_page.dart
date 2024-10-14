@@ -7,16 +7,16 @@ class SecondPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: const Color(0xFF1E1E1E),
+        color: const Color(0xFF0D0D0D),
         child: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Analytics Screen Image Here", 
+                "Analytics Screen Image Here",
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.white, 
+                  color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),

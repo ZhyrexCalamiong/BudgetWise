@@ -158,7 +158,7 @@ class _WalletScreenState extends State<WalletScreen> {
           _buildRecentTransactionsSection(context),
         ],
         if (_selectedTabIndex == 1) ...[
-          CryptoCurrencyTab(),
+          WalletScreen(),
         ],
       ],
     );
@@ -260,7 +260,7 @@ class _WalletScreenState extends State<WalletScreen> {
           Text(
             label,
             style: const TextStyle(
-                fontSize: 12, color: Color(0xFF8BBE6D)), // Highlight color
+                fontSize: 10, color: Color(0xFF8BBE6D)), // Highlight color
           ),
         ],
       ),

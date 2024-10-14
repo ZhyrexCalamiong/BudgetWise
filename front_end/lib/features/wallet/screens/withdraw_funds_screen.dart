@@ -117,7 +117,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
               ),
             ),
