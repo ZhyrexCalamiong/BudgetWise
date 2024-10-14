@@ -1,5 +1,3 @@
-import 'package:budgetwise_one/features/wallet/pages/wallet_page.dart';
-import 'package:budgetwise_one/repositories/budget_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:budgetwise_one/bloc/financial_wallet/financial_wallet_bloc.dart';
@@ -62,10 +60,20 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
       appBar: AppBar(
-        title: const Text('Withdraw Funds'),
+        elevation: 0,
+        title: const Text(
+          'Withdraw Funds',
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
         backgroundColor: const Color(0xFF1E1E1E),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -73,34 +81,44 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
             const Text(
               'Withdraw Amount',
               style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 20),
             _buildInputField(
               controller: _amountController,
-              hintText: 'Amount',
-              labelText: 'Enter Amount to Withdraw',
+              hintText: 'Enter Amount',
+              labelText: 'Amount to Withdraw',
               isNumber: true,
             ),
             const SizedBox(height: 20),
             _buildInputField(
               controller: _descriptionController,
-              hintText: 'Description',
+              hintText: 'Enter Description',
               labelText: 'Description (Optional)',
               isNumber: false,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: _withdraw,
               style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 backgroundColor: const Color(0xFF8BBE6D),
-                padding: const EdgeInsets.symmetric(vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 8,
+                shadowColor: const Color(0xFF8BBE6D).withOpacity(0.5),
               ),
               child: const Text(
                 'Withdraw',
-                style: TextStyle(fontSize: 16, color: Colors.black),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ),
           ],
@@ -120,22 +138,36 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
       children: [
         Text(
           labelText,
-          style: const TextStyle(fontSize: 16, color: Colors.white),
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 8),
         TextField(
           controller: controller,
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             filled: true,
-            fillColor: const Color(0xFF1E1E1E),
+            fillColor: const Color(0xFF2A2A2A),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
             ),
             hintText: hintText,
             hintStyle: const TextStyle(color: Colors.grey),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF3E3E3E)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF8BBE6D)),
+            ),
           ),
         ),
       ],

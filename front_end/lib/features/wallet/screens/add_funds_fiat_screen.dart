@@ -44,6 +44,10 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
       child: BlocConsumer<FinancialWalletBloc, FinancialWalletState>(
         listener: (context, state) {
           if (state is FinancialWalletLoading) {
+            // Show loading indicator
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Loading...')),
+            );
           } else if (state is FinancialWalletSuccess) {
             // Refresh wallet data
             context
@@ -64,12 +68,15 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
             backgroundColor: const Color(0xFF0D0D0D),
             appBar: AppBar(
               elevation: 0,
-              backgroundColor: const Color(0xFF121212),
+              backgroundColor: const Color(0xFF1E1E1E),
               centerTitle: true,
               title: const Text(
                 'Add Fiat Funds',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
               ),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -79,48 +86,74 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
                 ),
               ),
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _buildTextField(
-                    labelText: 'Set Budget',
-                    controller: _maximumAmountController,
-                    keyboardType: TextInputType.number,
-                    obscureText: false,
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async {
-                      double? maximumAmount =
-                          double.tryParse(_maximumAmountController.text);
-                      if (maximumAmount != null) {
-                        String? userId = await AuthService.getCurrentUserId();
-                        if (userId != null) {
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Title Section
+                    const Text(
+                      'Set Your Budget',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // Input Field for Budget
+                    _buildTextField(
+                      labelText: 'Enter Budget Amount',
+                      controller: _maximumAmountController,
+                      keyboardType: TextInputType.number,
+                      obscureText: false,
+                    ),
+                    const SizedBox(height: 30),
+                    // Add Budget Button
+                    ElevatedButton(
+                      onPressed: () async {
+                        double? maximumAmount =
+                            double.tryParse(_maximumAmountController.text);
+                        if (maximumAmount != null) {
+                          String? userId = await AuthService.getCurrentUserId();
                           DateTime date = DateTime.now();
                           context.read<FinancialWalletBloc>().add(
                               SetFinancialWallettEvent(
-                                  userId, maximumAmount, date));
+                                  userId!, maximumAmount, date));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content: Text('Error: User ID not found')),
+                                content: Text('Error: Invalid budget amount')),
                           );
                         }
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Error: Invalid budget amount')),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF8BBE6D),
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF8BBE6D),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 24.0),
+                        elevation: 4,
+                        shadowColor: const Color(0x80000000),
+                      ),
+                      child: const Text(
+                        'Set Budget',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    child: const Text('Set Budget'),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    // Show additional info or a suggestion here if needed
+                    if (state is FinancialWalletLoading)
+                      const Center(child: CircularProgressIndicator()),
+                  ],
+                ),
               ),
             ),
           );
@@ -135,21 +168,42 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
     TextInputType keyboardType = TextInputType.text,
     bool obscureText = false,
   }) {
-    return TextField(
-      controller: controller,
-      style: const TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: const TextStyle(color: Colors.white),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFF8BBE6D)),
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.0),
+        color: const Color(0xFF1E1E1E),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 6,
+          ),
+        ],
       ),
-      keyboardType: keyboardType,
-      obscureText: obscureText,
+      child: TextField(
+        controller: controller,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: const TextStyle(color: Color(0xFF8BBE6D)),
+          filled: true,
+          fillColor: const Color(0xFF1E1E1E),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            borderSide: const BorderSide(color: Colors.grey),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            borderSide: const BorderSide(color: Color(0xFF8BBE6D)),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 18.0,
+            horizontal: 16.0,
+          ),
+        ),
+        keyboardType: keyboardType,
+        obscureText: obscureText,
+      ),
     );
   }
 }
