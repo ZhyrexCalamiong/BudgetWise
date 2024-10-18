@@ -41,3 +41,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+/front_end/build/app/outputs/apk/debug/app-debug.apk
+/front_end/build/app/outputs/flutter-apk/app-debug.apk
+

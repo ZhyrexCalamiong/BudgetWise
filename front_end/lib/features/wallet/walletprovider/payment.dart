@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class PaymentJobCardPage extends StatefulWidget {
   final String amount;
   final String sender;
@@ -9,14 +8,14 @@ class PaymentJobCardPage extends StatefulWidget {
   final bool isSent;
 
   const PaymentJobCardPage({
-    super.key,
+    Key? key,
     required this.amount,
     required this.sender,
     required this.recipient,
     required this.hash,
     required this.date,
     required this.isSent,
-  });
+  }) : super(key: key);
 
   @override
   _PaymentJobCardPageState createState() => _PaymentJobCardPageState();
@@ -26,7 +25,7 @@ class _PaymentJobCardPageState extends State<PaymentJobCardPage> {
   bool _isExpanded = false;
 
   String shortenAddress(String address) {
-    if (address.length <= 10) return address;
+    if (address.length <= 10) return address; 
     return '${address.substring(0, 6)}...${address.substring(address.length - 4)}';
   }
 
@@ -50,9 +49,8 @@ class _PaymentJobCardPageState extends State<PaymentJobCardPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${widget.isSent ? 'Sent' : 'Recieved'} ${widget.amount} ETH',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18),
+                    '${widget.isSent ? 'Sent' : 'Recieved'} ${widget.amount} ETH', 
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   Text(
                     widget.date.toLocal().toString().split(' ')[0],
@@ -61,16 +59,14 @@ class _PaymentJobCardPageState extends State<PaymentJobCardPage> {
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
-                  'From: ${_isExpanded ? widget.sender : shortenAddress(widget.sender)}'),
-              Text(
-                  'To: ${_isExpanded ? widget.recipient : shortenAddress(widget.recipient)}'),
+              Text('From: ${_isExpanded ? widget.sender : shortenAddress(widget.sender)}'),
+              Text('To: ${_isExpanded ? widget.recipient : shortenAddress(widget.recipient)}'),
               const SizedBox(height: 8),
-              Text(
-                  'Hash: ${_isExpanded ? widget.hash : shortenAddress(widget.hash)}'),
+              Text('Hash: ${_isExpanded ? widget.hash : shortenAddress(widget.hash)}'),
             ],
           ),
         ),
+
       ),
     );
   }

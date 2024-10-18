@@ -160,7 +160,7 @@ class _WalletScreenState extends State<WalletScreen> {
           _buildRecentTransactionsSection(context),
         ],
         if (_selectedTabIndex == 1) ...[
-          CryptoCurrencyTab(),
+          Expanded(child: const CryptoWalletScreen()), // Ensures it takes available space
         ],
       ],
     );
@@ -299,45 +299,19 @@ class _WalletScreenState extends State<WalletScreen> {
         style: const TextStyle(color: Colors.grey),
       ),
       trailing: Text(
-        '${transaction.type == 'expense' ? '-' : '+'} ₱${transaction.amount}',
-        style: TextStyle(
-          color: transaction.type == 'expense'
-              ? Colors.red
-              : const Color(0xFF8BBE6D),
-          fontWeight: FontWeight.bold,
-        ),
+        '₱${transaction.amount.toStringAsFixed(2)}',
+        style: const TextStyle(color: Colors.white),
       ),
     );
   }
 
   String _formatDate(DateTime date) {
-    // You can format the date as per your requirements
-    // For example: 'Oct 13, 2024'
-    return "${_getMonth(date.month)} ${date.day}, ${date.year}";
-  }
-
-  String _getMonth(int month) {
-    const List<String> months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    return months[month - 1];
+    return '${date.day}/${date.month}/${date.year}';
   }
 }
 
 extension StringExtension on String {
   String capitalize() {
-    if (isEmpty) return this;
-    return '${this[0].toUpperCase()}${substring(1)}';
+    return "${this[0].toUpperCase()}${substring(1)}";
   }
 }

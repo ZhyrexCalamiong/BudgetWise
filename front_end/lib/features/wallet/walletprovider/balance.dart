@@ -30,7 +30,7 @@ class BalanceCard extends StatelessWidget {
               height: 150,
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: Color(0xFF0D0D0D),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
             ),
@@ -43,7 +43,7 @@ class BalanceCard extends StatelessWidget {
                 const Flexible(
                   child: Text(
                     'Wallet Address:',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
+                    style: TextStyle(fontSize: 15, color: Color.fromARGB(255, 255, 255, 255)),
                     overflow: TextOverflow.ellipsis, 
                   ),
                 ),
@@ -63,18 +63,18 @@ class BalanceCard extends StatelessWidget {
                   child: Text(
                     'Current Balance:',
                     style: TextStyle(fontSize: 15, color: Colors.white),
-                    overflow: TextOverflow.ellipsis, // Prevents overflow
+                    overflow: TextOverflow.ellipsis, 
                   ),
                 ),
-                const SizedBox(height: 4), // Space between the texts
+                const SizedBox(height: 4), 
                 Flexible(
                   child: Text(
-                    balance, // Display balance here
+                    balance, 
                     style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
-                    overflow: TextOverflow.ellipsis, // Prevents overflow
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
