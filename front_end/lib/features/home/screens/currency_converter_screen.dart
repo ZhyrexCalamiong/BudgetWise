@@ -180,7 +180,7 @@ class _CurrencyConverterScreen extends State<CurrencyConverterScreen> {
           ),
         ),
       ),
-      const AnalyticsScreen(),
+      AnalyticsScreen(),
       const WalletScreen(),
       const ProfileScreen(),
     ];

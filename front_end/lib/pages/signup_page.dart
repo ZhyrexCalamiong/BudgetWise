@@ -15,30 +15,6 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _middleNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _contactNoController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-  final TextEditingController _dateOfBirthController = TextEditingController();
-
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _middleNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _contactNoController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    _dateOfBirthController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,6 +45,22 @@ class _SignupPageContentState extends State<_SignupPageContent> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _dateOfBirthController = TextEditingController();
+
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _middleNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _contactNoController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _dateOfBirthController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +118,18 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                   _buildTextField('Email', _emailController),
                   _buildTextField('Contact No.', _contactNoController),
                   _buildDatePicker(),
-                  _buildTextField('Password', _passwordController,
-                      obscureText: true),
-                  _buildTextField(
-                      'Confirm Password', _confirmPasswordController,
-                      obscureText: true),
+                  _buildPasswordTextField(
+                      'Password', _passwordController, _obscurePassword, () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  }),
+                  _buildPasswordTextField('Confirm Password',
+                      _confirmPasswordController, _obscureConfirmPassword, () {
+                    setState(() {
+                      _obscureConfirmPassword = !_obscureConfirmPassword;
+                    });
+                  }),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
@@ -281,6 +280,52 @@ class _SignupPageContentState extends State<_SignupPageContent> {
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter your date of birth';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _buildPasswordTextField(String labelText,
+      TextEditingController controller, bool obscureText, VoidCallback toggle) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        style: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: const TextStyle(
+            fontSize: 14,
+            color: Colors.white70,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white24),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white70),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          filled: true,
+          fillColor: const Color(0xFF1A1A1A),
+          suffixIcon: IconButton(
+            icon: Icon(
+              obscureText ? Icons.visibility : Icons.visibility_off,
+              color: Colors.white70,
+              size: 18, // Smaller size for the icon
+            ),
+            onPressed: toggle,
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter $labelText';
           }
           return null;
         },

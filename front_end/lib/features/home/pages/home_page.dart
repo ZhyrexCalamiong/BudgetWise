@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      const AnalyticsScreen(),
+      AnalyticsScreen(),
       WalletScreen(),
       const ProfileScreen(),
     ];

@@ -40,7 +40,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         appBar: AppBar(
           title: const Text(
             'Change Password',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 24),
           ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),

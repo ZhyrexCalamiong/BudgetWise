@@ -33,51 +33,51 @@ class ForgotPasswordModal extends StatelessWidget {
   }
 
   Widget _buildForgotPasswordUI(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24.0),
-      decoration: const BoxDecoration(
-        color: Color(0xFF0D0D0D),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
-            title: const Text('Forgot Password',
-                style: TextStyle(color: Color(0xFF8BBE6D))),
-            toolbarHeight: 56,
-          ),
-          const SizedBox(height: 24),
-          _buildTextField('Email', controller: emailController, fontSize: 14.0),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {
-              try {
-                BlocProvider.of<ForgotPasswordBloc>(context).add(
-                  ForgotPasswordSubmitEvent(emailController.text),
-                );
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ResetPasswordModal(
-                            email: emailController.text.toString())));
-              } catch (e) {
-                print(e);
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF8BBE6D),
-              minimumSize: const Size.fromHeight(50),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
+    return Scaffold(
+      backgroundColor: const Color(0xFF0D0D0D),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              centerTitle: true,
+              title: const Text('Forgot Password',
+                  style: TextStyle(color: Color(0xFF8BBE6D))),
+              toolbarHeight: 56,
             ),
-            child: const Text('Send',
-                style: TextStyle(fontSize: 12, color: Colors.black)),
-          ),
-        ],
+            const SizedBox(height: 24),
+            _buildTextField('Email',
+                controller: emailController, fontSize: 14.0),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                try {
+                  BlocProvider.of<ForgotPasswordBloc>(context).add(
+                    ForgotPasswordSubmitEvent(emailController.text),
+                  );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ResetPasswordModal(
+                              email: emailController.text.toString())));
+                } catch (e) {
+                  print(e);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF8BBE6D),
+                minimumSize: const Size.fromHeight(50),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+              child: const Text('Send',
+                  style: TextStyle(fontSize: 12, color: Colors.black)),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -7,7 +7,6 @@ import 'package:budgetwise_one/repositories/user_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:budgetwise_one/widgets/forgot_password_modal.dart';
-import 'package:budgetwise_one/widgets/reset_password_modal.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,6 +19,9 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   late LoginBloc loginBloc;
+
+  // State variable to track password visibility
+  bool _isPasswordVisible = false;
 
   @override
   void initState() {
@@ -83,8 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20),
                     _buildTextField('Email', controller: emailController),
                     const SizedBox(height: 16),
-                    _buildTextField('Password',
-                        controller: passwordController, obscureText: true),
+                    _buildPasswordField(), // Password field with toggle
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
@@ -188,13 +189,73 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Method for password field with visibility toggle
+  Widget _buildPasswordField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: TextFormField(
+        controller: passwordController,
+        obscureText: !_isPasswordVisible, // Use the state variable
+        style: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        decoration: InputDecoration(
+          labelText: 'Password',
+          labelStyle: const TextStyle(
+            fontSize: 14,
+            color: Colors.white70,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white24),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white70),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          filled: true,
+          fillColor: const Color(0xFF1A1A1A),
+          suffixIcon: IconButton(
+            icon: Container(
+              width: 20, // Adjust the width
+              height: 20, // Adjust the height
+              child: Icon(
+                _isPasswordVisible
+                    ? Icons.visibility // Show icon
+                    : Icons.visibility_off, // Hide icon
+                color: Colors.white70,
+                size: 20, // Set icon size
+              ),
+            ),
+            onPressed: () {
+              setState(() {
+                _isPasswordVisible = !_isPasswordVisible; // Toggle visibility
+              });
+            },
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter Password';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
   void _showForgotPasswordModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF0D0D0D),
+      isScrollControlled: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
       builder: (context) {
         return ForgotPasswordModal(
-          onSuccess: (String email) {},
+          onSuccess: (String email) {
+            // Handle success, e.g., show a message or navigate
+          },
         );
       },
     );
