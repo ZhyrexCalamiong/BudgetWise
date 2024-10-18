@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class BudgetService implements BudgetRepository {
-  final String baseUrl = 'http://localhost:8000/api';
+  final String baseUrl = 'https://budgetwise-srcq.onrender.com/api';
 
   @override
   Future<void> setBudget(

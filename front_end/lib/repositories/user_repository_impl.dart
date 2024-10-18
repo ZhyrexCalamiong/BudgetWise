@@ -6,7 +6,7 @@ import '../models/user.dart';
 import 'user_repository.dart';
 
 class UserService implements UserRepository {
-  final String baseUrl = 'http://localhost:8000/api';
+  final String baseUrl = 'https://budgetwise-srcq.onrender.com/api';
 
   Future<String?> _getId() async {
     final prefs = await SharedPreferences.getInstance();

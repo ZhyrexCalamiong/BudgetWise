@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:budgetwise_one/repositories/money_converter.dart';
 
 class MoneyConverter implements MoneyConverterRepository {
-  final String baseUrl = 'http://localhost:8000/api';
+  final String baseUrl = 'https://budgetwise-srcq.onrender.com/api';
 
   @override
   Future<double> convertCurrency({
