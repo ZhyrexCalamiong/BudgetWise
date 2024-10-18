@@ -1,10 +1,7 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
 import User from './../model/auth.js';
 import { sendVerificationCode } from '../services/mailService.js';
 import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
-import { generateNonce, SiweMessage } from 'siwe';
 import { generateToken, authenticateToken } from '../token/token.js';
 
 const router = express.Router();
