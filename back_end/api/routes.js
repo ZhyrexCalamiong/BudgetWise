@@ -6,7 +6,6 @@ import { generateToken, authenticateToken } from '../token/token.js';
 
 const router = express.Router();
 const verificationCodes = {};
-let currentNonce = null;
 
 router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
@@ -63,9 +62,7 @@ router.post('/reset-password', async (req, res) => {
             });
         }
 
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-        user.password = hashedPassword;
+        user.password = newPassword;  // No bcrypt, just set the new password directly
         await user.save();
 
         delete verificationCodes[email];
@@ -169,9 +166,6 @@ router.post('/signup', async (req, res) => {
             });
         }
 
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-
         const newUser = new User({
             firstName,
             middleName,
@@ -179,7 +173,7 @@ router.post('/signup', async (req, res) => {
             email,
             dateOfBirth: parsedDate,
             phone,
-            password: hashedPassword,
+            password,  // No bcrypt, storing plain password
             verified: false,
         });
         
@@ -209,9 +203,7 @@ router.post('/signin', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
+        if (user.password !== password) {  // No bcrypt comparison, just plain comparison
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
@@ -222,12 +214,12 @@ router.post('/signin', async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
-  });
+});
 
-  router.get('/user/:id', async (req, res) => {
+router.get('/user/:id', async (req, res) => {
     try {
         const userId = req.params.id;
-        const user = await User.findById(userId, 'firstName middleName lastName'); // Fetch only first and last name
+        const user = await User.findById(userId, 'firstName middleName lastName');
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -239,47 +231,14 @@ router.post('/signin', async (req, res) => {
     }
 });
 
-// router.put('/user/:id', async (req, res) => {
-//     const id = req.params.id;
-//     const params = req.body;
-  
-//     try {
-//         const user = await User.findOneAndUpdate(
-//         { _id: id },
-//         {
-//         firstName: params.firstName,
-//         middleName: params.middleName,
-//         lastName: params.lastName,
-//         phone: params.phone,
-//         password: params.password,
-//         },
-//         { new: true }
-//       );
-  
-//       if (!user) {
-//         return res
-//           .status(404)
-//           .json({ message: 'No record found' });
-//       }
-//       res.status(200).json({
-//         message: 'Record of __ has been updated.',
-//       });
-//     } catch (error) {
-//       console.error("Error updating user:", error);
-//       res.status(500).json({ message: "Database query error" });
-//     }
-//   })
-
 router.put('/user/:id', async (req, res) => {
     const userId = req.params.id;
     const content = req.body;
 
     console.log("Received request to update user:", userId, content);
 
-    // Build the update object dynamically
     const updateData = {};
 
-    // Only set the fields if they are explicitly provided (even if empty string)
     if (content.hasOwnProperty('firstName')) {
         updateData.firstName = content.firstName.trim() === '' ? null : content.firstName;
     }
@@ -293,18 +252,15 @@ router.put('/user/:id', async (req, res) => {
         updateData.phone = content.phone.trim() === '' ? null : content.phone;
     }
 
-    // Handle password update with hashing
     if (content.password) {
-        const salt = await bcrypt.genSalt(10);
-        updateData.password = await bcrypt.hash(content.password, salt);
+        updateData.password = content.password;  // No bcrypt, just plain password update
     }
 
     try {
-        // Find user by ID and update with only the fields provided
         const user = await User.findOneAndUpdate(
             { _id: userId },
-            { $set: updateData },  // $set allows partial updates
-            { new: true, runValidators: true }  // Return the updated document and run validators
+            { $set: updateData },
+            { new: true, runValidators: true }
         );
 
         if (!user) {
@@ -323,8 +279,4 @@ router.put('/user/:id', async (req, res) => {
     }
 });
 
-
-
-
-  
 export default router;
