@@ -4,13 +4,18 @@ class BalanceCard extends StatelessWidget {
   final String balance;
   final String address;
 
-  const BalanceCard({super.key, required this.balance, required this.address, required MaterialAccentColor backgroundColor, required Color textColor});
+  const BalanceCard(
+      {super.key,
+      required this.balance,
+      required this.address,
+      required MaterialAccentColor backgroundColor,
+      required Color textColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 135,
-      width: MediaQuery.of(context).size.width * 0.89, 
+      height: 110, // Reduced height
+      width: MediaQuery.of(context).size.width * 0.89,
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(10),
@@ -27,7 +32,7 @@ class BalanceCard extends StatelessWidget {
           Opacity(
             opacity: 0.3,
             child: Container(
-              height: 150,
+              height: 135, // Reduced height to match the card's height
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: Color(0xFF0D0D0D),
@@ -36,44 +41,49 @@ class BalanceCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(12.0), // Reduced padding
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Flexible(
                   child: Text(
                     'Wallet Address:',
-                    style: TextStyle(fontSize: 15, color: Color.fromARGB(255, 255, 255, 255)),
-                    overflow: TextOverflow.ellipsis, 
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Color.fromARGB(
+                            255, 255, 255, 255)), // Reduced font size
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(height: 4), 
+                const SizedBox(height: 2), // Reduced space
                 Flexible(
                   child: Text(
                     address,
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 10, // Reduced font size
                       color: Colors.white,
                     ),
-                    overflow: TextOverflow.ellipsis, 
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8), // Reduced space
                 const Flexible(
                   child: Text(
                     'Current Balance:',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                    overflow: TextOverflow.ellipsis, 
+                    style: TextStyle(
+                        fontSize: 12, color: Colors.white), // Reduced font size
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(height: 4), 
+                const SizedBox(height: 2), // Reduced space
                 Flexible(
                   child: Text(
-                    balance, 
+                    balance,
                     style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                      fontSize: 12, // Reduced font size
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

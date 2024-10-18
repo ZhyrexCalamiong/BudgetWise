@@ -188,28 +188,31 @@ class _WalletScreenState extends State<CryptoWalletScreen> {
                 expandedHeight: 200.0,
                 flexibleSpace: FlexibleSpaceBar(
                   title: const SizedBox.shrink(),
-                  background: Container(
-                    color: const Color.fromARGB(255, 3, 169, 244),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            children: [
-                              BalanceCard(
+                  background: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, // Center the Row content
+                          children: [
+                            // Wrap the BalanceCard in a SizedBox to control its width
+                            SizedBox(
+                              width: 250, // Set your desired width here
+                              child: BalanceCard(
                                 balance: _balance,
                                 address: walletAddress,
                                 backgroundColor: Colors
                                     .deepPurpleAccent, // Dark theme balance card
                                 textColor: Colors.white,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 actions: const [
