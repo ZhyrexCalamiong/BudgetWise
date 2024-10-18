@@ -22,7 +22,8 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _contactNoController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _dateOfBirthController = TextEditingController();
 
   @override
@@ -65,7 +66,8 @@ class _SignupPageContentState extends State<_SignupPageContent> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _contactNoController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _dateOfBirthController = TextEditingController();
 
   @override
@@ -77,7 +79,7 @@ class _SignupPageContentState extends State<_SignupPageContent> {
           if (state is RegistrationNavigateToLoginScreenActionState) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => LoginPage()),
+              MaterialPageRoute(builder: (context) => const LoginPage()),
             );
           } else if (state is RegistrationError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -124,15 +126,20 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                   _buildTextField('Email', _emailController),
                   _buildTextField('Contact No.', _contactNoController),
                   _buildDatePicker(),
-                  _buildTextField('Password', _passwordController, obscureText: true),
-                  _buildTextField('Confirm Password', _confirmPasswordController, obscureText: true),
+                  _buildTextField('Password', _passwordController,
+                      obscureText: true),
+                  _buildTextField(
+                      'Confirm Password', _confirmPasswordController,
+                      obscureText: true),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        if (_passwordController.text != _confirmPasswordController.text) {
+                        if (_passwordController.text !=
+                            _confirmPasswordController.text) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Passwords do not match')),
+                            const SnackBar(
+                                content: Text('Passwords do not match')),
                           );
                           return;
                         }
@@ -146,7 +153,8 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                           dateOfBirth: _dateOfBirthController.text,
                           password: _passwordController.text,
                         );
-                        BlocProvider.of<RegistrationBloc>(context).add(UserRegistrationRequested(user));
+                        BlocProvider.of<RegistrationBloc>(context)
+                            .add(UserRegistrationRequested(user));
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -167,7 +175,8 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
                         );
                       },
                       child: const Row(
@@ -175,7 +184,8 @@ class _SignupPageContentState extends State<_SignupPageContent> {
                         children: [
                           Text(
                             'I already have an account',
-                            style: TextStyle(fontSize: 12, color: Colors.white70),
+                            style:
+                                TextStyle(fontSize: 12, color: Colors.white70),
                           ),
                           SizedBox(width: 4),
                           Icon(Icons.arrow_right_alt, color: Colors.white70),
@@ -192,7 +202,8 @@ class _SignupPageContentState extends State<_SignupPageContent> {
     );
   }
 
-  Widget _buildTextField(String labelText, TextEditingController controller, {bool obscureText = false}) {
+  Widget _buildTextField(String labelText, TextEditingController controller,
+      {bool obscureText = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(

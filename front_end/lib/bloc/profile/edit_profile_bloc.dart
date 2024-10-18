@@ -11,11 +11,12 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     on<UpdateProfile>(_onUpdateProfile);
   }
 
-  Future<void> _onUpdateProfile(UpdateProfile event, Emitter<EditProfileState> emit) async {
+  Future<void> _onUpdateProfile(
+      UpdateProfile event, Emitter<EditProfileState> emit) async {
     emit(EditProfileLoading());
 
     try {
-      final userId = ""; // Get the user ID
+      const userId = ""; // Get the user ID
       await userService.updateProfile(
         userId,
         event.firstName,

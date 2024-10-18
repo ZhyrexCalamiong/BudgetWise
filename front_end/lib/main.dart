@@ -36,7 +36,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BudgetWise',
-      theme: ThemeData.dark().copyWith( // Use a dark theme
+      theme: ThemeData.dark().copyWith(
+        // Use a dark theme
         primaryColor: Colors.orange,
         scaffoldBackgroundColor: const Color(0xFF0D0D0D), // Background color
         cardColor: const Color(0xFF1E1E1E), // Card color
@@ -49,7 +50,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const SplashScreen(),
         '/signup': (context) => const SignupPage(),
-        '/login': (context) => LoginPage(),
+        '/login': (context) => const LoginPage(),
         '/home': (context) => WalletScreen(),
         '/onboarding': (context) => const OnboardingScreen(),
       },

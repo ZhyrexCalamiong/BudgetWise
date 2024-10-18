@@ -13,6 +13,8 @@ import 'package:budgetwise_one/bloc/financial_wallet/financial_wallet_event.dart
 import 'package:budgetwise_one/bloc/financial_wallet/financial_wallet_state.dart';
 
 class WalletScreen extends StatefulWidget {
+  const WalletScreen({super.key});
+
   @override
   _WalletScreenState createState() => _WalletScreenState();
 }

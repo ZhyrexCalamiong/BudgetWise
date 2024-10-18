@@ -21,7 +21,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     try {
       // Assuming _getId() is a method within UserService
-      final userId = "";
+      const userId = "";
       User user = await _profileRepository.getName(userId);
 
       // Assuming userNameResponse contains firstName and lastName

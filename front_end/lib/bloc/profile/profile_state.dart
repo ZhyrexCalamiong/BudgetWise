@@ -1,5 +1,4 @@
 import 'package:budgetwise_one/models/user.dart';
-import 'package:equatable/equatable.dart';
 
 // Define login states
 abstract class ProfileState {}

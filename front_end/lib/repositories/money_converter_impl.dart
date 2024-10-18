@@ -3,9 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:budgetwise_one/repositories/money_converter.dart';
 
 class MoneyConverter implements MoneyConverterRepository {
-
   final String baseUrl = 'http://localhost:8000/api';
 
+  @override
   Future<double> convertCurrency({
     required String from,
     required String to,
@@ -27,7 +27,3 @@ class MoneyConverter implements MoneyConverterRepository {
     }
   }
 }
-
-
-
-

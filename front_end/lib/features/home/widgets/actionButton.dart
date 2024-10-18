@@ -6,11 +6,11 @@ class BuildActionButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const BuildActionButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class BuildActionButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             shape: const CircleBorder(),
             backgroundColor: const Color(0xFF1E1E1E),
-            padding: const EdgeInsets.all(20), 
+            padding: const EdgeInsets.all(20),
             shadowColor: Colors.black,
           ),
           child: Icon(icon, color: Colors.white, size: 36),
@@ -30,7 +30,7 @@ class BuildActionButton extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            color: Colors.white, 
+            color: Colors.white,
             fontSize: 16,
           ),
         ),

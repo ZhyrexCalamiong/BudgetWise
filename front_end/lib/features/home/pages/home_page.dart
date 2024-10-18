@@ -1,11 +1,9 @@
-import 'package:budgetwise_one/bloc/conversion_money/money_converter_bloc.dart';
 import 'package:budgetwise_one/features/analytics/pages/analytics_page.dart';
 import 'package:budgetwise_one/features/home/screens/currency_converter_screen.dart';
 import 'package:budgetwise_one/features/navigations/bottom_navigation.dart';
 import 'package:budgetwise_one/features/profile/pages/profile_page.dart';
 import 'package:budgetwise_one/features/wallet/pages/wallet_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const MyApp());

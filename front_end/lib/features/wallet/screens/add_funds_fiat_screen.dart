@@ -1,6 +1,5 @@
 import 'package:budgetwise_one/authservice/authService.dart';
 import 'package:budgetwise_one/bloc/financial_wallet/financial_wallet_state.dart';
-import 'package:budgetwise_one/features/wallet/pages/wallet_page.dart';
 import 'package:budgetwise_one/repositories/budget_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

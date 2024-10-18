@@ -1,4 +1,3 @@
-import 'package:budgetwise_one/models/Transaction.dart';
 import 'package:budgetwise_one/models/budget.dart';
 import 'package:budgetwise_one/models/budget_history.dart';
 import 'package:budgetwise_one/models/expense.dart';
@@ -10,7 +9,8 @@ class BudgetService implements BudgetRepository {
   final String baseUrl = 'http://localhost:8000/api';
 
   @override
-  Future<void> setBudget(String userId, double maximumAmount, DateTime date) async {
+  Future<void> setBudget(
+      String userId, double maximumAmount, DateTime date) async {
     final response = await http.post(
       Uri.parse('$baseUrl/set-budget'),
       body: jsonEncode({
@@ -27,7 +27,8 @@ class BudgetService implements BudgetRepository {
   }
 
   @override
-  Future<void> addExpense(String userId, double cost, String description, DateTime date) async {
+  Future<void> addExpense(
+      String userId, double cost, String description, DateTime date) async {
     final response = await http.post(
       Uri.parse('$baseUrl/add-expense'),
       body: jsonEncode({
@@ -63,7 +64,8 @@ class BudgetService implements BudgetRepository {
 
   @override
   Future<List<Expense>> getUserExpenses(String userId) async {
-    final response = await http.get(Uri.parse('$baseUrl/user-expenses/$userId'));
+    final response =
+        await http.get(Uri.parse('$baseUrl/user-expenses/$userId'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       final List<dynamic> expensesJson = responseBody['data'];

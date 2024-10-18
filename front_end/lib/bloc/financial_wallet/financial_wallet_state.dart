@@ -1,4 +1,3 @@
-import 'package:budgetwise_one/models/Transaction.dart';
 import 'package:budgetwise_one/models/budget_history.dart';
 import 'package:budgetwise_one/models/expense.dart';
 import 'package:equatable/equatable.dart';
@@ -15,30 +14,26 @@ class FinancialWalletLoading extends FinancialWalletState {}
 class FinancialWalletSuccess extends FinancialWalletState {}
 
 class FinancialGetUserExpensesSuccess extends FinancialWalletState {
-  final List<Expense> transactions; 
+  final List<Expense> transactions;
 
   FinancialGetUserExpensesSuccess(this.transactions);
 }
 
 // class FinancialGetTransactionsSuccess extends FinancialWalletState {
-//   final List<transaction> transactions; 
+//   final List<transaction> transactions;
 
 //   FinancialGetTransactionsSuccess(this.transactions);
 // }
-
-
 
 class FinancialGetUserBalanceSuccess extends FinancialWalletState {
   final double maximumAmount;
   final double amountSpent;
 
-  FinancialGetUserBalanceSuccess(this.maximumAmount,this.amountSpent);
+  FinancialGetUserBalanceSuccess(this.maximumAmount, this.amountSpent);
 
   @override
-  List<Object> get props => [maximumAmount,amountSpent];
+  List<Object> get props => [maximumAmount, amountSpent];
 }
-
-
 
 class FinancialWalletFailure extends FinancialWalletState {
   final String error;

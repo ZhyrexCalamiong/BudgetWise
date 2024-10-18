@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
             );
           } else {
             return const Scaffold(
-              backgroundColor: const Color(0xFF0D0D0D),
+              backgroundColor: Color(0xFF0D0D0D),
               body: Center(child: CircularProgressIndicator()),
             );
           }

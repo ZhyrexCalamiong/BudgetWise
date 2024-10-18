@@ -25,17 +25,28 @@ class _CurrencyConverterScreen extends State<CurrencyConverterScreen> {
   String _toCurrency = 'EUR';
   double _amountToConvert = 0.0;
 
-  // Define a list of available currencies
   final List<String> _currencies = [
     'USD',
     'EUR',
     'PHP',
-    'GBP', // British Pound
-    'JPY', // Japanese Yen
-    'AUD', // Australian Dollar
-    'CAD', // Canadian Dollar
-    'CHF', // Swiss Franc
-    'CNY', // Chinese Yuan
+    'GBP',
+    'JPY',
+    'AUD',
+    'CAD',
+    'CHF',
+    'CNY',
+    'INR',
+    'NZD',
+    'RUB',
+    'SGD',
+    'ZAR',
+    'KRW',
+    'HKD',
+    'SEK',
+    'NOK',
+    'DKK',
+    'MXN',
+    'BRL'
   ];
 
   void _onItemTapped(int index) {
@@ -52,6 +63,7 @@ class _CurrencyConverterScreen extends State<CurrencyConverterScreen> {
           appBar: AppBar(
             title: const Text('Currency Converter'),
             backgroundColor: const Color(0xFF0D0D0D),
+            elevation: 0,
           ),
           body: BlocBuilder<MoneyConverterBloc, MoneyConverterState>(
             builder: (context, state) {
@@ -64,123 +76,102 @@ class _CurrencyConverterScreen extends State<CurrencyConverterScreen> {
 
               return Container(
                 color: const Color(0xFF0D0D0D),
-                child: SizedBox.expand(
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Card(
-                          color: const Color(0xFF1E1E1E),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // const Text(
-                                //   'Currency Converter',
-                                //   style: TextStyle(
-                                //     color: Colors.white,
-                                //     fontSize: 18,
-                                //     fontWeight: FontWeight.bold,
-                                //   ),
-                                // ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextField(
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                        decoration: const InputDecoration(
-                                          hintText: 'Amount',
-                                          hintStyle:
-                                              TextStyle(color: Colors.grey),
-                                        ),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _amountToConvert =
-                                                double.tryParse(value) ?? 0.0;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    DropdownButton<String>(
-                                      dropdownColor: const Color(0xFF1E1E1E),
-                                      value: _fromCurrency,
-                                      items: _currencies.map((String currency) {
-                                        return DropdownMenuItem<String>(
-                                          value: currency,
-                                          child: Text(
-                                            currency,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _fromCurrency = value ?? 'USD';
-                                        });
-                                      },
-                                    ),
-                                    const Icon(Icons.swap_horiz,
-                                        color: Colors.white),
-                                    DropdownButton<String>(
-                                      dropdownColor: const Color(0xFF1E1E1E),
-                                      value: _toCurrency,
-                                      items: _currencies.map((String currency) {
-                                        return DropdownMenuItem<String>(
-                                          value: currency,
-                                          child: Text(
-                                            currency,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _toCurrency = value ?? 'EUR';
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    BlocProvider.of<MoneyConverterBloc>(context)
-                                        .add(
-                                      ConvertCurrencyEvent(
-                                        from: _fromCurrency,
-                                        to: _toCurrency,
-                                        amount: _amountToConvert,
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFF8BBE6D)),
-                                  child: const Text('Convert',
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.black)),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  convertedResult.isNotEmpty
-                                      ? 'Converted Amount: $convertedResult $_toCurrency'
-                                      : '',
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ],
+                child: Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Amount Input
+                        TextField(
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: const Color(0xFF1E1E1E),
+                            hintText: 'Enter amount',
+                            hintStyle: const TextStyle(color: Colors.grey),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              borderSide: BorderSide.none,
                             ),
                           ),
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            setState(() {
+                              _amountToConvert = double.tryParse(value) ?? 0.0;
+                            });
+                          },
                         ),
-                      ),
+                        const SizedBox(height: 20),
+
+                        // Currency Selection Row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _buildCurrencyDropdown(_fromCurrency, (value) {
+                              setState(() {
+                                _fromCurrency = value ?? 'USD';
+                              });
+                            }),
+                            const Icon(Icons.swap_horiz, color: Colors.white),
+                            _buildCurrencyDropdown(_toCurrency, (value) {
+                              setState(() {
+                                _toCurrency = value ?? 'EUR';
+                              });
+                            }),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Convert Button
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_amountToConvert > 0) {
+                              BlocProvider.of<MoneyConverterBloc>(context).add(
+                                ConvertCurrencyEvent(
+                                  from: _fromCurrency,
+                                  to: _toCurrency,
+                                  amount: _amountToConvert,
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF8BBE6D),
+                            foregroundColor: Colors.black, // Text color
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24.0, vertical: 14.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            elevation: 0, // Flat design, no shadow
+                            textStyle: const TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.monetization_on,
+                                  size: 20.0,
+                                  color: Colors.black), // Optional icon
+                              SizedBox(width: 8.0),
+                              Text('Convert'),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Conversion Result
+                        Text(
+                          convertedResult.isNotEmpty
+                              ? 'Converted Amount: $convertedResult $_toCurrency'
+                              : 'Enter a valid amount and select currencies',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -202,6 +193,36 @@ class _CurrencyConverterScreen extends State<CurrencyConverterScreen> {
       bottomNavigationBar: BottomNavigation(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
+      ),
+    );
+  }
+
+  // Helper method to build currency dropdown
+  Widget _buildCurrencyDropdown(
+      String selectedCurrency, Function(String?) onChanged) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E1E1E),
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: DropdownButton<String>(
+          dropdownColor: const Color(0xFF1E1E1E),
+          value: selectedCurrency,
+          isExpanded: true,
+          underline: const SizedBox(),
+          items: _currencies.map((String currency) {
+            return DropdownMenuItem<String>(
+              value: currency,
+              child: Text(
+                currency,
+                style: const TextStyle(color: Colors.white),
+              ),
+            );
+          }).toList(),
+          onChanged: onChanged,
+        ),
       ),
     );
   }
