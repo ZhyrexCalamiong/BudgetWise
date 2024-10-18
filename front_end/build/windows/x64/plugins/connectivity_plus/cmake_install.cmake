@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/ddal6/OneDrive/Desktop/BW october 14/BudgetWise/front_end/windows/flutter/ephemeral/.plugin_symlinks/connectivity_plus/windows
+# Install script for directory: C:/Users/ddal6/OneDrive/Desktop/BWoct18/BudgetWise/front_end/windows/flutter/ephemeral/.plugin_symlinks/connectivity_plus/windows
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

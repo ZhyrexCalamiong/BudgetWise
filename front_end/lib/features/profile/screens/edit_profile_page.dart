@@ -45,6 +45,7 @@ class _EditProfilePage extends State<EditProfilePage> {
         },
         child: Scaffold(
           appBar: AppBar(
+            title: const Text('Edit Profile'),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
@@ -57,29 +58,6 @@ class _EditProfilePage extends State<EditProfilePage> {
             child: Center(
               child: Column(
                 children: [
-                  // Edit Profile Title
-                  RichText(
-                    text: const TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Edit ",
-                          style: TextStyle(
-                            color: Color(0xFF8BBE6D),
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(
-                          text: "Profile",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 20),
                   _TextField(
                     labelText: 'First Name',
@@ -113,7 +91,6 @@ class _EditProfilePage extends State<EditProfilePage> {
                               lastName: lastName,
                             ),
                           );
-                      Navigator.pop(context, true);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF8BBE6D),

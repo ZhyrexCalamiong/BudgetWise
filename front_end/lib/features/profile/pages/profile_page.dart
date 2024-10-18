@@ -19,7 +19,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileState extends State<ProfileScreen> {
-  late ProfileBloc profileBloc; // Use late initialization
+  late ProfileBloc profileBloc;
 
   @override
   void initState() {
@@ -28,21 +28,20 @@ class _ProfileState extends State<ProfileScreen> {
   }
 
   void _initialize() {
-    // Initialize UserService and ProfileBloc
     final userService = UserService();
     profileBloc = ProfileBloc(userService);
-    profileBloc.add(FetchUserName()); // Trigger the fetch event here
+    profileBloc.add(FetchUserName());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ProfileBloc>(
-      create: (context) => profileBloc, // Use the initialized bloc
+      create: (context) => profileBloc,
       child: Scaffold(
-        backgroundColor: const Color(0xFF0D0D0D),
+        backgroundColor: const Color(0xFF0D0D0D), // Set the background color
         body: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             // Profile Image and Name
             CircleAvatar(
               radius: 50,
@@ -59,12 +58,14 @@ class _ProfileState extends State<ProfileScreen> {
             BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
                 if (state is ProfileLoading) {
-                  return const CircularProgressIndicator();
+                  return const CircularProgressIndicator(
+                    color: Colors.white,
+                  );
                 } else if (state is ProfileLoaded) {
                   return Text(
-                    '${state.user[0].firstName.toString()} ${state.user[0].middleName.toString()} ${state.user[0].lastName.toString()}', // Ensure correct access to the user's data
+                    '${state.user[0].firstName} ${state.user[0].middleName} ${state.user[0].lastName}',
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -91,6 +92,7 @@ class _ProfileState extends State<ProfileScreen> {
             // Options List
             Expanded(
               child: ListView(
+                padding: const EdgeInsets.all(16.0),
                 children: [
                   ProfileOption(
                     icon: Icons.edit,
@@ -106,9 +108,7 @@ class _ProfileState extends State<ProfileScreen> {
                         ),
                       );
 
-                      // Check if the result indicates a profile update and refresh the screen
                       if (result == true) {
-                        // Reload profile data
                         profileBloc.add(FetchUserName());
                       }
                     },
@@ -153,11 +153,9 @@ class _ProfileState extends State<ProfileScreen> {
   }
 
   Future<void> logout(BuildContext context) async {
-    // Clear user data from shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // Clear all stored data
+    await prefs.clear();
 
-    // Navigate back to the login page
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -169,35 +167,36 @@ class _ProfileState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor:
-              const Color(0xFF121212), // Match your screen's background color
+          backgroundColor: const Color(0xFF121212),
           title: const Text(
             'Confirm Logout',
-            style: TextStyle(color: Colors.white), // Set title text color
+            style: TextStyle(color: Colors.white),
           ),
           content: const Text(
             'Are you sure you want to logout?',
-            style: TextStyle(color: Colors.white), // Set content text color
+            style: TextStyle(color: Colors.white),
           ),
           actions: <Widget>[
-            TextButton(
+            ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey,
+              ),
               child: const Text(
                 'Cancel',
-                style: TextStyle(color: Colors.grey), // Set button text color
+                style: TextStyle(color: Colors.white),
               ),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
-                // Trigger logout through the BLoC
                 logout(context);
               },
-              child: const Text(
-                'Logout',
-                style: TextStyle(color: Colors.red), // Set button text color
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
               ),
+              child: const Text('Logout'),
             ),
           ],
         );
@@ -222,22 +221,20 @@ class ProfileOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          leading: Icon(icon, color: Colors.white),
-          title: Text(
-            text,
-            style: const TextStyle(color: Colors.white),
-          ),
-          trailing: const Icon(
-            Icons.arrow_forward_ios,
-            color: Colors.grey,
-          ),
-          onTap: onTap,
+    return Card(
+      color: Colors.grey.shade800,
+      child: ListTile(
+        leading: Icon(icon, color: Colors.white),
+        title: Text(
+          text,
+          style: const TextStyle(color: Colors.white, fontSize: 16),
         ),
-        if (!isLast) const Divider(color: Colors.grey),
-      ],
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          color: Colors.grey,
+        ),
+        onTap: onTap,
+      ),
     );
   }
 }

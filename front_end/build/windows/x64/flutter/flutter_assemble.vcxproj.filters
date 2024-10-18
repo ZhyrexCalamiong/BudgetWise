@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BW october 14\BudgetWise\front_end\build\windows\x64\CMakeFiles\1677bc04886275444d5f59a95e2a14a5\flutter_windows.dll.rule">
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\build\windows\x64\CMakeFiles\50f1d46f9d4a5388c533daa103974b15\flutter_windows.dll.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BW october 14\BudgetWise\front_end\build\windows\x64\CMakeFiles\a75e48680d7ad183b316e95c76663757\flutter_assemble.rule">
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\build\windows\x64\CMakeFiles\f59e61cc8de09d30ed013b56394948b7\flutter_assemble.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BW october 14\BudgetWise\front_end\windows\flutter\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\windows\flutter\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\ddal6\OneDrive\Desktop\BW october 14\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\flutter_assemble" />
+    <None Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\build\windows\x64\flutter\CMakeFiles\flutter_assemble" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{FA10350B-7850-3DDB-B477-C590FD2C2B44}</UniqueIdentifier>
+      <UniqueIdentifier>{0573419E-86B8-30A1-8F75-CD6C7DE52DBB}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

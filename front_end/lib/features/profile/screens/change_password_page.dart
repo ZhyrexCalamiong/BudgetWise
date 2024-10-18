@@ -22,7 +22,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       ],
       child: Scaffold(
         appBar: AppBar(
+          title: const Text(
+            'Change Password',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -51,7 +56,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               listener: (context, state) {
                 if (state is ForgotPasswordSuccessState) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('OTP sent to ${emailController.text}')),
+                    SnackBar(
+                        content: Text('OTP sent to ${emailController.text}')),
                   );
                 } else if (state is ForgotPasswordErrorState) {
                   _showErrorDialog(context, state.message);
@@ -61,146 +67,127 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 return BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
                   listener: (context, state) {
                     if (state is ResetPasswordSuccess) {
-                      _showSuccessDialog(context, "Password reset successful. Please log in.");
+                      _showSuccessDialog(
+                          context, "Password reset successful. Please log in.");
                     } else if (state is ResetPasswordFailure) {
                       _showErrorDialog(context, state.error);
                     }
                   },
                   builder: (context, resetPasswordState) {
-                    return Column(
-                      children: [
-                        // Change Password Title
-                        RichText(
-                          text: const TextSpan(
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 20),
+
+                          // Email TextField
+                          _buildTextField(
+                            'Email',
+                            controller: emailController,
+                            borderRadius: 10,
+                          ),
+                          const SizedBox(height: 16),
+
+                          // OTP TextField and Send Code Button
+                          Row(
                             children: [
-                              TextSpan(
-                                text: 'Change',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF8BBE6D),
+                              // OTP TextField
+                              Expanded(
+                                child: _buildTextField(
+                                  'Input OTP Code',
+                                  controller: otpController,
+                                  borderRadius: 10,
                                 ),
                               ),
-                              TextSpan(
-                                text: ' Password',
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                              const SizedBox(width: 10),
+                              // Send Code Button
+                              SizedBox(
+                                height: 45,
+                                width: 80,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    BlocProvider.of<ForgotPasswordBloc>(context)
+                                        .add(
+                                      ForgotPasswordSubmitEvent(
+                                          emailController.text),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF8BBE6D),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Send Code',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.black),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 20),
+                          const SizedBox(height: 16),
 
-                        _buildTextField(
-                          'Email',
-                          controller: emailController,
-                          borderRadius: 10,
-                        ),
-                        const SizedBox(height: 16),
+                          // New Password TextField
+                          _buildPasswordTextField(
+                            'New Password',
+                            controller: newPasswordController,
+                            obscureText: !_isPasswordVisible,
+                            onVisibilityToggle: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 16),
 
-                        // OTP TextField and Send Code Button
-                        Row(
-                          children: [
-                            // OTP TextField
-                            Expanded(
-                              child: TextField(
-                                controller: otpController,
-                                decoration: InputDecoration(
-                                  labelText: 'Input OTP Code',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                          // Confirm Password TextField
+                          _buildPasswordTextField(
+                            'Confirm Password',
+                            controller: confirmPasswordController,
+                            obscureText: !_isConfirmPasswordVisible,
+                            onVisibilityToggle: () {
+                              setState(() {
+                                _isConfirmPasswordVisible =
+                                    !_isConfirmPasswordVisible;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Confirm Button
+                          ElevatedButton(
+                            onPressed: () {
+                              if (newPasswordController.text ==
+                                  confirmPasswordController.text) {
+                                BlocProvider.of<ResetPasswordBloc>(context).add(
+                                  ChangePasswordRequested(
+                                    emailController.text,
+                                    otpController.text,
+                                    newPasswordController.text,
                                   ),
-                                ),
+                                );
+                              } else {
+                                _showErrorDialog(
+                                    context, "Passwords do not match!");
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF8BBE6D),
+                              minimumSize: const Size.fromHeight(50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            const SizedBox(width: 10),
-                            // Send Code Button
-                            SizedBox(
-                              height: 45,
-                              width: 80,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  BlocProvider.of<ForgotPasswordBloc>(context).add(
-                                    ForgotPasswordSubmitEvent(emailController.text),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF8BBE6D),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Send Code',
-                                  style: TextStyle(fontSize: 12, color: Colors.black),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Password TextField with visibility toggle
-                        _buildPasswordTextField(
-                          'Password',
-                          controller: newPasswordController,
-                          obscureText: !_isPasswordVisible,
-                          onVisibilityToggle: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Confirm Password TextField with visibility toggle
-                        _buildPasswordTextField(
-                          'Confirm Password',
-                          controller: confirmPasswordController,
-                          obscureText: !_isConfirmPasswordVisible,
-                          onVisibilityToggle: () {
-                            setState(() {
-                              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Confirm Button
-                        ElevatedButton(
-                          onPressed: () {
-                            if (newPasswordController.text == confirmPasswordController.text) {
-                              BlocProvider.of<ResetPasswordBloc>(context).add(
-                                ChangePasswordRequested(
-                                  emailController.text,
-                                  otpController.text,
-                                  newPasswordController.text,
-                                ),
-                              );
-                            } else {
-                              _showErrorDialog(context, "Passwords do not match!");
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF8BBE6D),
-                            minimumSize: const Size.fromHeight(50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                            child: const Text(
+                              'Confirm',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
                             ),
                           ),
-                          child: const Text(
-                            'Confirm',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   },
                 );
@@ -259,7 +246,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       {required TextEditingController controller,
       required bool obscureText,
       required VoidCallback onVisibilityToggle}) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
@@ -280,7 +267,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   // Helper method to build standard text fields
   Widget _buildTextField(String labelText,
       {required TextEditingController controller, double borderRadius = 5.0}) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       decoration: InputDecoration(
         labelText: labelText,

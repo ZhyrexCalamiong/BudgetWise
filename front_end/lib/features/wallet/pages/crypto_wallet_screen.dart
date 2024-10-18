@@ -122,15 +122,18 @@ class _CryptoCurrencyTabState extends State<CryptoCurrencyTab> {
       }
     });
 
-    appKitModal.appKit!.core.relayClient.onRelayClientConnect.subscribe((EventArgs? event) {
+    appKitModal.appKit!.core.relayClient.onRelayClientConnect
+        .subscribe((EventArgs? event) {
       print('Relay client connected');
     });
 
-    appKitModal.appKit!.core.relayClient.onRelayClientError.subscribe((EventArgs? event) {
+    appKitModal.appKit!.core.relayClient.onRelayClientError
+        .subscribe((EventArgs? event) {
       print('Relay client error: ${event?.toString()}');
     });
 
-    appKitModal.appKit!.core.relayClient.onRelayClientDisconnect.subscribe((EventArgs? event) {
+    appKitModal.appKit!.core.relayClient.onRelayClientDisconnect
+        .subscribe((EventArgs? event) {
       print('Relay client disconnected');
     });
   }
@@ -152,7 +155,8 @@ class _CryptoCurrencyTabState extends State<CryptoCurrencyTab> {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              appKitModal.openModalView(const ReownAppKitModalSelectNetworkPage());
+              appKitModal
+                  .openModalView(const ReownAppKitModalSelectNetworkPage());
             },
             child: const Text('CONNECT WALLET'),
           ),
