@@ -1,500 +1,254 @@
 import 'dart:convert';
-import 'dart:math';
-import 'package:budgetwise_one/features/wallet/walletprovider/balance.dart';
-import 'package:budgetwise_one/features/wallet/walletprovider/payment.dart';
-import 'package:budgetwise_one/models/user.dart';
+import 'dart:typed_data';
+import 'package:budgetwise_one/features/analytics/services/coingecko_service.dart';
 import 'package:flutter/material.dart';
+import 'package:reown_appkit/modal/appkit_modal_impl.dart';
+import 'package:reown_appkit/modal/pages/public/appkit_modal_select_network_page.dart';
+import 'package:reown_appkit/modal/widgets/public/appkit_modal_account_button.dart';
+import 'package:reown_appkit/modal/widgets/public/appkit_modal_connect_button.dart';
+import 'package:reown_appkit/modal/widgets/public/appkit_modal_network_select_button.dart';
 import 'package:reown_appkit/reown_appkit.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
 
-
-class WalletScreen extends StatefulWidget {
-  const WalletScreen({super.key, required this.user});
-  final User user;
-
-
+class CryptoCurrencyTab extends StatefulWidget {
   @override
-  State<WalletScreen> createState() => _WalletScreenState();
+  _CryptoCurrencyTabState createState() => _CryptoCurrencyTabState();
 }
 
-class _WalletScreenState extends State<WalletScreen> {
-  ReownAppKitModal? appKitModal;
-  String walletAddress = '';
-  String _balance = '0';
-  bool isLoading = false;
-  List<TransactionDetails> transactions = [];
+class _CryptoCurrencyTabState extends State<CryptoCurrencyTab> {
+  double cryptoBalance = 0.0;
+  List<dynamic> topCoins = []; // To hold the top coins
+  late ReownAppKitModal appKitModal;
 
-  final customNetwork = ReownAppKitModalNetworkInfo(
-    name: 'Sepolia',
-    chainId: '11155111',
-    currency: 'ETH',
-    rpcUrl: 'https://rpc.sepolia.org/',
-    explorerUrl: 'https://sepolia.etherscan.io/',
-    isTestNetwork: true,
-  );
+  final Set<String> featuredWalletIds = {
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
+    'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa',
+  };
 
-  final String etherscanApiKey = '13SYGMMFG27Z343YCQAVAH5B7R8NS3HR45';
+  final Set<String> includedWalletIds = {
+    'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+    '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0',
+    'fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa',
+  };
+
+  final Set<String> excludedWalletIds = {};
 
   @override
-
   void initState() {
     super.initState();
-    initializeAppKitModal();
+    _initializeAppKitModal();
+    _fetchCryptoData();
+    _fetchTopCoins(); // Fetch top coins
+    _initLinkListener();
+    _setupEventListeners();
   }
 
-
-  void initializeAppKitModal() async {
-    ReownAppKitModalNetworks.addNetworks('eip155', [customNetwork]);
+  Future<void> _initializeAppKitModal() async {
     appKitModal = ReownAppKitModal(
       context: context,
-      projectId: 'e9191ac2aa60ece02115a39c7d51b48c',
+      projectId: '{YOUR_PROJECT_ID}',
       metadata: const PairingMetadata(
-        name: 'Buko App',
-        description: 'Payment method',
-        url: 'https://www.reown.com/',
-        icons: ['https://reown.com/reown-logo.png'],
+        name: 'Example App',
+        description: 'Example app description',
+        url: 'https://example.com/',
+        icons: ['https://example.com/logo.png'],
         redirect: Redirect(
-          native: 'cryptoflutter://',
-          universal: 'https://reown.com/buko_app',
-          linkMode: true,
+          native: 'exampleapp://',
+          universal: 'https://reown.com/exampleapp',
         ),
       ),
+      featuredWalletIds: featuredWalletIds,
+      includedWalletIds: includedWalletIds,
+      excludedWalletIds: excludedWalletIds,
     );
 
-    await appKitModal!.init();
-    appKitModal!.addListener(updateWalletAddress);
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? savedWalletAddress = prefs.getString('walletAddress');
-    if (savedWalletAddress != null) {
-      setState(() {
-        walletAddress = savedWalletAddress;
-      });
-    }
+    await appKitModal.init();
   }
 
-  void updateWalletAddress() async {
-    if (appKitModal?.session != null) {
-      setState(() {
-        walletAddress = appKitModal!.session!.address ?? 'No Address';
-        _balance = appKitModal!.balanceNotifier.value;
-        fetchTransactions(
-            walletAddress); 
-      });
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('walletAddress', walletAddress);
-    } else {
-      setState(() {
-        walletAddress = 'No Address';
-        _balance = 'No Balance';
-        transactions.clear(); 
-      });
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.remove('walletAddress');
+  Future<void> _initLinkListener() async {
+    final initialLink = await getInitialLink();
+    if (initialLink != null) {
+      _onLinkCaptured(initialLink);
     }
-  }
 
-  Future<void> loginWithMetaMask(
-      String email, String password, String metamaskAddress) async {
-    final response = await http.post(
-      Uri.parse('https://vercel-testing-y4tp.vercel.app/api/users/login'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'email': email,
-        'password': password,
-        'walletAddress': metamaskAddress 
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      // Handle successful login, e.g., save the token
-      print('Login successful: ${data['message']}');
-    } else {
-      print('Login failed: ${response.body}');
-    }
-  }
-
-  Future<void> logout() async {
-    final response = await http.post(
-      Uri.parse('https://vercel-testing-y4tp.vercel.app/api/users/logout'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
-    if (response.statusCode == 200) {
-      print('Logout successful: ${json.decode(response.body)['message']}');
-    } else {
-      print('Logout failed: ${response.body}');
-    }
-  }
-
-  Future<void> fetchTransactions(String address) async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      final url =
-          'https://api-sepolia.etherscan.io/api?module=account&action=txlist&address=$address&startblock=0&endblock=99999999&sort=desc&apikey=$etherscanApiKey';
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data['status'] == '1') {
-          final txList = data['result'] as List;
-          setState(() {
-            transactions = txList.map((tx) {
-              // Check if the transaction is sent by the current address
-              final String addressLowerCase = address
-                  .toLowerCase(); // Convert address to lower case for comparison
-              final String sender = tx['from'];
-              final String recipient = tx['to'];
-              bool isSent = sender.toLowerCase() == addressLowerCase;
-              return TransactionDetails(
-                sender: sender,
-                recipient: recipient,
-                amount: (BigInt.parse(tx['value']) / BigInt.from(10).pow(18))
-                    .toString(),
-                hash: tx['hash'],
-                isSent: isSent,
-                date: DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(tx['timeStamp']) * 1000),
-              );
-            }).toList();
-          });
-        } else {
-          throw Exception('Failed to load transactions');
-        }
-      } else {
-        throw Exception('Failed to fetch transactions');
+    linkStream.listen((String? link) {
+      if (link != null) {
+        _onLinkCaptured(link);
       }
-    } catch (e) {
-      print('Error fetching transactions: $e');
-    } finally {
+    });
+  }
+
+  void _onLinkCaptured(String link) async {
+    await appKitModal.connectSelectedWallet();
+  }
+
+  Future<void> _fetchCryptoData() async {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
-        isLoading = false;
+        cryptoBalance = 1000.0; // Simulated balance
       });
+    });
+  }
+
+  Future<void> _fetchTopCoins() async {
+    final coinGeckoService = CoinGeckoService(); // Instance of your service
+    try {
+      final coins = await coinGeckoService.fetchTopCoins();
+      setState(() {
+        topCoins = coins;
+      });
+    } catch (e) {
+      print('Error fetching top coins: $e');
     }
+  }
+
+  void _setupEventListeners() {
+    appKitModal.onModalConnect.subscribe((ModalConnect? event) {
+      if (event != null) {
+        print('Connected to modal: ${event.toString()}');
+      }
+    });
+
+    appKitModal.onModalDisconnect.subscribe((ModalDisconnect? event) {
+      if (event != null) {
+        print('Disconnected from modal');
+      }
+    });
+
+    appKitModal.onModalError.subscribe((ModalError? event) {
+      if (event != null) {
+        print('Error: ${event.message}');
+      }
+    });
+
+    appKitModal.appKit!.core.relayClient.onRelayClientConnect.subscribe((EventArgs? event) {
+      print('Relay client connected');
+    });
+
+    appKitModal.appKit!.core.relayClient.onRelayClientError.subscribe((EventArgs? event) {
+      print('Relay client error: ${event?.toString()}');
+    });
+
+    appKitModal.appKit!.core.relayClient.onRelayClientDisconnect.subscribe((EventArgs? event) {
+      print('Relay client disconnected');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                pinned: true,
-                expandedHeight: 200.0,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: const SizedBox.shrink(),
-                  background: Container(
-                    color: const Color.fromARGB(255, 3, 169, 244),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            children: [
-                              BalanceCard(
-                                balance: _balance,
-                                address: walletAddress,
-                                backgroundColor: Colors
-                                    .deepPurpleAccent, // Dark theme balance card
-                                textColor: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                actions: const [
-                   Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Text(
-                          'Payment',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const SizedBox(height: 16),
-                          AppKitModalConnectButton(
-                            appKit: appKitModal!,
-                            custom: ElevatedButton(
-                              onPressed: () {
-                                if (appKitModal!.isConnected) {
-                                  appKitModal!.disconnect();
-                                } else {
-                                  appKitModal!.openModalView();
-                                }
-                              },
-                              child: Text(appKitModal!.isConnected
-                                  ? 'Disconnect'
-                                  : 'Connect Wallet'),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Visibility(
-                            visible: !appKitModal!.isConnected,
-                            child: AppKitModalNetworkSelectButton(
-                                appKit: appKitModal!),
-                          ),
-                          const SizedBox(height: 16),
-                          Visibility(
-                            visible: appKitModal!.isConnected,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    _showSendDialog(context);
-                                  },
-                                  child: const Text('Send'),
-                                ),
-                                const SizedBox(width: 17),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    // Define what happens when the Receive button is pressed
-                                  },
-                                  child: const Text('Receive'),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-
-                      Visibility(
-                        visible: appKitModal!.isConnected,
-                        child: isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : SizedBox(
-                                height: 350,
-                                child: ListView.builder(
-                                  itemCount: transactions.length,
-                                  itemBuilder: (context, index) {
-                                    final transaction = transactions[index];
-                                    return PaymentJobCardPage(
-                                      amount: transaction.amount,
-                                      sender: transaction.sender,
-                                      recipient: transaction.recipient,
-                                      hash: transaction.hash,
-                                      date: transaction.date,
-                                      isSent: transaction.isSent,
-                                    );
-                                  },
-                                ),
-                              ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
+          _buildCryptoBalanceCard(),
+          const SizedBox(height: 20),
+          AppKitModalNetworkSelectButton(appKit: appKitModal),
+          AppKitModalConnectButton(appKit: appKitModal),
+          Visibility(
+            visible: appKitModal.isConnected,
+            child: AppKitModalAccountButton(appKit: appKitModal),
           ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              appKitModal.openModalView(const ReownAppKitModalSelectNetworkPage());
+            },
+            child: const Text('CONNECT WALLET'),
+          ),
+          const SizedBox(height: 20),
+          _buildTopCoinsSection(), // Add the section for top coins
         ],
       ),
     );
   }
 
-
-
-  void _showSendDialog(BuildContext context) {
-    final TextEditingController addressController = TextEditingController();
-    final TextEditingController amountController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Send Crypto'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: addressController,
-                decoration: const InputDecoration(
-                  hintText: 'Recipient Address (0x..)',
-                ),
+  Widget _buildCryptoBalanceCard() {
+    return Card(
+      color: const Color(0xFF1E1E1E),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Crypto Balance',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              TextField(
-                controller: amountController,
-                decoration: const InputDecoration(
-                  hintText: 'Amount to Send',
-                ),
-                keyboardType: TextInputType.number,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                String recipient = addressController.text;
-                double amount = double.parse(amountController.text);
-                BigInt bigIntValue = BigInt.from(amount * pow(10, 18));
-                EtherAmount ethAmount =
-                    EtherAmount.fromBigInt(EtherUnit.wei, bigIntValue);
-                Navigator.of(context).pop();
-                setState(() {
-                  isLoading = true;
-                  final Uri metamaskUri = Uri.parse("metamask://");
-                  launchUrl(metamaskUri, mode: LaunchMode.externalApplication);
-                });
-                try {
-                  await sendTransaction(recipient, ethAmount);
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: ${e.toString()}')),
-                  );
-                }
-              },
-              child: const Text('Send'),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('Cancel'),
+            const SizedBox(height: 8),
+            Text(
+              '₱$cryptoBalance',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF8BBE6D),
+              ),
             ),
           ],
-        );
-      },
-    );
-  }
-
-  Future<void> sendTransaction(String receiver, EtherAmount txValue) async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final tetherContract = DeployedContract(
-      ContractAbi.fromJson(
-        jsonEncode([
-          {
-            "constant": false,
-            "inputs": [
-              {"internalType": "address", "name": "_to", "type": "address"},
-              {"internalType": "uint256", "name": "_value", "type": "uint256"}
-            ],
-            "name": "transfer",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-          }
-        ]),
-        'ETH',
-      ),
-      EthereumAddress.fromHex(receiver),
-    );
-
-    try {
-      final senderAddress = appKitModal!.session!.address!;
-      final currentBalance = appKitModal!.balanceNotifier.value;
-
-      if (currentBalance.isEmpty) {
-        throw Exception('Unable to fetch wallet balance.');
-      }
-
-      BigInt balanceInWeiValue;
-      try {
-        double balanceInEther = double.parse(currentBalance.split(' ')[0]);
-        balanceInWeiValue = BigInt.from((balanceInEther * pow(10, 18)).toInt());
-      } catch (e) {
-        throw Exception('Error parsing wallet balance: $e');
-      }
-
-      final balanceInWei =
-          EtherAmount.fromUnitAndValue(EtherUnit.wei, balanceInWeiValue);
-
-      final totalCost = txValue.getInWei + BigInt.from(100000 * 21000);
-      if (balanceInWei.getInWei < totalCost) {
-        throw Exception('Insufficient funds for transaction!');
-      }
-
-      final result = await appKitModal!.requestWriteContract(
-        topic: appKitModal!.session!.topic,
-        chainId: appKitModal!.selectedChain!.chainId,
-        deployedContract: tetherContract,
-        functionName: 'transfer',
-        transaction: Transaction(
-          from: EthereumAddress.fromHex(senderAddress),
-          to: EthereumAddress.fromHex(receiver),
-          value: txValue,
-          maxGas: 100000,
         ),
-        parameters: [
-          EthereumAddress.fromHex(receiver),
-          txValue.getInWei,
-        ],
-      );
-
-      if (result != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Transaction successful!')),
-        );
-        await appKitModal!.loadAccountData();
-      } else {
-        throw Exception('Transaction failed. Please try again.');
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+      ),
+    );
   }
-}
 
-class TransactionDetails {
-  final String sender;
-  final String recipient;
-  final String amount;
-  final String hash;
-  final DateTime date;
-  final bool isSent;
-
-  TransactionDetails({
-    required this.sender,
-    required this.recipient,
-    required this.amount,
-    required this.hash,
-    required this.date,
-    required this.isSent,
-  });
+  Widget _buildTopCoinsSection() {
+    return Card(
+      color: const Color(0xFF1E1E1E),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Top Cryptocurrencies',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 10),
+            topCoins.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No coins found',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: topCoins.length > 5 ? 5 : topCoins.length,
+                    itemBuilder: (context, index) {
+                      final coin = topCoins[index];
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: const Color(0xFF1E1E1E),
+                          child: Image.network(
+                            coin['image'],
+                            width: 30,
+                            height: 30,
+                          ),
+                        ),
+                        title: Text(
+                          coin['name'],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        subtitle: Text(
+                          '₱${coin['current_price'].toString()}',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
+                    },
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
 }

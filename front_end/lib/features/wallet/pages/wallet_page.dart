@@ -160,7 +160,11 @@ class _WalletScreenState extends State<WalletScreen> {
           _buildRecentTransactionsSection(context),
         ],
         if (_selectedTabIndex == 1) ...[
+<<<<<<< HEAD
           const WalletScreen(),
+=======
+          CryptoCurrencyTab(),
+>>>>>>> 7ef376171ba38e680dac31a968c54b531b9b1266
         ],
       ],
     );
