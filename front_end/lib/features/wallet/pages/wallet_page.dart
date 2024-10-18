@@ -160,7 +160,7 @@ class _WalletScreenState extends State<WalletScreen> {
           _buildRecentTransactionsSection(context),
         ],
         if (_selectedTabIndex == 1) ...[
-          WalletScreen(),
+          const WalletScreen(),
         ],
       ],
     );

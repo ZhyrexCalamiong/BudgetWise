@@ -8,7 +8,7 @@ class ExchangeRateService {
       'https://v6.exchangerate-api.com/v6/$apiKey/latest/PHP';
 
   // Function to fetch exchange rates
-  Future<Map<String, dynamic>> fetchExchangeRates() async {
+  Future<Map<String, dynamic>> fetchExchangeRates({required int page}) async {
     final response = await http.get(Uri.parse(baseUrl));
 
     if (response.statusCode == 200) {

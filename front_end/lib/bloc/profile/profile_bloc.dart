@@ -2,10 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:budgetwise_one/bloc/profile/profile_event.dart';
 import 'package:budgetwise_one/bloc/profile/profile_state.dart';
 import 'package:budgetwise_one/models/user.dart';
-import 'package:budgetwise_one/pages/login_page.dart';
 import 'package:budgetwise_one/repositories/user_repository_impl.dart';
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final UserService _profileRepository;

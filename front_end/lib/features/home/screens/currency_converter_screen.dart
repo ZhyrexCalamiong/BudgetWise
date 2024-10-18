@@ -150,9 +150,9 @@ class _CurrencyConverterScreen extends State<CurrencyConverterScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(Icons.monetization_on,
                                   size: 20.0,
                                   color: Colors.black), // Optional icon
@@ -181,7 +181,7 @@ class _CurrencyConverterScreen extends State<CurrencyConverterScreen> {
         ),
       ),
       const AnalyticsScreen(),
-      WalletScreen(),
+      const WalletScreen(),
       const ProfileScreen(),
     ];
   }

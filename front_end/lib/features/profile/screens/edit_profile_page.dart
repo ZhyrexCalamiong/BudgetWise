@@ -147,7 +147,6 @@ class _TextField extends StatelessWidget {
   final TextEditingController controller;
 
   const _TextField({
-    super.key,
     required this.labelText,
     required this.controller,
     this.borderRadius = 5.0, // default value for borderRadius
