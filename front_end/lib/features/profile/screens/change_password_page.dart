@@ -1,3 +1,4 @@
+import 'package:budgetwise_one/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:budgetwise_one/repositories/user_repository_impl.dart';
@@ -7,6 +8,8 @@ import 'package:budgetwise_one/bloc/authentication/forgot_password/forgot_passwo
 import 'package:budgetwise_one/bloc/authentication/forgot_password/reset_password_bloc.dart';
 import 'package:budgetwise_one/bloc/authentication/forgot_password/reset_password_event.dart';
 import 'package:budgetwise_one/bloc/authentication/forgot_password/reset_password_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async'; 
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
@@ -18,6 +21,10 @@ class ChangePasswordPage extends StatefulWidget {
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+  bool _isButtonEnabled = true;
+  String _buttonText = 'Send Code'; 
+  Timer? _timer; 
+  int _countdownTime = 30; 
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
@@ -80,7 +87,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         children: [
                           const SizedBox(height: 20),
 
-                          // Email TextField
                           _buildTextField(
                             'Email',
                             controller: emailController,
@@ -88,10 +94,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           ),
                           const SizedBox(height: 16),
 
-                          // OTP TextField and Send Code Button
                           Row(
                             children: [
-                              // OTP TextField
                               Expanded(
                                 child: _buildTextField(
                                   'Input OTP Code',
@@ -100,27 +104,30 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              // Send Code Button
                               SizedBox(
                                 height: 45,
                                 width: 80,
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    BlocProvider.of<ForgotPasswordBloc>(context)
-                                        .add(
-                                      ForgotPasswordSubmitEvent(
-                                          emailController.text),
-                                    );
-                                  },
+                                  onPressed: _isButtonEnabled 
+                                      ? () {
+                                          BlocProvider.of<ForgotPasswordBloc>(
+                                                  context)
+                                              .add(
+                                            ForgotPasswordSubmitEvent(
+                                                emailController.text),
+                                          );
+                                          _startCooldown(); 
+                                        }
+                                      : null, 
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF8BBE6D),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
-                                  child: const Text(
-                                    'Send Code',
-                                    style: TextStyle(
+                                  child: Text(
+                                    _buttonText,
+                                    style: const TextStyle(
                                         fontSize: 12, color: Colors.black),
                                   ),
                                 ),
@@ -129,7 +136,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           ),
                           const SizedBox(height: 16),
 
-                          // New Password TextField
                           _buildPasswordTextField(
                             'New Password',
                             controller: newPasswordController,
@@ -142,7 +148,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           ),
                           const SizedBox(height: 16),
 
-                          // Confirm Password TextField
                           _buildPasswordTextField(
                             'Confirm Password',
                             controller: confirmPasswordController,
@@ -156,7 +161,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           ),
                           const SizedBox(height: 16),
 
-                          // Confirm Button
                           ElevatedButton(
                             onPressed: () {
                               if (newPasswordController.text ==
@@ -199,7 +203,39 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-  // Function to show a success dialog
+  Future<void> logout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+  }
+
+  void _startCooldown() {
+    setState(() {
+      _isButtonEnabled = false;
+      _countdownTime = 30; 
+      _buttonText = 'Wait $_countdownTime s'; 
+    });
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_countdownTime > 0) {
+        setState(() {
+          _countdownTime--; 
+          _buttonText = 'Wait $_countdownTime s'; 
+        });
+      } else {
+        _timer?.cancel(); 
+        setState(() {
+          _isButtonEnabled = true;
+          _buttonText = 'Send Code'; 
+        });
+      }
+    });
+  }
+
   void _showSuccessDialog(BuildContext context, String message) {
     showDialog(
       context: context,
@@ -210,7 +246,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                logout(context);
               },
               child: const Text('OK'),
             ),
@@ -220,7 +256,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-  // Function to show an error dialog
   void _showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
@@ -241,7 +276,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-  // Helper method to build password text fields with visibility toggle
   Widget _buildPasswordTextField(String labelText,
       {required TextEditingController controller,
       required bool obscureText,
@@ -264,7 +298,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 
-  // Helper method to build standard text fields
   Widget _buildTextField(String labelText,
       {required TextEditingController controller, double borderRadius = 5.0}) {
     return TextFormField(
@@ -276,5 +309,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); 
+    super.dispose();
   }
 }
