@@ -160,7 +160,9 @@ class _WalletScreenState extends State<WalletScreen> {
           _buildRecentTransactionsSection(context),
         ],
         if (_selectedTabIndex == 1) ...[
-          Expanded(child: const CryptoWalletScreen()), // Ensures it takes available space
+          Expanded(
+              child:
+                  const CryptoWalletScreen()), 
         ],
       ],
     );
@@ -214,13 +216,16 @@ class _WalletScreenState extends State<WalletScreen> {
         _buildActionButton(
           Icons.add,
           'Add Funds',
-          () {
-            Navigator.push(
+          () async {
+            final result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const AddFundsFiatScreen(),
               ),
             );
+            if (result == true) {
+              _loadUserId();
+            }
           },
           Icons.add,
         ),
@@ -235,7 +240,7 @@ class _WalletScreenState extends State<WalletScreen> {
               ),
             );
             if (result == true) {
-              _loadUserId();
+              _loadUserId(); 
             }
           },
           Icons.arrow_downward,
@@ -249,20 +254,20 @@ class _WalletScreenState extends State<WalletScreen> {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        shape: const CircleBorder(), // Makes the button round
-        padding: const EdgeInsets.all(20), // Adds padding for larger size
-        backgroundColor: const Color(0xFF1E1E1E), // Matches card background
+        shape: const CircleBorder(), 
+        padding: const EdgeInsets.all(20),
+        backgroundColor: const Color(0xFF1E1E1E), 
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(buttonIcon,
-              size: 24, color: const Color(0xFF8BBE6D)), // Highlight color
+              size: 24, color: const Color(0xFF8BBE6D)), 
           const SizedBox(height: 4),
           Text(
             label,
             style: const TextStyle(
-                fontSize: 10, color: Color(0xFF8BBE6D)), // Highlight color
+                fontSize: 10, color: Color(0xFF8BBE6D)), 
           ),
         ],
       ),

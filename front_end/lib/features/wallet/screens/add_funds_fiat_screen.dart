@@ -23,11 +23,11 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
   void initState() {
     super.initState();
     financialWalletBloc = FinancialWalletBloc(BudgetService());
-    _loadUserId(); // Load the user ID
+    _loadUserId(); 
   }
 
   Future<void> _loadUserId() async {
-    userId = await AuthService.getCurrentUserId(); // Fetch user ID
+    userId = await AuthService.getCurrentUserId(); 
   }
 
   @override
@@ -43,16 +43,14 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
       child: BlocConsumer<FinancialWalletBloc, FinancialWalletState>(
         listener: (context, state) {
           if (state is FinancialWalletLoading) {
-            // Show loading indicator
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Loading...')),
             );
           } else if (state is FinancialWalletSuccess) {
-            // Refresh wallet data
             context
                 .read<FinancialWalletBloc>()
                 .add(GetBalanceFinancialWalletEvent(userId!));
-            Navigator.pop(context);
+            Navigator.pop(context, true);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Success: Budget added')),
             );
@@ -80,7 +78,7 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () => Navigator.pop(
-                  context,
+                  context, true
                 ),
               ),
             ),
@@ -91,7 +89,6 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Title Section
                     const Text(
                       'Set Your Budget',
                       style: TextStyle(
@@ -101,7 +98,6 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Input Field for Budget
                     _buildTextField(
                       labelText: 'Enter Budget Amount',
                       controller: _maximumAmountController,
@@ -109,7 +105,6 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
                       obscureText: false,
                     ),
                     const SizedBox(height: 30),
-                    // Add Budget Button
                     ElevatedButton(
                       onPressed: () async {
                         double? maximumAmount =
@@ -147,7 +142,6 @@ class _AddFundsFiatScreenState extends State<AddFundsFiatScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Show additional info or a suggestion here if needed
                     if (state is FinancialWalletLoading)
                       const Center(child: CircularProgressIndicator()),
                   ],
