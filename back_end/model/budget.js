@@ -9,6 +9,12 @@ const BudgetSchema = new Schema({
     date: { type: Date, default: Date.now }
 });
 
-const Budget = mongoose.model('Budget', BudgetSchema);
+let Budget;
+
+try {
+    Budget = mongoose.model('Budget');
+} catch (error) {
+    Budget = mongoose.model('Budget', BudgetSchema);
+}
 
 export default Budget;

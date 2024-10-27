@@ -7,9 +7,12 @@ import 'package:budgetwise_one/repositories/user_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:budgetwise_one/features/guide/screen/introduction_screen.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/edit_profile_page.dart';
 import '../screens/change_password_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -38,11 +41,10 @@ class _ProfileState extends State<ProfileScreen> {
     return BlocProvider<ProfileBloc>(
       create: (context) => profileBloc,
       child: Scaffold(
-        backgroundColor: const Color(0xFF0D0D0D), // Set the background color
+        backgroundColor: const Color(0xFF0D0D0D),
         body: Column(
           children: [
             const SizedBox(height: 40),
-            // Profile Image and Name
             CircleAvatar(
               radius: 50,
               backgroundColor: Colors.grey.shade800,
@@ -53,14 +55,10 @@ class _ProfileState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 10),
-
-            // Use BlocBuilder to display the profile data
             BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
                 if (state is ProfileLoading) {
-                  return const CircularProgressIndicator(
-                    color: Colors.white,
-                  );
+                  return const CircularProgressIndicator(color: Colors.white);
                 } else if (state is ProfileLoaded) {
                   return Text(
                     '${state.user[0].firstName} ${state.user[0].middleName} ${state.user[0].lastName}',
@@ -73,23 +71,17 @@ class _ProfileState extends State<ProfileScreen> {
                 } else if (state is ProfileError) {
                   return Text(
                     state.message,
-                    style: const TextStyle(
-                      color: Colors.red,
-                    ),
+                    style: const TextStyle(color: Colors.red),
                   );
                 } else {
                   return const Text(
                     'Unknown user',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(color: Colors.white),
                   );
                 }
               },
             ),
             const SizedBox(height: 30),
-
-            // Options List
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.all(16.0),
@@ -136,6 +128,13 @@ class _ProfileState extends State<ProfileScreen> {
                     },
                   ),
                   ProfileOption(
+                    icon: Icons.file_download,
+                    text: 'Download CSV',
+                    onTap: () {
+                      _downloadCsv(); // Call the download function here
+                    },
+                  ),
+                  ProfileOption(
                     icon: Icons.logout,
                     text: 'Logout',
                     isLast: true,
@@ -151,6 +150,40 @@ class _ProfileState extends State<ProfileScreen> {
       ),
     );
   }
+
+Future<void> _downloadCsv() async {
+  try {
+    // Your existing code to export the CSV
+    final response = await http.get(Uri.parse('http://localhost:8000/api/export-csv'));
+    
+    if (response.statusCode == 200) {
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/budget.csv';
+      final File file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+      
+      // Print the message to the terminal
+      print('CSV exported successfully: $filePath');
+      
+      // Show SnackBar or any other UI message if needed
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('CSV exported successfully: $filePath')),
+      );
+    } else {
+      print('Failed to export CSV. Status code: ${response.statusCode}');
+      // Optionally show error SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to export CSV.')),
+      );
+    }
+  } catch (e) {
+    print('An error occurred while exporting CSV: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('An error occurred while exporting CSV.')),
+    );
+  }
+}
+
 
   Future<void> logout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

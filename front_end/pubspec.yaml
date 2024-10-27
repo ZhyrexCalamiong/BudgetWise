@@ -35,6 +35,12 @@ dependencies:
   flutter_bloc:
   equatable:
 
+  open_file: ^3.2.1
+  excel: ^2.0.0
+
+  path_provider:
+  csv: ^5.0.0
+
   shared_preferences: ^2.0.15
   reown_appkit:
   
@@ -76,6 +82,8 @@ flutter:
     - assets/images/bar_chart.png
     - assets/images/pie_chart.png
     - assets/images/home_image.png
+    - assets/images/analytic_image.png
+    - assets/images/converter.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

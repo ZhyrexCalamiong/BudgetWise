@@ -1,8 +1,12 @@
 import express from 'express';
 import User from './../model/auth.js';
+import Budget from '../model/Budget.js';
 import { sendVerificationCode } from '../services/mailService.js';
 import crypto from 'crypto';
 import { generateToken, authenticateToken } from '../token/token.js';
+import { createObjectCsvWriter } from 'csv-writer';
+import fs from 'fs';
+import path from 'path';
 
 const router = express.Router();
 const verificationCodes = {};
@@ -62,7 +66,7 @@ router.post('/reset-password', async (req, res) => {
             });
         }
 
-        user.password = newPassword;  // No bcrypt, just set the new password directly
+        user.password = newPassword;
         await user.save();
 
         delete verificationCodes[email];
@@ -173,7 +177,7 @@ router.post('/signup', async (req, res) => {
             email,
             dateOfBirth: parsedDate,
             phone,
-            password,  // No bcrypt, storing plain password
+            password,
             verified: false,
         });
         
@@ -203,7 +207,7 @@ router.post('/signin', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        if (user.password !== password) {  // No bcrypt comparison, just plain comparison
+        if (user.password !== password) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
@@ -253,7 +257,7 @@ router.put('/user/:id', async (req, res) => {
     }
 
     if (content.password) {
-        updateData.password = content.password;  // No bcrypt, just plain password update
+        updateData.password = content.password;
     }
 
     try {
@@ -276,6 +280,46 @@ router.put('/user/:id', async (req, res) => {
     } catch (error) {
         console.error("Error updating user:", error);
         res.status(500).json({ message: "Database query error" });
+    }
+});
+
+router.get('/export-csv', async (req, res) => {
+    try {
+        // Fetch budgets from the database, populating the user details
+        const budgets = await Budget.find().populate('user', 'firstName lastName _id'); // Include user _id in the population
+
+        // Map budgets to the required format for CSV
+        const records = budgets.map(budget => ({
+            budgetID: budget._id, // Include the MongoDB Budget document ID
+            userID: budget.user._id, // Include the MongoDB User document ID
+            userFirstName: budget.user.firstName, // User's first name
+            userLastName: budget.user.lastName, // User's last name
+            maximumAmount: budget.maximumAmount,
+            amountSpent: budget.amountSpent,
+            date: budget.date.toISOString().split('T')[0],
+        }));
+
+        // Define the CSV writer
+        const csvFilePath = path.join(process.cwd(), 'budgets.csv');
+        const csvWriter = createObjectCsvWriter({
+            path: csvFilePath,
+            header: [
+                { id: 'budgetID', title: 'Budget ID' }, // Include Budget ID in the CSV header
+                { id: 'userID', title: 'User ID' }, // Include User ID in the CSV header
+                { id: 'userFirstName', title: 'User First Name' }, // User First Name in CSV
+                { id: 'userLastName', title: 'User Last Name' }, // User Last Name in CSV
+                { id: 'maximumAmount', title: 'Maximum Amount' },
+                { id: 'amountSpent', title: 'Amount Spent' },
+                { id: 'date', title: 'Date' },
+            ],
+        });
+
+        // Write records to CSV
+        await csvWriter.writeRecords(records);
+        res.download(csvFilePath); // Send the CSV file for download
+    } catch (error) {
+        console.error('Error exporting CSV:', error); // Log the error details
+        res.status(500).json({ message: 'An error occurred while exporting data to CSV.', error: error.message }); // Include error details in the response
     }
 });
 

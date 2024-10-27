@@ -19,7 +19,7 @@ class FirstPage extends StatelessWidget {
               ),
               const SizedBox(height: 20), // Spacing between image and text
               const Text(
-                "In Home Screen, we have our digital currency\nwhich we can input any amount and manage the money\nby either click the 'Add' and 'Buy' buttons:\n\n - In the Add Button lets u add money \n - Buy Button spends the money while keeping track of it",
+                "In Wallet Screen, we have our digital currency\nwhich we can input any amount and manage the money\nby either click the 'Add' and 'Buy' buttons:\n\n - In the Add Button lets u add money \n - Buy Button spends the money while keeping track of it",
                 style: TextStyle(
                   fontSize: 14, // Font size of the text
                   color: Colors.white, // Change to white for better contrast
