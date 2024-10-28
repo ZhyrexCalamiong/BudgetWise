@@ -9,7 +9,7 @@ import 'package:budgetwise_one/bloc/authentication/forgot_password/reset_passwor
 import 'package:budgetwise_one/bloc/authentication/forgot_password/reset_password_event.dart';
 import 'package:budgetwise_one/bloc/authentication/forgot_password/reset_password_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async'; 
+import 'dart:async';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
@@ -22,9 +22,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool _isButtonEnabled = true;
-  String _buttonText = 'Send Code'; 
-  Timer? _timer; 
-  int _countdownTime = 30; 
+  String _buttonText = 'Send Code';
+  Timer? _timer;
+  int _countdownTime = 30;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
@@ -44,7 +44,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ),
       ],
       child: Scaffold(
+        backgroundColor: const Color(0xFF0D0D0D),
         appBar: AppBar(
+          backgroundColor: const Color(0xFF0D0D0D),
           title: const Text(
             'Change Password',
             style: TextStyle(fontSize: 24),
@@ -86,14 +88,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 20),
-
                           _buildTextField(
                             'Email',
                             controller: emailController,
                             borderRadius: 10,
                           ),
                           const SizedBox(height: 16),
-
                           Row(
                             children: [
                               Expanded(
@@ -108,7 +108,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 height: 45,
                                 width: 80,
                                 child: ElevatedButton(
-                                  onPressed: _isButtonEnabled 
+                                  onPressed: _isButtonEnabled
                                       ? () {
                                           BlocProvider.of<ForgotPasswordBloc>(
                                                   context)
@@ -116,9 +116,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                             ForgotPasswordSubmitEvent(
                                                 emailController.text),
                                           );
-                                          _startCooldown(); 
+                                          _startCooldown();
                                         }
-                                      : null, 
+                                      : null,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF8BBE6D),
                                     shape: RoundedRectangleBorder(
@@ -135,7 +135,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             ],
                           ),
                           const SizedBox(height: 16),
-
                           _buildPasswordTextField(
                             'New Password',
                             controller: newPasswordController,
@@ -147,7 +146,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             },
                           ),
                           const SizedBox(height: 16),
-
                           _buildPasswordTextField(
                             'Confirm Password',
                             controller: confirmPasswordController,
@@ -160,7 +158,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             },
                           ),
                           const SizedBox(height: 16),
-
                           ElevatedButton(
                             onPressed: () {
                               if (newPasswordController.text ==
@@ -216,21 +213,21 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   void _startCooldown() {
     setState(() {
       _isButtonEnabled = false;
-      _countdownTime = 30; 
-      _buttonText = 'Wait $_countdownTime s'; 
+      _countdownTime = 30;
+      _buttonText = 'Wait $_countdownTime s';
     });
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_countdownTime > 0) {
         setState(() {
-          _countdownTime--; 
-          _buttonText = 'Wait $_countdownTime s'; 
+          _countdownTime--;
+          _buttonText = 'Wait $_countdownTime s';
         });
       } else {
-        _timer?.cancel(); 
+        _timer?.cancel();
         setState(() {
           _isButtonEnabled = true;
-          _buttonText = 'Send Code'; 
+          _buttonText = 'Send Code';
         });
       }
     });
@@ -313,7 +310,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   void dispose() {
-    _timer?.cancel(); 
+    _timer?.cancel();
     super.dispose();
   }
 }

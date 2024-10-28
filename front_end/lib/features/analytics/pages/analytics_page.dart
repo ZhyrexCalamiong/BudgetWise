@@ -12,14 +12,14 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
   late Future<Map<String, dynamic>> _futureRates;
   late TabController _tabController;
 
-  // Pagination state for Cryptocurrency tab
+  // Cryptocurrency state
   late ScrollController _scrollController;
   List<dynamic> _coins = [];
   int _currentPageCoins = 1;
   bool _isLoadingMoreCoins = false;
   bool _isFirstLoadCoins = true;
 
-  // Pagination state for PHP Exchange Rates tab
+  // Exchange Rates state
   late ScrollController _scrollControllerRates;
   List<dynamic> _exchangeRates = [];
   int _currentPageRates = 1;
@@ -38,7 +38,6 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
     _scrollControllerRates = ScrollController();
     _scrollControllerRates.addListener(_onScrollRates);
 
-    // Load the first page of coins and exchange rates on init
     _fetchCoins();
     _fetchExchangeRates();
   }
@@ -51,7 +50,6 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
     super.dispose();
   }
 
-  // Scroll listener for Cryptocurrency
   void _onScrollCoins() {
     if (_scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent &&
@@ -60,7 +58,6 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
     }
   }
 
-  // Scroll listener for Exchange Rates
   void _onScrollRates() {
     if (_scrollControllerRates.position.pixels ==
             _scrollControllerRates.position.maxScrollExtent &&
@@ -69,7 +66,6 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
     }
   }
 
-  // Fetch first page or subsequent pages of cryptocurrency data
   Future<void> _fetchCoins({int page = 1}) async {
     setState(() {
       _isLoadingMoreCoins = true;
@@ -98,33 +94,30 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
     }
   }
 
-  // Load more coins when the user scrolls to the bottom
   void _loadMoreCoins() {
     _currentPageCoins++;
     _fetchCoins(page: _currentPageCoins);
   }
 
-  // Fetch first page or subsequent pages of exchange rates
   Future<void> _fetchExchangeRates({int page = 1}) async {
     setState(() {
       _isLoadingMoreRates = true;
     });
 
     try {
-      // Adjust the URL as per your API pagination, here I'm assuming there's an endpoint for exchange rates pagination
-      final response = await http.get(Uri.parse(
-          'https://api.exchangerate-api.com/v4/latest/PHP?page=$page'));
+      final response = await http
+          .get(Uri.parse('https://api.exchangerate-api.com/v4/latest/PHP'));
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         setState(() {
-          _exchangeRates.addAll(data['rates']
+          _exchangeRates = data['rates']
               .entries
               .map((entry) => {
                     'currency': entry.key,
                     'rate': entry.value,
                   })
-              .toList());
+              .toList();
           _isLoadingMoreRates = false;
           _isFirstLoadRates = false;
         });
@@ -140,7 +133,6 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
     }
   }
 
-  // Load more exchange rates when the user scrolls to the bottom
   void _loadMoreExchangeRates() {
     _currentPageRates++;
     _fetchExchangeRates(page: _currentPageRates);
@@ -148,8 +140,6 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
       appBar: AppBar(
@@ -172,7 +162,7 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
         controller: _tabController,
         children: [
           // Cryptocurrency Prices Tab with Pagination
-          _buildCryptoTab(screenWidth),
+          _buildCryptoTab(),
 
           // Exchange Rates Tab
           _buildExchangeRatesTab(),
@@ -194,36 +184,33 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
     );
   }
 
-  // Cryptocurrency Tab with Pagination Support
-  Widget _buildCryptoTab(double screenWidth) {
-    int crossAxisCount = screenWidth > 600
-        ? 4
-        : 2; // Adjust number of columns based on screen width
-
-    return _isFirstLoadCoins
-        ? const Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF8BBE6D)),
-            ),
-          )
-        : Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Expanded(
+  // Cryptocurrency Tab with Key Metrics and Charts
+  Widget _buildCryptoTab() {
+    return Column(
+      children: [
+        _buildKeyMetrics(), // Add key metrics at the top
+        Expanded(
+          child: _isFirstLoadCoins
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Color(0xFF8BBE6D)),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: GridView.builder(
                     controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: screenWidth > 600 ? 2 / 1 : 3 / 2,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      childAspectRatio: 1,
                     ),
                     itemCount: _coins.length + 1, // Add 1 for loading indicator
                     itemBuilder: (context, index) {
                       if (index == _coins.length) {
-                        // Display loading indicator at the bottom
                         return _isLoadingMoreCoins
                             ? const Center(
                                 child: CircularProgressIndicator(
@@ -238,22 +225,22 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
                       return Card(
                         color: const Color(0xFF1F1F1F),
                         child: Padding(
-                          padding: const EdgeInsets.all(4.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Image.network(
                                 coin['image'],
-                                height: 20,
-                                width: 20,
+                                height: 40,
+                                width: 40,
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 coin['name'],
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: screenWidth > 600 ? 14 : 10,
+                                style: const TextStyle(
+                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -262,7 +249,7 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
                                 '\$${coin['current_price']}',
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
-                                  fontSize: 8,
+                                  fontSize: 10,
                                   color: Colors.green,
                                 ),
                               ),
@@ -293,12 +280,64 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
                     },
                   ),
                 ),
-              ],
-            ),
-          );
+        ),
+      ],
+    );
   }
 
-  // Exchange Rates Tab with pagination support
+  // Key Metrics Section
+  Widget _buildKeyMetrics() {
+    double totalMarketCap =
+        _coins.fold(0, (sum, coin) => sum + coin['market_cap']);
+    double totalVolume =
+        _coins.fold(0, (sum, coin) => sum + coin['total_volume']);
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+              child: _buildMetricCard('Total Market Cap',
+                  '\$${totalMarketCap.toStringAsFixed(2)}')),
+          const SizedBox(width: 8),
+          Expanded(
+              child: _buildMetricCard(
+                  'Total Volume', '\$${totalVolume.toStringAsFixed(2)}')),
+        ],
+      ),
+    );
+  }
+
+  // Key Metric Card Widget
+  Widget _buildMetricCard(String title, String value) {
+    return Card(
+      color: const Color(0xFF2C2C2C),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                  color: Colors.grey, fontSize: 12), // Smaller title font size
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 14), // Smaller value font size
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Exchange Rates Tab
   Widget _buildExchangeRatesTab() {
     return _isFirstLoadRates
         ? const Center(
@@ -307,15 +346,14 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
             ),
           )
         : Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView.separated(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
               controller: _scrollControllerRates,
+              physics: const AlwaysScrollableScrollPhysics(),
               itemCount:
                   _exchangeRates.length + 1, // Add 1 for loading indicator
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
                 if (index == _exchangeRates.length) {
-                  // Display loading indicator at the bottom
                   return _isLoadingMoreRates
                       ? const Center(
                           child: CircularProgressIndicator(
@@ -327,35 +365,13 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
                 }
 
                 final rate = _exchangeRates[index];
-                return Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1F1F1F),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 8,
-                        spreadRadius: 2,
-                      ),
-                    ],
-                  ),
+                return Card(
+                  color: const Color(0xFF1F1F1F),
+                  margin: const EdgeInsets.symmetric(vertical: 4),
                   child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 16),
                     title: Text(
-                      rate['currency'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    trailing: Text(
-                      rate['rate'].toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+                      '${rate['currency']}: ${rate['rate'].toStringAsFixed(4)}',
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                 );
@@ -367,8 +383,8 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
 
 class ExchangeRateService {
   Future<Map<String, dynamic>> fetchExchangeRates({int page = 1}) async {
-    final response = await http.get(
-        Uri.parse('https://api.exchangerate-api.com/v4/latest/PHP?page=$page'));
+    final response = await http
+        .get(Uri.parse('https://api.exchangerate-api.com/v4/latest/PHP'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -377,11 +393,4 @@ class ExchangeRateService {
           'Failed to load exchange rates: ${response.reasonPhrase}');
     }
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: AnalyticsScreen(),
-    theme: ThemeData.dark(),
-  ));
 }

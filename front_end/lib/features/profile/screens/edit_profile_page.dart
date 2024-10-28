@@ -46,12 +46,12 @@ class _EditProfilePage extends State<EditProfilePage> {
       final lastName = lastNameController.text;
 
       context.read<EditProfileBloc>().add(
-        UpdateProfile(
-          firstName: firstName,
-          middleName: middleName,
-          lastName: lastName,
-        ),
-      );
+            UpdateProfile(
+              firstName: firstName,
+              middleName: middleName,
+              lastName: lastName,
+            ),
+          );
     }
   }
 
@@ -63,7 +63,7 @@ class _EditProfilePage extends State<EditProfilePage> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Profile updated successfully!')),
           );
-          Navigator.pop(context, true); 
+          Navigator.pop(context, true);
         } else if (state is EditProfileError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error: ${state.message}')),
@@ -72,7 +72,9 @@ class _EditProfilePage extends State<EditProfilePage> {
       },
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: const Color(0xFF0D0D0D),
           appBar: AppBar(
+            backgroundColor: const Color(0xFF0D0D0D),
             title: const Text('Edit Profile'),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
@@ -139,20 +141,19 @@ class _EditProfilePage extends State<EditProfilePage> {
   }
 }
 
-
 class _TextField extends StatelessWidget {
   final String labelText;
   final double borderRadius;
   final TextEditingController controller;
   final bool isEmpty;
-  final String? errorText; 
+  final String? errorText;
 
   const _TextField({
     required this.labelText,
     required this.controller,
     this.borderRadius = 5.0,
     this.isEmpty = false,
-    this.errorText, 
+    this.errorText,
   });
 
   @override

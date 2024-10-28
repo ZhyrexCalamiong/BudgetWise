@@ -43,6 +43,8 @@ class _ProfileState extends State<ProfileScreen> {
       child: Scaffold(
         backgroundColor: const Color(0xFF0D0D0D),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 40),
             CircleAvatar(
@@ -60,23 +62,29 @@ class _ProfileState extends State<ProfileScreen> {
                 if (state is ProfileLoading) {
                   return const CircularProgressIndicator(color: Colors.white);
                 } else if (state is ProfileLoaded) {
-                  return Text(
-                    '${state.user[0].firstName} ${state.user[0].middleName} ${state.user[0].lastName}',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  return Center(
+                    child: Text(
+                      '${state.user[0].firstName} ${state.user[0].middleName} ${state.user[0].lastName}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   );
                 } else if (state is ProfileError) {
-                  return Text(
-                    state.message,
-                    style: const TextStyle(color: Colors.red),
+                  return Center(
+                    child: Text(
+                      state.message,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   );
                 } else {
-                  return const Text(
-                    'Unknown user',
-                    style: TextStyle(color: Colors.white),
+                  return Center(
+                    child: const Text(
+                      'Unknown user',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   );
                 }
               },
@@ -151,39 +159,35 @@ class _ProfileState extends State<ProfileScreen> {
     );
   }
 
-Future<void> _downloadCsv() async {
-  try {
-    // Your existing code to export the CSV
-    final response = await http.get(Uri.parse('http://localhost:8000/api/export-csv'));
-    
-    if (response.statusCode == 200) {
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/budget.csv';
-      final File file = File(filePath);
-      await file.writeAsBytes(response.bodyBytes);
-      
-      // Print the message to the terminal
-      print('CSV exported successfully: $filePath');
-      
-      // Show SnackBar or any other UI message if needed
+  Future<void> _downloadCsv() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://localhost:8000/api/export-csv'));
+
+      if (response.statusCode == 200) {
+        final directory = await getApplicationDocumentsDirectory();
+        final filePath = '${directory.path}/budget.csv';
+        final File file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        print('CSV exported successfully: $filePath');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('CSV exported successfully: $filePath')),
+        );
+      } else {
+        print('Failed to export CSV. Status code: ${response.statusCode}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to export CSV.')),
+        );
+      }
+    } catch (e) {
+      print('An error occurred while exporting CSV: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('CSV exported successfully: $filePath')),
-      );
-    } else {
-      print('Failed to export CSV. Status code: ${response.statusCode}');
-      // Optionally show error SnackBar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to export CSV.')),
+        SnackBar(content: Text('An error occurred while exporting CSV.')),
       );
     }
-  } catch (e) {
-    print('An error occurred while exporting CSV: $e');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('An error occurred while exporting CSV.')),
-    );
   }
-}
-
 
   Future<void> logout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -256,6 +260,7 @@ class ProfileOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.grey.shade800,
+      margin: const EdgeInsets.only(bottom: 16.0), // Add margin to cards
       child: ListTile(
         leading: Icon(icon, color: Colors.white),
         title: Text(

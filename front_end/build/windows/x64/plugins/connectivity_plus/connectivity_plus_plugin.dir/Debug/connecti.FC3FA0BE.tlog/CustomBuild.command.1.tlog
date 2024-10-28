@@ -1,0 +1,10 @@
+^C:\USERS\DDAL6\ONEDRIVE\DESKTOP\BW\BUDGETWISE\FRONT_END\WINDOWS\FLUTTER\EPHEMERAL\.PLUGIN_SYMLINKS\CONNECTIVITY_PLUS\WINDOWS\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/ddal6/OneDrive/Desktop/BW/BudgetWise/front_end/windows -BC:/Users/ddal6/OneDrive/Desktop/BW/BudgetWise/front_end/build/windows/x64 --check-stamp-file C:/Users/ddal6/OneDrive/Desktop/BW/BudgetWise/front_end/build/windows/x64/plugins/connectivity_plus/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

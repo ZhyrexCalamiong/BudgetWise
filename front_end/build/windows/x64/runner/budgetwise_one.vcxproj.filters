@@ -1,33 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\windows\runner\flutter_window.cpp">
+    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\windows\runner\flutter_window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\windows\runner\main.cpp">
+    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\windows\runner\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\windows\runner\utils.cpp">
+    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\windows\runner\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\windows\runner\win32_window.cpp">
+    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\windows\runner\win32_window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\windows\flutter\generated_plugin_registrant.cc">
+    <ClCompile Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\windows\flutter\generated_plugin_registrant.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\windows\runner\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\windows\runner\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\windows\runner\Runner.rc">
+    <ResourceCompile Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\windows\runner\Runner.rc">
       <Filter>Source Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{33F87330-5B57-35F1-9EDF-39BC88EBC307}</UniqueIdentifier>
+      <UniqueIdentifier>{CFC5BF64-EAD9-3B7A-BA7F-6851A06CE261}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{572A016D-C22D-3F85-9F35-AEBD60F89F8D}</ProjectGuid>
+    <ProjectGuid>{86E62644-2F6F-3E32-911A-352F950472FB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
@@ -100,7 +100,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\build\windows\x64\CMakeFiles\18a7f0b3cb2809fbd21fb226b16dbf70\INSTALL_force.rule">
+    <CustomBuild Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\build\windows\x64\CMakeFiles\e046f76d5d89603e646cb14a8351a42d\INSTALL_force.rule">
       <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</BuildInParallel>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
@@ -113,7 +113,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\build\windows\x64\plugins\connectivity_plus\CMakeFiles\INSTALL_force</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\build\windows\x64\plugins\connectivity_plus\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
       <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</VerifyInputsAndOutputsExist>
       <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">true</BuildInParallel>
@@ -128,7 +128,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\build\windows\x64\plugins\connectivity_plus\CMakeFiles\INSTALL_force</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\build\windows\x64\plugins\connectivity_plus\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">false</LinkObjects>
       <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">false</VerifyInputsAndOutputsExist>
       <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</BuildInParallel>
@@ -143,20 +143,20 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\build\windows\x64\plugins\connectivity_plus\CMakeFiles\INSTALL_force</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\build\windows\x64\plugins\connectivity_plus\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
       <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</VerifyInputsAndOutputsExist>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\build\windows\x64\ZERO_CHECK.vcxproj">
-      <Project>{D7E16195-FE3C-3826-AC88-97F6C087C3F6}</Project>
+    <ProjectReference Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\build\windows\x64\ZERO_CHECK.vcxproj">
+      <Project>{FE060F5E-D456-3ED2-9197-1CD108E67552}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\ddal6\OneDrive\Desktop\BWoct18\BudgetWise\front_end\build\windows\x64\plugins\connectivity_plus\ALL_BUILD.vcxproj">
-      <Project>{0462B10A-24A6-31B1-B918-5EFF8A55F526}</Project>
+    <ProjectReference Include="C:\Users\ddal6\OneDrive\Desktop\BW\BudgetWise\front_end\build\windows\x64\plugins\connectivity_plus\ALL_BUILD.vcxproj">
+      <Project>{3B89D4F8-4A40-3FAC-8391-591E8BDAB4BC}</Project>
       <Name>ALL_BUILD</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

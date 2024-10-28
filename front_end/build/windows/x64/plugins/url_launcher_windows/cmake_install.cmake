@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/ddal6/OneDrive/Desktop/BWoct18/BudgetWise/front_end/windows/flutter/ephemeral/.plugin_symlinks/url_launcher_windows/windows
+# Install script for directory: C:/Users/ddal6/OneDrive/Desktop/BW/BudgetWise/front_end/windows/flutter/ephemeral/.plugin_symlinks/url_launcher_windows/windows
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
