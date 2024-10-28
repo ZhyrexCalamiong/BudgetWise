@@ -311,33 +311,37 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
 
   // Key Metric Card Widget
   Widget _buildMetricCard(String title, String value) {
-    return Card(
-      color: const Color(0xFF2C2C2C),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                  color: Colors.grey, fontSize: 12), // Smaller title font size
-            ),
-            const SizedBox(height: 4),
-            Text(
-              value,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 14), // Smaller value font size
-            ),
-          ],
+    return SizedBox(
+      width: 120, // Define a fixed width
+      height: 120, // Define a fixed height to make it square
+      child: Card(
+        color: const Color(0xFF2C2C2C),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12), // Smaller title font size
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 14), // Smaller value font size
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // Exchange Rates Tab
   Widget _buildExchangeRatesTab() {
     return _isFirstLoadRates
         ? const Center(
@@ -349,9 +353,7 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
             padding: const EdgeInsets.all(8.0),
             child: ListView.builder(
               controller: _scrollControllerRates,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount:
-                  _exchangeRates.length + 1, // Add 1 for loading indicator
+              itemCount: _exchangeRates.length + 1,
               itemBuilder: (context, index) {
                 if (index == _exchangeRates.length) {
                   return _isLoadingMoreRates
@@ -367,11 +369,27 @@ class _AnalyticsPageState extends State<AnalyticsScreen>
                 final rate = _exchangeRates[index];
                 return Card(
                   color: const Color(0xFF1F1F1F),
-                  margin: const EdgeInsets.symmetric(vertical: 4),
-                  child: ListTile(
-                    title: Text(
-                      '${rate['currency']}: ${rate['rate'].toStringAsFixed(4)}',
-                      style: const TextStyle(color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          rate['currency'],
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          rate['rate'].toString(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
